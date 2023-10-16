@@ -12,10 +12,10 @@ const chains: Chain[] = []; // import from somewhere
  * @param transfers 
  * @returns 
  */
-const calculateBundledTransactions = (amount: BigNumber, transfers: Transfer[]): BundledTransfers => {
+export const calculateBundledTransactions = (transferAmount: BigNumber, transfers: Transfer[]): BundledTransfers => {
     let bundle: Transfer[] = [];
     let bundleCost: BigNumber = BigNumber.from(0);
-    let totalRemaining: BigNumber = amount;
+    let totalRemaining: BigNumber = transferAmount;
 
     // Iterate over the amounts available and substracts from the total until the transfer can be completed
     transfers.forEach(transfer => {
@@ -30,7 +30,7 @@ const calculateBundledTransactions = (amount: BigNumber, transfers: Transfer[]):
             transfer.amountToTransfer = totalRemaining;
             totalRemaining = totalRemaining.sub(totalRemaining);
         }
-        transfers.push(transfer);
+        bundle.push(transfer);
         bundleCost = bundleCost.add(transfer.cost);
     });
 
@@ -47,7 +47,7 @@ const calculateBundledTransactions = (amount: BigNumber, transfers: Transfer[]):
  * @param destinationChain 
  * @returns 
  */
-const calculate_native_transfer = async (from: string, chains: Chain[], amount: BigNumber, destinationChain: string | null = null): Promise<AccountDetails[] | AccountDetails> => {
+export const calculate_native_transfer = async (from: string, chains: Chain[], amount: BigNumber, destinationChain: Chain | null = null): Promise<AccountDetails[] | AccountDetails> => {
     // Step 1 - Get balances across all chains
     const accountDetails = await getAllBalances(from, chains);
 
@@ -79,8 +79,8 @@ const calculate_native_transfer = async (from: string, chains: Chain[], amount: 
     // The best outcome is that the destinationChain is the cheapest, otherwise we need to combine all the options    
     } else {
         // There HAS TO BE a better way
-        const destinationAccountDetails = accountDetails.find(chain => chain.chain.name === destinationChain);
-        const bridgeChainsBalances = accountDetails.filter(chain => chain.chain.name !== destinationChain);
+        const destinationAccountDetails = accountDetails.find(chain => chain.chain.name === destinationChain.name);
+        const bridgeChainsBalances = accountDetails.filter(chain => chain.chain.name !== destinationChain.name);
 
         // Lists of transfers with assosiated costs across all the chains
         const currentChainTransfer = await getAllTransfers(amount, [destinationAccountDetails!], calculate_base_gas_cost);

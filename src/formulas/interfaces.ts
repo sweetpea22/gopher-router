@@ -3,7 +3,6 @@ import {BigNumber} from "ethers";
 export interface Chain {
     name: string;
     rpcUrl: string;
-    isbridged?: boolean;
 }
 
 export interface AccountDetails {
