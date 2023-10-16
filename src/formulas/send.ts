@@ -5,7 +5,8 @@ import {calculate_base_gas_cost, calculate_bridge_cost} from "./costs";
 
 const chains: Chain[] = []; // import from somewhere
 
-/**s
+/**
+ * NOTE: THIS ACTUALLY ISN'T THE CHEAPEST, NEED TO USE A VARIATION OF THE KNAPSACK PROBLEM
  * Calculates the best bundle of transfers
  * Simple alrogirthm, since costs are sorted, we use up as much of each balance on each chain until we reach our desired amount
  * @param amount 
