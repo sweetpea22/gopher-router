@@ -1,4 +1,4 @@
-"use client"
+
 import { Fragment, useEffect, useState } from 'react'
 import { ArrowDownCircleIcon, ArrowPathIcon, ArrowUpCircleIcon } from '@heroicons/react/20/solid'
 import { actions } from '@/formulas'
@@ -39,16 +39,16 @@ export default function SampleTable() {
   const [loading, setLoading] = useState(false);
   const [transfers, setTransfers] = useState<Transfer[]>([])
 
-  async function prepareTransaction() {
-    setOpen(true);
-    setLoading(true);
-    const from = ""
-    const chains: Chain[] = [];
-    const amount = BigNumber.from(0);
+  // async function prepareTransaction() {
+  //   setOpen(true);
+  //   setLoading(true);
+  //   const from = ""
+  //   const chains: Chain[] = [];
+  //   const amount = BigNumber.from(0);
 
-    const transfers = await actions.calculateNativeTransfer(from, chains, amount);
-    setTransfers(transfers);
-  }
+  //   const transfers = await actions.calculateNativeTransfer(from, chains, amount);
+  //   setTransfers(transfers);
+  // }
 
   return (
     <div>
@@ -98,7 +98,7 @@ export default function SampleTable() {
                         </td>
                        
                         <td className="py-5 text-right">
-                          <div className="flex justify-end" onClick={prepareTransaction}>
+                          {/* <div className="flex justify-end" onClick={prepareTransaction}>
                             <a
                               href={transaction.href}
                               className="text-sm font-medium leading-6 text-indigo-600 hover:text-indigo-500"
@@ -108,7 +108,7 @@ export default function SampleTable() {
                                 , invoice #{transaction.invoiceNumber}, {transaction.client}
                               </span>
                             </a>
-                          </div>
+                          </div> */}
                          
                         </td>
                       </tr>
