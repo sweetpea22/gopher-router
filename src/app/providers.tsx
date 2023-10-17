@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import '@rainbow-me/rainbowkit/styles.css';
 
 
-const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY || "";
+const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 
 const { chains, publicClient } = configureChains(
 

@@ -1,5 +1,4 @@
-"use client"
-import BasicTable from './components/Basic'
+import BasicTable from './components/Basic/Basic'
 import SampleWalletPortfolio from './components/SampleWalletPortfolio'
 import SlideOut from './components/SlideOut'
 
