@@ -52,7 +52,7 @@ export const calculateAmountToSend = (transferAmount: BigNumber, transfers: Tran
  * @param destinationChain 
  * @returns 
  */
-export const calculateNativeTransfer = async (from: string, chains: Chain[], amount: BigNumber, destinationChain: Chain | null = null): Promise<AccountDetails[] | AccountDetails> => {
+export const calculateNativeTransfer = async (from: string, chains: Chain[], amount: BigNumber, destinationChain: Chain | null = null): Promise<Transfer[]> => {
     // Step 1 - Get balances across all chains
     const accountDetails = await getAllBalances(from, chains);
 
@@ -77,7 +77,7 @@ export const calculateNativeTransfer = async (from: string, chains: Chain[], amo
         // Calculate multi-chain transfers
         const { transfers, bundleCost } = calculateBundledTransactions(amount, possibleTransfers);
         // Return the cheapeast option
-        return bestSingleChainTransfer && bestSingleChainTransfer.cost!.lte(bundleCost) ? bestSingleChainTransfer : transfers;
+        return bestSingleChainTransfer && bestSingleChainTransfer.cost!.lte(bundleCost) ? [bestSingleChainTransfer] : transfers;
 
     // Step 2.2 - If `destinationChain != null`
     // In this case we need to calculate the costs of bridging between chains, and finding the cheapest bundle
@@ -97,7 +97,7 @@ export const calculateNativeTransfer = async (from: string, chains: Chain[], amo
         if (currentChainTransfer[0].hasFullBalance) {
             // We want to prioritize the destinationChain if it has balance
             const { transfers, bundleCost } = calculateBundledTransactions(amount, bridgedTransfers);
-            return currentChainTransfer[0].cost!.lte(bundleCost) ? currentChainTransfer[0] : transfers;
+            return currentChainTransfer[0].cost!.lte(bundleCost) ? currentChainTransfer : transfers;
         } else {
             const bundledTransfers = [...currentChainTransfer, ...bridgedTransfers];
             const { transfers } = calculateBundledTransactions(amount, bundledTransfers);
