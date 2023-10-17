@@ -4,6 +4,7 @@ import { actions } from '@/formulas'
 import { BigNumber } from 'ethers'
 import { Chain, Transfer } from '@/formulas/interfaces'
 import GetQuote from '@/app/components/Basic/GetQuote';
+import InputFields from './InputFields'
 
 
 export default async function BasicTable({children}: any) { 
@@ -23,11 +24,11 @@ export default async function BasicTable({children}: any) {
       {/* <div className='text-indigo-500'>
         {transfers.map((transfer, index) => (
           <div key={index}>
-            <p>{transfer.balance}</p>
+          <p>{transfer.balance}</p>
           </div>
-        ))}
-      </div> */}
-       <GetQuote />
+          ))}
+        </div> */}
+      <GetQuote />
     </div>
   )
 }
