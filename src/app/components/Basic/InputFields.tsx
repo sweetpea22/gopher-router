@@ -1,0 +1,66 @@
+"use client"
+import { standardInput } from '@/app/styles/styles'
+import { useSendTransaction, usePrepareSendTransaction } from 'wagmi'
+import { useState } from 'react'
+import { parseEther } from "viem";
+import { useDebounce } from "use-debounce";
+
+const HARDCODED_ADDRESS = '0x18f32D6c9075796a74a403e575c27299EdABfE2D';
+
+export default function InputFields() {
+
+  // Set Value to Send
+  const [value, setValue] = useState(0);
+
+  const [debouncedAmountToSend] = useDebounce(value.toString(), 500);
+
+  // prepareSendTransaction 
+
+  const {
+    config,
+    error: prepareError,
+    isError: isPrepareError,
+  } = usePrepareSendTransaction({
+    to: HARDCODED_ADDRESS,
+    value: debouncedAmountToSend
+      ? parseEther(debouncedAmountToSend as `${number}`)
+      : undefined,
+  });
+
+  // choose which transaction to send...? 
+
+  // send transaction
+
+  return (
+    <div className='py-2'>
+      <div className='py-2'>
+        <label htmlFor="address" className="block text-sm font-medium leading-6 text-gray-900">
+          Send to
+        </label>
+        <div className="mt-2">
+          <input
+            type="text"
+            name="address"
+            id="address"
+            className={`${standardInput}`}
+            placeholder="0x..."
+          />
+        </div>
+        </div>
+      <div className='py-2'>
+        <label htmlFor="amount" className="block text-sm font-medium leading-6 text-gray-900">
+          Amount to send
+        </label>
+        <div className="mt-2">
+          <input
+            type="number"
+            name="amount"
+            id="amount"
+            className={`${standardInput}`}
+            placeholder="Amount in ether"
+          />
+        </div>
+        </div>
+      </div>
+  )
+}
