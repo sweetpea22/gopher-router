@@ -1,4 +1,4 @@
-import BasicTable from './components/Basic/Basic'
+import BasicTable from './components/Basic/BasicTable'
 import SampleWalletPortfolio from './components/SampleWalletPortfolio'
 import SlideOut from './components/SlideOut'
 
