@@ -1,6 +1,6 @@
 import { Chain, Transfer } from "../../formulas/interfaces";
 import { BigNumber } from "ethers";
-import { calculateBundledTransactions, calculateNativeTransfer } from "../../formulas/sendNative";
+import { calculateBundledTransactions, calculateNativeTransfer } from "../../formulas/calculateNative";
 import { generateChain, generateManyFakes, generateTransfer } from "./utils";
 
 let chains: Chain[] = [];
@@ -26,11 +26,11 @@ test('calculateBundledTransactions :: single chain 1', () => {
     transfers.push(generateTransfer({chain: eth, balance: BigNumber.from("5"), cost: BigNumber.from("4")}));
     const bundle = calculateBundledTransactions(transferAmount, transfers);
     const expected = [
-        generateTransfer({chain: eth, balance: BigNumber.from("5"), cost: BigNumber.from("3")}),
-        generateTransfer({chain: eth, balance: BigNumber.from("5"), cost: BigNumber.from("4")})
+        generateTransfer({chain: eth, balance: BigNumber.from("5"), cost: BigNumber.from("4"), amountToTransfer: BigNumber.from(5)}),
+        generateTransfer({chain: eth, balance: BigNumber.from("5"), cost: BigNumber.from("3"), amountToTransfer: BigNumber.from(5)})
     ];
     expect(bundle.bundleCost.toString()).toBe("7");
-    expect(bundle.transfers).toStrictEqual(transfers);
+    expect(bundle.transfers).toStrictEqual(expected);
 });
 
 
@@ -41,10 +41,14 @@ test('calculateBundledTransactions :: single chain 2', () => {
     transfers.push(generateTransfer({chain: eth, balance: BigNumber.from("8"), cost: BigNumber.from("3")}));
     transfers.push(generateTransfer({chain: eth, balance: BigNumber.from("5"), cost: BigNumber.from("4")}));
     const bundle = calculateBundledTransactions(transferAmount, transfers);
+    
+    const expected = [
+        generateTransfer({chain: eth, balance: BigNumber.from("8"), cost: BigNumber.from("3"), amountToTransfer: BigNumber.from("8")}),
+        generateTransfer({chain: eth, balance: BigNumber.from("1"), cost: BigNumber.from("2"), amountToTransfer: BigNumber.from("1")}),
+        generateTransfer({chain: eth, balance: BigNumber.from("1"), cost: BigNumber.from("1"), amountToTransfer: BigNumber.from("1")}),
+    ]
     expect(bundle.bundleCost.toString()).toBe("6");
-    // Remove the last transfer which should have been ignored because transfer amnount reached prior to it being used.
-    transfers.pop();
-    expect(bundle.transfers).toStrictEqual(transfers);
+    expect(bundle.transfers).toStrictEqual(expected);
  });
 
  test('calculateBundledTransactions :: single chain 3', () => {
@@ -54,6 +58,25 @@ test('calculateBundledTransactions :: single chain 2', () => {
     transfers.push(generateTransfer({chain: eth, balance: BigNumber.from("8"), cost: BigNumber.from("3")}));
     transfers.push(generateTransfer({chain: eth, balance: BigNumber.from("5"), cost: BigNumber.from("4")}));
     const bundle = calculateBundledTransactions(transferAmount, transfers);
+    
+    const expected = [
+        generateTransfer({chain: eth, balance: BigNumber.from("10"), cost: BigNumber.from("1"), amountToTransfer: BigNumber.from("10")})
+    ]
     expect(bundle.bundleCost.toString()).toBe("1");
-    expect(bundle.transfers).toStrictEqual([transfers[0]]);
+    expect(bundle.transfers).toStrictEqual(expected);
+ });
+
+ test('calculateBundledTransactions :: single chain 4', () => {
+    const eth: Chain = chains[0];
+    transfers.push(generateTransfer({chain: eth, balance: BigNumber.from("1"), cost: BigNumber.from("1")}));
+    transfers.push(generateTransfer({chain: eth, balance: BigNumber.from("1"), cost: BigNumber.from("2")}));
+    transfers.push(generateTransfer({chain: eth, balance: BigNumber.from("11"), cost: BigNumber.from("3")}));
+    transfers.push(generateTransfer({chain: eth, balance: BigNumber.from("5"), cost: BigNumber.from("4")}));
+    const bundle = calculateBundledTransactions(transferAmount, transfers);
+    
+    const expected = [
+        generateTransfer({chain: eth, balance: BigNumber.from("11"), cost: BigNumber.from("3"), amountToTransfer: BigNumber.from("10")}),
+    ]
+    expect(bundle.bundleCost.toString()).toBe("3");
+    expect(bundle.transfers).toStrictEqual(expected);
  });

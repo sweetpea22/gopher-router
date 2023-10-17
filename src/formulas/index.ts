@@ -1,4 +1,4 @@
-import { calculateNativeTransfer } from "./sendNative";
+import { calculateNativeTransfer } from "./calculateNative";
 
 export const actions = {
     calculateNativeTransfer

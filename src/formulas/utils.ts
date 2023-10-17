@@ -1,7 +1,7 @@
 import {ethers, BigNumber} from "ethers";
 import {Chain, AccountDetails, Transfer} from "./interfaces";
 
-export const sortTransfers = (t: Transfer[]): Transfer[] => {
+export const sortByTransfersByCost = (t: Transfer[]): Transfer[] => {
     return t.sort((a ,b) => {
         if(a.cost.gt(b.cost)) {
           return 1;
@@ -11,6 +11,18 @@ export const sortTransfers = (t: Transfer[]): Transfer[] => {
           return 0;
         }
       });
+}
+
+export const sortByTransfersByBalance = (t: Transfer[]): Transfer[] => {
+  return t.sort((a ,b) => {
+      if(a.balance.gt(b.balance)) {
+        return 1;
+      } else if (a.balance.lt(b.balance)){
+        return -1;
+      } else {
+        return 0;
+      }
+    });
 }
 
 /**

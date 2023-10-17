@@ -1,6 +1,6 @@
 import { ethers, BigNumber } from "ethers";
 import {Chain, AccountDetails, Transfer, BundledTransfers} from "./interfaces";
-import {getAllBalances, getAllTransfers, sortTransfers} from "./utils";
+import {getAllBalances, getAllTransfers, sortByTransfersByBalance, sortByTransfersByCost} from "./utils";
 import {calculate_base_gas_cost, calculate_bridge_cost} from "./costs";
 import { findCheapestCombination } from "./lowestCost";
 
@@ -13,7 +13,7 @@ const chains: Chain[] = []; // import from somewhere
  * @returns 
  */
 export const calculateBundledTransactions = (transferAmount: BigNumber, transfers: Transfer[]): BundledTransfers => {
-    const bundledTransfers = findCheapestCombination(transferAmount, transfers);
+    let bundledTransfers = findCheapestCombination(transferAmount, transfers);
     if (bundledTransfers.length === 0) {
         return {
             transfers: bundledTransfers,
@@ -21,11 +21,29 @@ export const calculateBundledTransactions = (transferAmount: BigNumber, transfer
         }
     }
     const bundleCost = bundledTransfers.reduce((p,c) => p.add(c.cost), BigNumber.from(0));
+    const newBunlde = calculateAmountToSend(transferAmount, bundledTransfers);
+    console.log({newBunlde})
     return {
-        transfers: bundledTransfers,
+        transfers: newBunlde,
         bundleCost
     }
 };
+
+export const calculateAmountToSend = (transferAmount: BigNumber, transfers: Transfer[]): Transfer[] => {
+    const sorted = sortByTransfersByBalance(transfers).reverse();
+    return sorted.map(transfer => {
+        if (transfer.balance.gt(transferAmount)) {
+            // Use remainder
+            const amountToTransfer = transferAmount;
+            transferAmount = BigNumber.from(0);
+            return {...transfer, amountToTransfer};
+        } else {
+            // Use full balance
+            transferAmount = transferAmount.sub(transfer.balance);
+            return {...transfer, amountToTransfer: transfer.balance}
+        }
+    })
+}
 
 /**
  * Returns best path to perfomring a native transfer
@@ -47,7 +65,7 @@ export const calculateNativeTransfer = async (from: string, chains: Chain[], amo
         let possibleTransfers = await getAllTransfers(amount, accountDetails, calculate_base_gas_cost);
         
         // Sort the transfers based on cheapest -> most expensive
-        possibleTransfers = sortTransfers(possibleTransfers);
+        possibleTransfers = sortByTransfersByCost(possibleTransfers);
         
         // Find the cheapest single chain transfer, since its sorted it will always be the first one found
         const bestSingleChainTransfer = possibleTransfers.find(transfer => {
@@ -74,7 +92,7 @@ export const calculateNativeTransfer = async (from: string, chains: Chain[], amo
         let bridgedTransfers = await getAllTransfers(amount, bridgeChainsBalances, calculate_bridge_cost);
         
         // Sort the birdgedTransfer based on cheapest -> most expensive
-        bridgedTransfers = sortTransfers(bridgedTransfers);
+        bridgedTransfers = sortByTransfersByCost(bridgedTransfers);
 
         if (currentChainTransfer[0].hasFullBalance) {
             // We want to prioritize the destinationChain if it has balance
