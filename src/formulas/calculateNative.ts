@@ -74,6 +74,7 @@ export const calculateNativeTransfer = async (from: string, chains: Chain[], amo
                 return true;
             }
         });
+
         // Calculate multi-chain transfers
         const { transfers, bundleCost } = calculateBundledTransactions(amount, possibleTransfers);
         // Return the cheapeast option
@@ -88,7 +89,7 @@ export const calculateNativeTransfer = async (from: string, chains: Chain[], amo
         const bridgeChainsBalances = accountDetails.filter(chain => chain.chain.name !== destinationChain.name);
 
         // Lists of transfers with assosiated costs across all the chains
-        const currentChainTransfer = await getAllTransfers(amount, [destinationAccountDetails!], calculate_base_gas_cost);
+        const currentChainTransfer = await getAllTransfers(amount, [destinationAccountDetails!], calculate_base_gas_cost); // always length=1
         let bridgedTransfers = await getAllTransfers(amount, bridgeChainsBalances, calculate_bridge_cost);
         
         // Sort the birdgedTransfer based on cheapest -> most expensive
