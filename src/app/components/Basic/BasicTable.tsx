@@ -18,7 +18,7 @@ export default async function BasicTable({children}: any) {
     <div className={`${centeredDiv} bg-gray-200 py-10`}>
       <ConnectButton />
       <div className='my-4'>
-        <h1 className='text-gray-600'>Demo case: I want to transfer 0.1 eth to [address]. Which way is cheaper?</h1>
+        <h1 className='text-gray-600'>Demo case: I want to transfer 0.1 eth to [address]. Show me the cheapest route.</h1>
       </div>
       {/* <div className='text-indigo-500'>
         {transfers.map((transfer, index) => (
