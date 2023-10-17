@@ -15,7 +15,6 @@ const navigation = [
   { name: 'Profile', href: '#', icon: UsersIcon, current: false },
   { name: 'NFTs', href: '#', icon: FolderIcon, current: false },
   { name: 'DeFi', href: '#', icon: CalendarIcon, current: false },
-
 ]
 
 

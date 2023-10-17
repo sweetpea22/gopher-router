@@ -48,7 +48,7 @@ export default function SlideOut() {
                     </div>
                     <div className="relative mt-6 flex-1 px-4 sm:px-6">
                       {/* Main content */}
-                      {loading ? <p>"Loading..."</p> : null}
+                      {loading ? <p>Loading...</p> : null}
                     </div>
                   </div>
                 </Dialog.Panel>

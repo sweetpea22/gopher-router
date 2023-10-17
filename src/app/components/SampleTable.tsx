@@ -1,3 +1,4 @@
+"use client"
 import { Fragment, useEffect, useState } from 'react'
 import { ArrowDownCircleIcon, ArrowPathIcon, ArrowUpCircleIcon } from '@heroicons/react/20/solid'
 import { actions } from '@/formulas'
@@ -33,7 +34,7 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default async function SampleTable() {
+export default function SampleTable() {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [transfers, setTransfers] = useState<Transfer[]>([])
