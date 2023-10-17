@@ -21,7 +21,7 @@ export const generateTransfer = (opts: {chain: Chain, balance?: BigNumber, cost?
         hasFullBalance: false,
         balance: balance || BigNumber.from(faker.number.int(10)),
         cost: cost || BigNumber.from(faker.number.int(100)),
-        isBridged: isBridged || faker.datatype.boolean(),
+        isBridged: isBridged || false,
         amountToTransfer: undefined
     }
     return transfer;

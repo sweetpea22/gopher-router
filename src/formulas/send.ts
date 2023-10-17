@@ -1,44 +1,30 @@
 import { ethers, BigNumber } from "ethers";
 import {Chain, AccountDetails, Transfer, BundledTransfers} from "./interfaces";
-import {getAllBalances, getAllTransfers, sortTransfer} from "./utils";
+import {getAllBalances, getAllTransfers, sortTransfers} from "./utils";
 import {calculate_base_gas_cost, calculate_bridge_cost} from "./costs";
+import { findCheapestCombination } from "./lowestCost";
 
 const chains: Chain[] = []; // import from somewhere
 
 /**
- * NOTE: THIS ACTUALLY ISN'T THE CHEAPEST, NEED TO USE A VARIATION OF THE KNAPSACK PROBLEM
- * Calculates the best bundle of transfers
- * Simple alrogirthm, since costs are sorted, we use up as much of each balance on each chain until we reach our desired amount
- * @param amount 
+ * Finds the cheapest bundle of transactions and returns those with their total cost.
+ * @param transferAmount 
  * @param transfers 
  * @returns 
  */
 export const calculateBundledTransactions = (transferAmount: BigNumber, transfers: Transfer[]): BundledTransfers => {
-    let bundle: Transfer[] = [];
-    let bundleCost: BigNumber = BigNumber.from(0);
-    let totalRemaining: BigNumber = transferAmount;
-
-    // Iterate over the amounts available and substracts from the total until the transfer can be completed
-    transfers.forEach(transfer => {
-        if (totalRemaining.isZero()) {
-            return;
-        } else if (totalRemaining.gte(transfer.balance)) {
-            // if balance is less than total, transfer full balance
-            transfer.amountToTransfer = transfer.balance;
-            totalRemaining = totalRemaining.sub(transfer.balance);
-        } else {
-            // if balance is more than the total, transfer the remainder
-            transfer.amountToTransfer = totalRemaining;
-            totalRemaining = totalRemaining.sub(totalRemaining);
+    const bundledTransfers = findCheapestCombination(transferAmount, transfers);
+    if (bundledTransfers.length === 0) {
+        return {
+            transfers: bundledTransfers,
+            bundleCost: BigNumber.from(0)
         }
-        bundle.push(transfer);
-        bundleCost = bundleCost.add(transfer.cost);
-    });
-
+    }
+    const bundleCost = bundledTransfers.reduce((p,c) => p.add(c.cost), BigNumber.from(0));
     return {
-        transfers: bundle,
+        transfers: bundledTransfers,
         bundleCost
-    };
+    }
 };
 
 /**
@@ -61,7 +47,7 @@ export const calculate_native_transfer = async (from: string, chains: Chain[], a
         let possibleTransfers = await getAllTransfers(amount, accountDetails, calculate_base_gas_cost);
         
         // Sort the transfers based on cheapest -> most expensive
-        possibleTransfers = sortTransfer(possibleTransfers);
+        possibleTransfers = sortTransfers(possibleTransfers);
         
         // Find the cheapest single chain transfer, since its sorted it will always be the first one found
         const bestSingleChainTransfer = possibleTransfers.find(transfer => {
@@ -88,7 +74,7 @@ export const calculate_native_transfer = async (from: string, chains: Chain[], a
         let bridgedTransfers = await getAllTransfers(amount, bridgeChainsBalances, calculate_bridge_cost);
         
         // Sort the birdgedTransfer based on cheapest -> most expensive
-        bridgedTransfers = sortTransfer(bridgedTransfers);
+        bridgedTransfers = sortTransfers(bridgedTransfers);
 
         if (currentChainTransfer[0].hasFullBalance) {
             // We want to prioritize the destinationChain if it has balance

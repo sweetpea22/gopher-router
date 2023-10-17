@@ -18,15 +18,19 @@ afterEach(() => {
     transfers = [];
 })
 
-test('calculateBundledTransactions :: single chain', () => {
-   const eth: Chain = chains[0];
-   transfers.push(generateTransfer({chain: eth, balance: BigNumber.from("1"), cost: BigNumber.from("1")}));
-   transfers.push(generateTransfer({chain: eth, balance: BigNumber.from("1"), cost: BigNumber.from("2")}));
-   transfers.push(generateTransfer({chain: eth, balance: BigNumber.from("5"), cost: BigNumber.from("3")}));
-   transfers.push(generateTransfer({chain: eth, balance: BigNumber.from("5"), cost: BigNumber.from("4")}));
-   const bundle = calculateBundledTransactions(transferAmount, transfers);
-   expect(bundle.bundleCost.toString()).toBe("10");
-   expect(bundle.transfers).toStrictEqual(transfers);
+test('calculateBundledTransactions :: single chain 1', () => {
+    const eth: Chain = chains[0];
+    transfers.push(generateTransfer({chain: eth, balance: BigNumber.from("1"), cost: BigNumber.from("1")}));
+    transfers.push(generateTransfer({chain: eth, balance: BigNumber.from("1"), cost: BigNumber.from("2")}));
+    transfers.push(generateTransfer({chain: eth, balance: BigNumber.from("5"), cost: BigNumber.from("3")}));
+    transfers.push(generateTransfer({chain: eth, balance: BigNumber.from("5"), cost: BigNumber.from("4")}));
+    const bundle = calculateBundledTransactions(transferAmount, transfers);
+    const expected = [
+        generateTransfer({chain: eth, balance: BigNumber.from("5"), cost: BigNumber.from("3")}),
+        generateTransfer({chain: eth, balance: BigNumber.from("5"), cost: BigNumber.from("4")})
+    ];
+    expect(bundle.bundleCost.toString()).toBe("7");
+    expect(bundle.transfers).toStrictEqual(transfers);
 });
 
 

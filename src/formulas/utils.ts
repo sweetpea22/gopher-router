@@ -1,7 +1,7 @@
 import {ethers, BigNumber} from "ethers";
 import {Chain, AccountDetails, Transfer} from "./interfaces";
 
-export const sortTransfer = (t: Transfer[]): Transfer[] => {
+export const sortTransfers = (t: Transfer[]): Transfer[] => {
     return t.sort((a ,b) => {
         if(a.cost.gt(b.cost)) {
           return 1;
