@@ -5,7 +5,7 @@ import { useAccount, useFeeData } from 'wagmi';
 import { standardButton } from '@/app/styles/styles';
 
 export default function getQuote() {
-  const { data: feeData, isError: feeDataError, isLoading: feeDataLoading } = useFeeData()
+  const { data: feeData, isError: feeDataError, isLoading: feeDataLoading } = useFeeData({formatUnits: 'gwei', watch: true})
   const { address, isConnected } = useAccount();
 
   const renderLoading = () => {
@@ -19,7 +19,7 @@ export default function getQuote() {
     )
   }
 
-  const renderQuotes = () => {
+  const renderGasPrice = () => {
     if (!feeData) {
       return (
         <>
@@ -35,16 +35,16 @@ export default function getQuote() {
   }
 
   return (
-    <div className='flex flex-col shadow-md p-4 bg-gray-100 rounded-xl'>
+    <div className='flex flex-col items-center shadow-md p-4 bg-gray-100 rounded-xl'>
       <button
         onClick={() => {console.log('hi')}}
         type='button'
         className={`${standardButton} w-[150px] my-5`}>
         Get quotes
       </button>
-      <div className=' flex flex-col text-gray-900 text-center items-center my-8 gap-2'>
+      <div className='flex flex-col text-gray-900 text-center items-center my-8 gap-2'>
         GasPrice:
-      {renderQuotes()}
+        {renderGasPrice()}
       </div>
     </div>
 
