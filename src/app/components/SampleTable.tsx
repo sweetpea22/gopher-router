@@ -1,5 +1,8 @@
-import { Fragment } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { ArrowDownCircleIcon, ArrowPathIcon, ArrowUpCircleIcon } from '@heroicons/react/20/solid'
+import { actions } from '@/formulas'
+import { BigNumber } from 'ethers'
+import { Chain, Transfer } from '@/formulas/interfaces'
 
 const statuses = {
   Paid: 'text-green-700 bg-green-50 ring-green-600/20',
@@ -30,7 +33,22 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function SampleTable() {
+export default async function SampleTable() {
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [transfers, setTransfers] = useState<Transfer[]>([])
+
+  async function prepareTransaction() {
+    setOpen(true);
+    setLoading(true);
+    const from = ""
+    const chains: Chain[] = [];
+    const amount = BigNumber.from(0);
+
+    const transfers = await actions.calculateNativeTransfer(from, chains, amount);
+    setTransfers(transfers);
+  }
+
   return (
     <div>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -79,12 +97,12 @@ export default function SampleTable() {
                         </td>
                        
                         <td className="py-5 text-right">
-                          <div className="flex justify-end">
+                          <div className="flex justify-end" onClick={prepareTransaction}>
                             <a
                               href={transaction.href}
                               className="text-sm font-medium leading-6 text-indigo-600 hover:text-indigo-500"
                             >
-                              View<span className="hidden sm:inline"> transaction</span>
+                              Send<span className="hidden sm:inline"> transaction</span>
                               <span className="sr-only">
                                 , invoice #{transaction.invoiceNumber}, {transaction.client}
                               </span>
