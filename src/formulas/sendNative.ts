@@ -34,7 +34,7 @@ export const calculateBundledTransactions = (transferAmount: BigNumber, transfer
  * @param destinationChain 
  * @returns 
  */
-export const calculate_native_transfer = async (from: string, chains: Chain[], amount: BigNumber, destinationChain: Chain | null = null): Promise<AccountDetails[] | AccountDetails> => {
+export const calculateNativeTransfer = async (from: string, chains: Chain[], amount: BigNumber, destinationChain: Chain | null = null): Promise<AccountDetails[] | AccountDetails> => {
     // Step 1 - Get balances across all chains
     const accountDetails = await getAllBalances(from, chains);
 

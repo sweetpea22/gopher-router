@@ -1,6 +1,6 @@
 import { Chain, Transfer } from "../../formulas/interfaces";
 import { BigNumber } from "ethers";
-import { calculateBundledTransactions, calculate_native_transfer } from "../../formulas/send";
+import { calculateBundledTransactions, calculateNativeTransfer } from "../../formulas/sendNative";
 import { generateChain, generateManyFakes, generateTransfer } from "./utils";
 
 let chains: Chain[] = [];
