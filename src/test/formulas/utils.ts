@@ -14,15 +14,15 @@ export const generateChain = (name: string, isBridged = false): Chain => {
     return chain;
 }
 
-export const generateTransfer = (opts: {chain: Chain, balance?: BigNumber, cost?: BigNumber, isBridged?: boolean}): Transfer => {
-    const {chain, balance, cost, isBridged} = opts;
+export const generateTransfer = (opts: {chain: Chain, balance?: BigNumber, cost?: BigNumber, isBridged?: boolean, amountToTransfer?: BigNumber}): Transfer => {
+    const {chain, balance, cost, isBridged, amountToTransfer} = opts;
     const transfer: Transfer = {
         chain,
         hasFullBalance: false,
         balance: balance || BigNumber.from(faker.number.int(10)),
         cost: cost || BigNumber.from(faker.number.int(100)),
-        isBridged: isBridged || faker.datatype.boolean(),
-        amountToTransfer: undefined
+        isBridged: isBridged || false,
+        amountToTransfer: amountToTransfer || undefined
     }
     return transfer;
 }
