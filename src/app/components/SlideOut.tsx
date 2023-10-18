@@ -1,13 +1,9 @@
-"use client"
 import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import { Transfer } from '@/formulas/interfaces'
 
 export default function SlideOut() {
-  const [open, setOpen] = useState(false)
-  const [loading, setLoading] = useState(false);
-  const [transfers, setTransfers] = useState<Transfer[]>([])
+  const [open, setOpen] = useState(true)
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -46,10 +42,7 @@ export default function SlideOut() {
                         </div>
                       </div>
                     </div>
-                    <div className="relative mt-6 flex-1 px-4 sm:px-6">
-                      {/* Main content */}
-                      {loading ? <p>Loading...</p> : null}
-                    </div>
+                    <div className="relative mt-6 flex-1 px-4 sm:px-6">{/* Your content */}</div>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

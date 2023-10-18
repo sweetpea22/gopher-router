@@ -1,9 +1,9 @@
 import { BigNumber } from "ethers";
 import { generateChain, generateTransfer } from "./utils";
 import { sortByTransfersByBalance, sortByTransfersByCost } from "../../formulas/utils";
-import { Chain, Transfer } from "@/formulas/interfaces";
+import { ChainInfo, Transfer } from "@/app/interfaces";
 
-let chains: Chain[] = [];
+let chains: ChainInfo[] = [];
 let transfers: Transfer[] = [];
 
 beforeEach(() => {
