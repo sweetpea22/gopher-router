@@ -22,7 +22,6 @@ export const calculateBundledTransactions = (transferAmount: BigNumber, transfer
     }
     const bundleCost = bundledTransfers.reduce((p,c) => p.add(c.cost), BigNumber.from(0));
     const newBunlde = calculateAmountToSend(transferAmount, bundledTransfers);
-    console.log({newBunlde})
     return {
         transfers: newBunlde,
         bundleCost
