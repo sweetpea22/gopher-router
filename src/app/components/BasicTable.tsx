@@ -7,8 +7,9 @@ import { BigNumber } from 'ethers'
 import { ChainInfo, Transfer } from '@/app/interfaces'
 import { EthOverview } from './TableContents/eth/EthOverview';
 import { Token, TokenOverview } from './TableContents/tokens/tokenOverview';
-import { TransactionView } from './TableContents/TransactionView';
-import { RouteContext } from '../context';
+import { RouteContext } from '../context/route';
+import SlideOut from './SlideOut';
+import { SlideOutContext } from '../context/slideOut';
 
 export default function BasicTable({children}: any) { 
   // const { data: feeData, isError: feeDataError, isLoading: feeDataLoading } = useFeeData({ formatUnits: 'gwei', watch: true })
@@ -50,31 +51,33 @@ export default function BasicTable({children}: any) {
 
   return (
     <RouteContext>
-      <div className={`${centeredDiv} bg-gray-200 py-10`}>
-        <ConnectButton />
-        <div className='my-4'>
-          <h1 className='text-gray-600'>Demo case: I want to transfer 0.1 eth to [address]. Show me the cheapest route.</h1>
-        </div>
-        <div>
-          <TransactionView />
-          {/* Ether Balances */}
-          <EthOverview />
-          {/* Token Overviews */}
+      <SlideOutContext>
+        <div className={`${centeredDiv} bg-gray-200 py-10`}>
+          <ConnectButton />
+          <SlideOut />
+          <div className='my-4'>
+            <h1 className='text-gray-600'>Demo case: I want to transfer 0.1 eth to [address]. Show me the cheapest route.</h1>
           </div>
           <div>
-          {/* {
-            // TODO: Add token overviews
-            tokens.map(token => {
-              return <TokenOverview token={token}/>
-            })
-          } */}
-          </div>
+            {/* Ether Balances */}
+            <EthOverview />
+            {/* Token Overviews */}
+            </div>
+            <div>
+            {/* {
+              // TODO: Add token overviews
+              tokens.map(token => {
+                return <TokenOverview token={token}/>
+              })
+            } */}
+            </div>
 
-          <div className='flex flex-col text-gray-900 text-center items-center my-8 gap-2'>
-            Current Gas Price (Gwei):
-            {/* {renderGasPrice()} */}
+            <div className='flex flex-col text-gray-900 text-center items-center my-8 gap-2'>
+              Current Gas Price (Gwei):
+              {/* {renderGasPrice()} */}
+          </div>
         </div>
-      </div>
+      </SlideOutContext>
     </RouteContext>
   )
 }
