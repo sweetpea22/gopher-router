@@ -1,5 +1,6 @@
 import { RouteData } from "@/app/context/route";
 import { TrasnferData } from "@/app/context/transfers";
+import { ethers } from "ethers";
 import { useContext, useState } from "react";
 
 export function InnerContent() {
@@ -25,7 +26,7 @@ export function InnerContent() {
               <div key={transfer.chain.name + transfer.amountToTransfer?.toString()}>
                 <p>Transfer #{i}</p>
                 <p>{transfer.chain.name}</p>
-                <p>Amount to transfer: {transfer.amountToTransfer?.toString()}</p>
+                <p>Amount to transfer: {ethers.utils.formatUnits(transfer.amountToTransfer) }</p>
                 <p>Cost to transfer: ${transfer.cost.toString()}</p>
                 <p>Bridged TX: {transfer.isBridged ? "Yes":"No"}</p>
                 <br/>

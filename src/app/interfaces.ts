@@ -15,8 +15,8 @@ export interface Transfer {
     hasFullBalance: boolean;
     balance: BigNumber;
     cost: BigNumber;
+    amountToTransfer: BigNumber;
     isBridged?: boolean;
-    amountToTransfer?: BigNumber;
 }
 
 export interface BundledTransfers {
