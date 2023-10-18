@@ -5,14 +5,16 @@ import { parseEther } from "viem";
 import { useDebounce } from "use-debounce";
 import { standardButton } from '@/app/styles/styles';
 import { BigNumber } from 'ethers';
-import { RouteData } from '@/app/context';
+import { RouteData } from '@/app/context/route';
+import { SlideOutData } from '@/app/context/slideOut';
 
 // const HARDCODED_ADDRESS = '0x18f32D6c9075796a74a403e575c27299EdABfE2D';
 
 export default function InputFields() {
   const {setDestinationAddress, setEtherAmount} = useContext(RouteData);
+  const {isOpen, setOpen} = useContext(SlideOutData);
   const [localAddress, setLocalAddress] = useState("");
-  const [localAmount, setLocalAmount] = useState(BigNumber.from(0));
+  const [localAmount, setLocalAmount] = useState("");
 
   // const [debouncedAmountToSend] = useDebounce(value.toString(), 500);
 
@@ -34,12 +36,13 @@ export default function InputFields() {
   }
 
   const changeAmount = (e: ChangeEvent<HTMLInputElement>) => {
-    setLocalAmount(BigNumber.from(e.target.value))
+    setLocalAmount(e.target.value)
   }
 
   const getRoutes = () => {
+    if (!isOpen) setOpen(true);
     setDestinationAddress(localAddress);
-    setEtherAmount(localAmount);
+    setEtherAmount(BigNumber.from(localAmount));
   }
 
   return (
@@ -72,12 +75,14 @@ export default function InputFields() {
             className={`${standardInput}`}
             placeholder="Amount in ether"
             onChange={changeAmount}
-            value={localAmount.eq(BigNumber.from(0)) ? undefined : localAmount.toString()}
+            value={localAmount}
           />
           <button
             onClick={getRoutes}
             type='button'
-            className={`${standardButton} w-[150px] my-5`}>
+            className={`${standardButton} w-[150px] my-5`}
+            disabled={!localAddress && !localAmount}
+            >
             Get Routes
           </button>
         </div>

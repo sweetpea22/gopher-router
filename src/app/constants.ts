@@ -2,7 +2,7 @@ import { ChainInfo } from "@/app/interfaces";
 import { BigNumber } from "ethers";
 
 export enum ChainNames {
-    ETHEREUM = "ETHREUM",
+    ETHEREUM = "ETHEREUM",
     GOERLI = "GOERLI",
     SEPOLIA = "SEPOLIA"
 }
