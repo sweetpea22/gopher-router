@@ -1,12 +1,13 @@
 import { faker } from '@faker-js/faker';
 import { ChainInfo, Transfer } from "../../app/interfaces";
 import { ethers, BigNumber } from 'ethers';
+import { ChainNames } from '@/app/constants';
 
 export const generateManyFakes = (n: number, fn: Function, fnArgs: any[]) => {
     return new Array(n).fill(0).map(() => fn(...fnArgs));
 }
 
-export const generateChain = (name: string, isBridged = false): ChainInfo => {
+export const generateChain = (name: ChainNames, isBridged = false): ChainInfo => {
     const chain: ChainInfo = {
         name,
         rpcUrl: ""
@@ -22,7 +23,7 @@ export const generateTransfer = (opts: {chain: ChainInfo, balance?: BigNumber, c
         balance: balance || BigNumber.from(faker.number.int(10)),
         cost: cost || BigNumber.from(faker.number.int(100)),
         isBridged: isBridged || false,
-        amountToTransfer: amountToTransfer || undefined
+        amountToTransfer: amountToTransfer || BigNumber.from(0)
     }
     return transfer;
 }

@@ -1,7 +1,9 @@
 import {BigNumber} from "ethers";
+import { ChainNames } from "./constants";
+import { FeeData } from "@/formulas/gasCosts";
 
 export interface ChainInfo {
-    name: string;
+    name: ChainNames;
     rpcUrl: string;
 }
 
@@ -14,9 +16,9 @@ export interface Transfer {
     chain: ChainInfo;
     hasFullBalance: boolean;
     balance: BigNumber;
-    cost: BigNumber;
+    feeData: FeeData;
+    amountToTransfer: BigNumber;
     isBridged?: boolean;
-    amountToTransfer?: BigNumber;
 }
 
 export interface BundledTransfers {
