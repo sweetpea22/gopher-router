@@ -1,12 +1,11 @@
-import { Fragment, useContext, useState } from 'react'
+import { Fragment, useContext } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import { SlideOutData } from '../context/slideOut'
-import { RouteData } from '../context/route';
+import { SlideOutData } from '../../context/slideOut'
+import { InnerContent } from './InnderContent';
 
-export default function SlideOut() {
+export function SlideOut() {
   const {isOpen, setOpen} = useContext(SlideOutData);
-  const {destinationAddress, etherAmount} = useContext(RouteData);
 
   return (
     <Transition.Root show={isOpen} as={Fragment}>
@@ -30,7 +29,7 @@ export default function SlideOut() {
                     <div className="px-4 sm:px-6">
                       <div className="flex items-start justify-between">
                         <Dialog.Title className="text-base font-semibold leading-6 text-gray-900">
-                          Panel title
+                          Transfer Details
                         </Dialog.Title>
                         <div className="ml-3 flex h-7 items-center">
                           <button
@@ -47,9 +46,9 @@ export default function SlideOut() {
                     </div>
                     <div style={{"color": "black"}} className="relative mt-6 flex-1 px-4 sm:px-6">
                       {/* Inner content */}
-                      <p>Destination Address: {destinationAddress}</p>
-                      <p>Ether Amount: {etherAmount.toString()}</p>
-                      <p>Display routes...</p>
+                      
+                      <InnerContent />
+
                     </div>
                   </div>
                 </Dialog.Panel>
