@@ -1,10 +1,10 @@
 import { ethers, BigNumber } from "ethers";
-import {Chain, AccountDetails, Transfer, BundledTransfers} from "./interfaces";
+import {ChainInfo, AccountDetails, Transfer, BundledTransfers} from "../app/interfaces";
 import {getAllBalances, getAllTransfers, sortByTransfersByBalance, sortByTransfersByCost} from "./utils";
-import {calculate_base_gas_cost, calculate_bridge_cost} from "./costs";
+import {calculate_base_gas_cost, calculate_bridge_cost} from "./gasCosts";
 import { findCheapestCombination } from "./lowestCost";
 
-const chains: Chain[] = []; // import from somewhere
+const chains: ChainInfo[] = []; // import from somewhere
 
 /**
  * Finds the cheapest bundle of transactions and returns those with their total cost.
@@ -52,7 +52,7 @@ export const calculateAmountToSend = (transferAmount: BigNumber, transfers: Tran
  * @param destinationChain 
  * @returns 
  */
-export const calculateNativeTransfer = async (from: string, chains: Chain[], amount: BigNumber, destinationChain: Chain | null = null): Promise<Transfer[]> => {
+export const calculateNativeTransfer = async (from: string, chains: ChainInfo[], amount: BigNumber, destinationChain: ChainInfo | null = null): Promise<Transfer[]> => {
     // Step 1 - Get balances across all chains
     const accountDetails = await getAllBalances(from, chains);
 

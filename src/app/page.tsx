@@ -1,13 +1,13 @@
-import BasicTable from './components/Basic/BasicTable'
-import SampleWalletPortfolio from './components/SampleWalletPortfolio'
-import SlideOut from './components/SlideOut'
+import { useState } from 'react';
+import BasicTable from './components/BasicTable';
+import SlideOut from './components/SlideOut';
+import { BigNumber } from 'ethers';
 
 export default function Home() {
   return (
-    <div className="h-full">
-      <BasicTable />
-      {/* <SampleWalletPortfolio/>
-      <SlideOut /> */}
-    </div>
+      <div className="h-full">
+        <BasicTable />
+        {/* <SlideOut /> */}
+      </div>
   )
 }

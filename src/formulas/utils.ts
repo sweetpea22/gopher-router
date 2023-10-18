@@ -1,5 +1,5 @@
 import {ethers, BigNumber} from "ethers";
-import {Chain, AccountDetails, Transfer} from "./interfaces";
+import {ChainInfo, AccountDetails, Transfer} from "../app/interfaces";
 
 export const sortByTransfersByCost = (t: Transfer[]): Transfer[] => {
     return t.sort((a ,b) => {
@@ -50,7 +50,7 @@ export const getAllTransfers = async (amount: BigNumber, AccountDetails: Account
  * @param chains 
  * @returns 
  */
-export const getAllBalances = async (address: string, chains: Chain[]): Promise<AccountDetails[]> => {
+export const getAllBalances = async (address: string, chains: ChainInfo[]): Promise<AccountDetails[]> => {
     return await Promise.all(chains.map(async (chain) => {
         const provider = new ethers.providers.JsonRpcProvider(chain.rpcUrl);
         const balance = await provider.getBalance(address);

@@ -1,17 +1,17 @@
 import {BigNumber} from "ethers";
 
-export interface Chain {
+export interface ChainInfo {
     name: string;
     rpcUrl: string;
 }
 
 export interface AccountDetails {
-    chain: Chain;
+    chain: ChainInfo;
     balance: BigNumber;
 }
 
 export interface Transfer {
-    chain: Chain;
+    chain: ChainInfo;
     hasFullBalance: boolean;
     balance: BigNumber;
     cost: BigNumber;

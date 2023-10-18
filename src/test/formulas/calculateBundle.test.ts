@@ -1,9 +1,9 @@
-import { Chain, Transfer } from "../../formulas/interfaces";
+import { ChainInfo, Transfer } from "../../app/interfaces";
 import { BigNumber } from "ethers";
 import { calculateBundledTransactions, calculateNativeTransfer } from "../../formulas/calculateNative";
 import { generateChain, generateManyFakes, generateTransfer } from "./utils";
 
-let chains: Chain[] = [];
+let chains: ChainInfo[] = [];
 let transfers: Transfer[] = [];
 const transferAmount = BigNumber.from("10");
 
@@ -19,7 +19,7 @@ afterEach(() => {
 })
 
 test('calculateBundledTransactions :: single chain 1', () => {
-    const eth: Chain = chains[0];
+    const eth: ChainInfo = chains[0];
     transfers.push(generateTransfer({chain: eth, balance: BigNumber.from("1"), cost: BigNumber.from("1")}));
     transfers.push(generateTransfer({chain: eth, balance: BigNumber.from("1"), cost: BigNumber.from("2")}));
     transfers.push(generateTransfer({chain: eth, balance: BigNumber.from("5"), cost: BigNumber.from("3")}));
@@ -35,7 +35,7 @@ test('calculateBundledTransactions :: single chain 1', () => {
 
 
 test('calculateBundledTransactions :: single chain 2', () => {
-    const eth: Chain = chains[0];
+    const eth: ChainInfo = chains[0];
     transfers.push(generateTransfer({chain: eth, balance: BigNumber.from("1"), cost: BigNumber.from("1")}));
     transfers.push(generateTransfer({chain: eth, balance: BigNumber.from("1"), cost: BigNumber.from("2")}));
     transfers.push(generateTransfer({chain: eth, balance: BigNumber.from("8"), cost: BigNumber.from("3")}));
@@ -52,7 +52,7 @@ test('calculateBundledTransactions :: single chain 2', () => {
  });
 
  test('calculateBundledTransactions :: single chain 3', () => {
-    const eth: Chain = chains[0];
+    const eth: ChainInfo = chains[0];
     transfers.push(generateTransfer({chain: eth, balance: BigNumber.from("10"), cost: BigNumber.from("1")}));
     transfers.push(generateTransfer({chain: eth, balance: BigNumber.from("1"), cost: BigNumber.from("2")}));
     transfers.push(generateTransfer({chain: eth, balance: BigNumber.from("8"), cost: BigNumber.from("3")}));
@@ -67,7 +67,7 @@ test('calculateBundledTransactions :: single chain 2', () => {
  });
 
  test('calculateBundledTransactions :: single chain 4', () => {
-    const eth: Chain = chains[0];
+    const eth: ChainInfo = chains[0];
     transfers.push(generateTransfer({chain: eth, balance: BigNumber.from("1"), cost: BigNumber.from("1")}));
     transfers.push(generateTransfer({chain: eth, balance: BigNumber.from("1"), cost: BigNumber.from("2")}));
     transfers.push(generateTransfer({chain: eth, balance: BigNumber.from("11"), cost: BigNumber.from("3")}));
