@@ -1,11 +1,12 @@
 import {ethers, BigNumber} from "ethers";
 import {ChainInfo, AccountDetails, Transfer} from "../app/interfaces";
+import { calculateBaseGasCost, calculateBridgeCost } from "./gasCosts";
 
 export const sortByTransfersByCost = (t: Transfer[]): Transfer[] => {
     return t.sort((a ,b) => {
-        if(a.cost.gt(b.cost)) {
+        if(a.feeData.cost.gt(b.feeData.cost)) {
           return 1;
-        } else if (a.cost.lt(b.cost)){
+        } else if (a.feeData.cost.lt(b.feeData.cost)){
           return -1;
         } else {
           return 0;
@@ -32,16 +33,16 @@ export const sortByTransfersByBalance = (t: Transfer[]): Transfer[] => {
  * @param costFn 
  * @returns 
  */
-export const getAllTransfers = async (amount: BigNumber, AccountDetails: AccountDetails[], costFn: () => Promise<BigNumber>): Promise<Transfer[]> => {
+export const getAllTransfers = async (amount: BigNumber, AccountDetails: AccountDetails[], isBaseCost: boolean): Promise<Transfer[]> => {
     return await Promise.all(AccountDetails.map(async (account) => {
-        const cost = await costFn();
-        const hasFullBalance = account.balance.gte(amount.add(cost));
-        return {
-            chain: account.chain,
-            balance: account.balance,
-            hasFullBalance,
-            cost,
-        } as Transfer;
+      const feeData = isBaseCost ? await calculateBaseGasCost(account.chain) : await calculateBridgeCost(account.chain);
+      const hasFullBalance = account.balance.gte(amount.add(feeData.cost));
+      return {
+          chain: account.chain,
+          balance: account.balance,
+          hasFullBalance,
+          feeData,
+      } as Transfer;
     }));
 };
 

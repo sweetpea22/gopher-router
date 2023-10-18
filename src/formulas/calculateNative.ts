@@ -1,7 +1,6 @@
 import { ethers, BigNumber } from "ethers";
 import {ChainInfo, AccountDetails, Transfer, BundledTransfers} from "../app/interfaces";
 import {getAllBalances, getAllTransfers, sortByTransfersByBalance, sortByTransfersByCost} from "./utils";
-import {calculate_base_gas_cost, calculate_bridge_cost} from "./gasCosts";
 import { findCheapestCombination } from "./lowestCost";
 
 const chains: ChainInfo[] = []; // import from somewhere
@@ -20,7 +19,7 @@ export const calculateBundledTransactions = (transferAmount: BigNumber, transfer
             bundleCost: BigNumber.from(0)
         }
     }
-    const bundleCost = bundledTransfers.reduce((p,c) => p.add(c.cost), BigNumber.from(0));
+    const bundleCost = bundledTransfers.reduce((p,c) => p.add(c.feeData.cost), BigNumber.from(0));
     const newBunlde = calculateAmountToSend(transferAmount, bundledTransfers);
     return {
         transfers: newBunlde,
@@ -61,7 +60,7 @@ export const calculateNativeTransfer = async (from: string, chains: ChainInfo[],
     if (destinationChain == null) {
         
         // Contains a list of transfers with assosiated costs across all the chains
-        let possibleTransfers = await getAllTransfers(amount, accountDetails, calculate_base_gas_cost);
+        let possibleTransfers = await getAllTransfers(amount, accountDetails, true);
         
         // Sort the transfers based on cheapest -> most expensive
         possibleTransfers = sortByTransfersByCost(possibleTransfers);
@@ -77,7 +76,7 @@ export const calculateNativeTransfer = async (from: string, chains: ChainInfo[],
         // Calculate multi-chain transfers
         const { transfers, bundleCost } = calculateBundledTransactions(amount, possibleTransfers);
         // Return the cheapeast option
-        return bestSingleChainTransfer && bestSingleChainTransfer.cost!.lte(bundleCost) ? [bestSingleChainTransfer] : transfers;
+        return bestSingleChainTransfer && bestSingleChainTransfer.feeData.cost!.lte(bundleCost) ? [bestSingleChainTransfer] : transfers;
 
     // Step 2.2 - If `destinationChain != null`
     // In this case we need to calculate the costs of bridging between chains, and finding the cheapest bundle
@@ -88,8 +87,8 @@ export const calculateNativeTransfer = async (from: string, chains: ChainInfo[],
         const bridgeChainsBalances = accountDetails.filter(chain => chain.chain.name !== destinationChain.name);
 
         // Lists of transfers with assosiated costs across all the chains
-        const currentChainTransfer = await getAllTransfers(amount, [destinationAccountDetails!], calculate_base_gas_cost); // always length=1
-        let bridgedTransfers = await getAllTransfers(amount, bridgeChainsBalances, calculate_bridge_cost);
+        const currentChainTransfer = await getAllTransfers(amount, [destinationAccountDetails!], false); // always length=1
+        let bridgedTransfers = await getAllTransfers(amount, bridgeChainsBalances, true);
         
         // Sort the birdgedTransfer based on cheapest -> most expensive
         bridgedTransfers = sortByTransfersByCost(bridgedTransfers);
@@ -97,7 +96,7 @@ export const calculateNativeTransfer = async (from: string, chains: ChainInfo[],
         if (currentChainTransfer[0].hasFullBalance) {
             // We want to prioritize the destinationChain if it has balance
             const { transfers, bundleCost } = calculateBundledTransactions(amount, bridgedTransfers);
-            return currentChainTransfer[0].cost!.lte(bundleCost) ? currentChainTransfer : transfers;
+            return currentChainTransfer[0].feeData.cost!.lte(bundleCost) ? currentChainTransfer : transfers;
         } else {
             const bundledTransfers = [...currentChainTransfer, ...bridgedTransfers];
             const { transfers } = calculateBundledTransactions(amount, bundledTransfers);
