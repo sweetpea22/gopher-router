@@ -1,20 +1,20 @@
 import { faker } from '@faker-js/faker';
-import { Chain, Transfer } from "../../formulas/interfaces";
+import { ChainInfo, Transfer } from "../../app/interfaces";
 import { ethers, BigNumber } from 'ethers';
 
 export const generateManyFakes = (n: number, fn: Function, fnArgs: any[]) => {
     return new Array(n).fill(0).map(() => fn(...fnArgs));
 }
 
-export const generateChain = (name: string, isBridged = false): Chain => {
-    const chain: Chain = {
+export const generateChain = (name: string, isBridged = false): ChainInfo => {
+    const chain: ChainInfo = {
         name,
         rpcUrl: ""
     };
     return chain;
 }
 
-export const generateTransfer = (opts: {chain: Chain, balance?: BigNumber, cost?: BigNumber, isBridged?: boolean, amountToTransfer?: BigNumber}): Transfer => {
+export const generateTransfer = (opts: {chain: ChainInfo, balance?: BigNumber, cost?: BigNumber, isBridged?: boolean, amountToTransfer?: BigNumber}): Transfer => {
     const {chain, balance, cost, isBridged, amountToTransfer} = opts;
     const transfer: Transfer = {
         chain,

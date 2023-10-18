@@ -3,7 +3,7 @@ import { Fragment, useEffect, useState } from 'react'
 import { ArrowDownCircleIcon, ArrowPathIcon, ArrowUpCircleIcon } from '@heroicons/react/20/solid'
 import { actions } from '@/formulas'
 import { BigNumber } from 'ethers'
-import { Chain, Transfer } from '@/formulas/interfaces'
+import { ChainInfo, Transfer } from '@/app/interfaces'
 
 const statuses = {
   Paid: 'text-green-700 bg-green-50 ring-green-600/20',

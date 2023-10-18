@@ -1,5 +1,4 @@
 "use client"
-
 import { WagmiConfig } from "wagmi";
 import { RainbowKitProvider, getDefaultWallets } from '@rainbow-me/rainbowkit'
 import { configureChains, createConfig } from 'wagmi'

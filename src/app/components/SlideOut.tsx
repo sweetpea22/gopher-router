@@ -1,17 +1,16 @@
-"use client"
-import { Fragment, useState } from 'react'
+import { Fragment, useContext, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import { Transfer } from '@/formulas/interfaces'
+import { SlideOutData } from '../context/slideOut'
+import { RouteData } from '../context/route';
 
 export default function SlideOut() {
-  const [open, setOpen] = useState(false)
-  const [loading, setLoading] = useState(false);
-  const [transfers, setTransfers] = useState<Transfer[]>([])
+  const {isOpen, setOpen} = useContext(SlideOutData);
+  const {destinationAddress, etherAmount} = useContext(RouteData);
 
   return (
-    <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={setOpen}>
+    <Transition.Root show={isOpen} as={Fragment}>
+      <Dialog as="div" className="relative z-10" onClose={() => setOpen(false)}>
         <div className="fixed inset-0" />
 
         <div className="fixed inset-0 overflow-hidden">
@@ -46,9 +45,11 @@ export default function SlideOut() {
                         </div>
                       </div>
                     </div>
-                    <div className="relative mt-6 flex-1 px-4 sm:px-6">
-                      {/* Main content */}
-                      {loading ? <p>Loading...</p> : null}
+                    <div style={{"color": "black"}} className="relative mt-6 flex-1 px-4 sm:px-6">
+                      {/* Inner content */}
+                      <p>Destination Address: {destinationAddress}</p>
+                      <p>Ether Amount: {etherAmount.toString()}</p>
+                      <p>Display routes...</p>
                     </div>
                   </div>
                 </Dialog.Panel>
