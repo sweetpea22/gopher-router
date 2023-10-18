@@ -1,83 +1,58 @@
-"use client"
 import { ConnectButton } from '@rainbow-me/rainbowkit'
-import { useFeeData } from 'wagmi';
-import { centeredDiv, standardButton } from '../styles/styles'
-import { actions } from '@/formulas'
-import { BigNumber } from 'ethers'
-import { ChainInfo, Transfer } from '@/app/interfaces'
+import { centeredDiv } from '../styles/styles'
 import { EthOverview } from './TableContents/eth/EthOverview';
-import { Token, TokenOverview } from './TableContents/tokens/tokenOverview';
-import { RouteContext } from '../context/route';
-import SlideOut from './SlideOut';
-import { SlideOutContext } from '../context/slideOut';
+import { RouteData } from '../context/route';
+import {SlideOut} from './SlideOut/index';
+import { TrasnferData } from '../context/transfers';
+import { useContext, useEffect } from 'react';
+import { actions } from '@/formulas';
+import * as constants  from '../constants';
+import { ethers } from 'ethers';
 
-export default function BasicTable({children}: any) { 
-  // const { data: feeData, isError: feeDataError, isLoading: feeDataLoading } = useFeeData({ formatUnits: 'gwei', watch: true })
-  const chains: ChainInfo[] = [{name: "Goerli", rpcUrl: ""}];
-  const amount = BigNumber.from(0);
-  
-  // const renderLoading = () => {
-  //   if (!feeDataLoading) {
-  //     return null;
-  //   }
-  //   return (
-  //     <div>
-  //       Processing...
-  //     </div>
-  //   )
-  // }
+export default function BasicTable({children}: any) {
+  const {setTransfers, setLoadingTransfers, loadingTransfers} = useContext(TrasnferData);
+  const {etherAmount, destinationAddress} = useContext(RouteData);
 
-  // const renderGasPrice = () => {
-  //   if (!feeData) {
-  //     return (
-  //       <>
-  //         {renderLoading()}
-  //       </>
-  //     )
-  //   }
-  //   return (
-  //     <div className="">
-  //       <p className='text-gray-900'>{JSON.stringify(feeData?.formatted.gasPrice)}</p>
-  //     </div>
-  //   )
-  // }
-  // const transfers = await actions.calculateNativeTransfer("0x18f32D6c9075796a74a403e575c27299EdABfE2D" as string, chains, amount)
-  // console.log(transfers);
+  useEffect(() => {
+    const fetchTransfers = async () => {
+      const amount = ethers.utils.parseEther(etherAmount.toString());
+      const transfers = await actions.calculateNativeTransfer(
+        destinationAddress, 
+        constants.chains,
+        ethers.BigNumber.from(amount)
+        );
+      setTransfers(transfers);
+      setLoadingTransfers(false);
+    };
 
-  const tokens: Token[] = [
-    {name:"usdc"},
-    {name: "tether"},
-  ];
+    // Add actual validations here
+    if (ethers.utils.isAddress(destinationAddress)) {
+      setLoadingTransfers(true);
+      fetchTransfers();
+    }
+  }, [etherAmount, destinationAddress])
 
   return (
-    <RouteContext>
-      <SlideOutContext>
-        <div className={`${centeredDiv} bg-gray-200 py-10`}>
-          <ConnectButton />
-          <SlideOut />
-          <div className='my-4'>
-            <h1 className='text-gray-600'>Demo case: I want to transfer 0.1 eth to [address]. Show me the cheapest route.</h1>
-          </div>
-          <div>
-            {/* Ether Balances */}
-            <EthOverview />
-            {/* Token Overviews */}
-            </div>
-            <div>
-            {/* {
-              // TODO: Add token overviews
-              tokens.map(token => {
-                return <TokenOverview token={token}/>
-              })
-            } */}
-            </div>
-
-            <div className='flex flex-col text-gray-900 text-center items-center my-8 gap-2'>
-              Current Gas Price (Gwei):
-              {/* {renderGasPrice()} */}
-          </div>
+    <div className={`${centeredDiv} bg-gray-200 py-10`}>
+      <ConnectButton />
+      <SlideOut />
+      <p>Ether: {etherAmount.toString()} destinationAddress: {destinationAddress} </p>
+      <div className='my-4'>
+        <h1 className='text-gray-600'>Demo case: I want to transfer 0.1 eth to [address]. Show me the cheapest route.</h1>
+      </div>
+      <div>
+        {/* Ether Balances */}
+        <EthOverview />
+        {/* Token Overviews */}
         </div>
-      </SlideOutContext>
-    </RouteContext>
+        <div>
+        {/* {
+          // TODO: Add token overviews
+          tokens.map(token => {
+            return <TokenOverview token={token}/>
+          })
+        } */}
+        </div>
+    </div>
   )
 }

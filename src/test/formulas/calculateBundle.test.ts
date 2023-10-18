@@ -2,14 +2,15 @@ import { ChainInfo, Transfer } from "../../app/interfaces";
 import { BigNumber } from "ethers";
 import { calculateBundledTransactions, calculateNativeTransfer } from "../../formulas/calculateNative";
 import { generateChain, generateManyFakes, generateTransfer } from "./utils";
+import { ChainNames } from "@/app/constants";
 
 let chains: ChainInfo[] = [];
 let transfers: Transfer[] = [];
 const transferAmount = BigNumber.from("10");
 
 beforeEach(() => {
-    chains.push(generateChain("ethereum"));
-    chains.push(generateChain("optimism"))
+    chains.push(generateChain(ChainNames.ETHEREUM));
+    chains.push(generateChain(ChainNames.GOERLI))
     return;
 });
 

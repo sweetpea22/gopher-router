@@ -2,7 +2,7 @@ import { BigNumber } from 'ethers';
 import { Transfer } from '../app/interfaces';
 
 function calculateCost(combination: Transfer[]): BigNumber {
-    return combination.reduce((acc, item) => acc.add(item.cost), BigNumber.from('0'));
+    return combination.reduce((acc, item) => acc.add(item.feeData.cost), BigNumber.from('0'));
 }
 
 const INFINITY = BigNumber.from('999999999999999999999999999'); // Choose a large value as "infinity"
