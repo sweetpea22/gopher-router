@@ -1,5 +1,5 @@
 import { BigNumber } from 'ethers';
-import { Transfer } from './interfaces';
+import { Transfer } from '../app/interfaces';
 
 function calculateCost(combination: Transfer[]): BigNumber {
     return combination.reduce((acc, item) => acc.add(item.cost), BigNumber.from('0'));
