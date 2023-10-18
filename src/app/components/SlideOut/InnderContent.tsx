@@ -27,7 +27,7 @@ export function InnerContent() {
                 <p>Transfer #{i}</p>
                 <p>{transfer.chain.name}</p>
                 <p>Amount to transfer: {ethers.utils.formatUnits(transfer.amountToTransfer) }</p>
-                <p>Cost to transfer: ${transfer.cost.toString()}</p>
+                <p>Cost to transfer: ${transfer.feeData.cost.toString()}</p>
                 <p>Bridged TX: {transfer.isBridged ? "Yes":"No"}</p>
                 <br/>
               </div>

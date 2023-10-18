@@ -1,8 +1,9 @@
 import { BigNumber } from "ethers";
 import { findCheapestCombination } from "../../formulas/lowestCost";
 import { generateChain, generateTransfer } from "./utils";
+import { ChainNames } from "@/app/constants";
 
-const eth = generateChain("eth");
+const eth = generateChain(ChainNames.ETHEREUM);
 
 test('findCheapestCombination 1', () => {
     const bundles = [

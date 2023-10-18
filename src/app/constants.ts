@@ -7,12 +7,6 @@ export enum ChainNames {
     SEPOLIA = "SEPOLIA"
 }
 
-export const NativeTransferCosts = {
-    [ChainNames.ETHEREUM]: 21000,
-    [ChainNames.GOERLI]: 21000,
-    [ChainNames.SEPOLIA]: 21000
-};
-
 export const chains: ChainInfo[] = [
     { 
         name: ChainNames.GOERLI, 
