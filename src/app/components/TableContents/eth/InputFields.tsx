@@ -4,6 +4,8 @@ import { standardButton } from '@/app/styles/styles';
 import { BigNumber } from 'ethers';
 import { RouteData } from '@/app/context/route';
 import { SlideOutData } from '@/app/context/slideOut';
+import NetworkInput from './NetworkInput';
+
 import { TrasnferData } from '@/app/context/transfers';
 
 export default function InputFields() {
@@ -28,8 +30,8 @@ export default function InputFields() {
   }
 
   return (
-    <div className='py-2'>
-      <div className='py-2'>
+    <div className='py-2 px-12'>
+      <div className='py-2 w-[5rem]'>
         <label htmlFor="address" className="block text-sm font-medium leading-6 text-gray-900">
           Send to
         </label>
@@ -59,6 +61,7 @@ export default function InputFields() {
             onChange={changeAmount}
             value={localAmount}
           />
+          <NetworkInput />
           <button
             onClick={getRoutes}
             type='button'

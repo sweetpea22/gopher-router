@@ -33,25 +33,29 @@ export default function BasicTable({children}: any) {
   }, [etherAmount, destinationAddress])
 
   return (
-    <div className={`${centeredDiv} bg-gray-200 py-10`}>
-      <ConnectButton />
-      <SlideOut />
-      <p>Ether: {etherAmount.toString()} destinationAddress: {destinationAddress} </p>
-      <div className='my-4'>
-        <h1 className='text-gray-600'>Demo case: I want to transfer 0.1 eth to [address]. Show me the cheapest route.</h1>
-      </div>
-      <div>
-        {/* Ether Balances */}
-        <EthOverview />
-        {/* Token Overviews */}
-        </div>
-        <div>
-        {/* {
-          // TODO: Add token overviews
-          tokens.map(token => {
-            return <TokenOverview token={token}/>
-          })
-        } */}
+    <RouteContext>
+      <SlideOutContext>
+            <div className='flex flex-col text-gray-900 text-center items-center my-8 gap-2'>
+              Current Gas Price (Gwei):
+              {/* {renderGasPrice()} */}
+          </div>
+        <div className={`${centeredDiv} bg-gray-200 py-10 my-8`}>
+          <ConnectButton />
+          <SlideOut />
+          <div>
+            {/* Ether Balances */}
+            <EthOverview />
+            {/* Token Overviews */}
+            </div>
+            <div>
+            {/* {
+              // TODO: Add token overviews
+              tokens.map(token => {
+                return <TokenOverview token={token}/>
+              })
+            } */}
+            </div>
+
         </div>
     </div>
   )
