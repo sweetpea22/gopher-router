@@ -1,12 +1,13 @@
 import { standardInput } from '@/app/styles/styles'
 import { useSendTransaction, usePrepareSendTransaction } from 'wagmi'
-import { ChangeEvent, useContext, useState } from 'react'
 import { parseEther } from "viem";
 import { useDebounce } from "use-debounce";
+import { ChangeEvent, useContext, useState } from 'react'
 import { standardButton } from '@/app/styles/styles';
 import { BigNumber } from 'ethers';
 import { RouteData } from '@/app/context/route';
 import { SlideOutData } from '@/app/context/slideOut';
+import NetworkInput from './NetworkInput';
 
 // const HARDCODED_ADDRESS = '0x18f32D6c9075796a74a403e575c27299EdABfE2D';
 
@@ -46,8 +47,8 @@ export default function InputFields() {
   }
 
   return (
-    <div className='py-2'>
-      <div className='py-2'>
+    <div className='py-2 px-12'>
+      <div className='py-2 w-[5rem]'>
         <label htmlFor="address" className="block text-sm font-medium leading-6 text-gray-900">
           Send to
         </label>
@@ -77,6 +78,7 @@ export default function InputFields() {
             onChange={changeAmount}
             value={localAmount}
           />
+          <NetworkInput />
           <button
             onClick={getRoutes}
             type='button'
