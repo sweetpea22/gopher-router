@@ -4,7 +4,7 @@ import InputFields from './InputFields';
 import { getAllBalances } from '@/formulas/utils';
 import { useEffect, useState } from 'react';
 import { formatEther } from 'ethers/lib/utils';
-import { chains } from '@/app/constants';
+import { Chains } from '@/app/constants';
 
 export interface Opts {
   token: Token
@@ -26,7 +26,7 @@ export function TokenOverview(props: Token) {
       // setBalances(data);
     }
     getBalanceByChain();
-  }, [address, chains])
+  }, [address, Chains])
 
   return (
     <div className='flex flex-col items-center shadow-md p-4 bg-gray-100 rounded-xl'>      

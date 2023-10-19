@@ -18,8 +18,10 @@ export default function BasicTable({children}: any) {
       const amount = ethers.utils.parseEther(etherAmount.toString());
       const transfers = await actions.calculateNativeTransfer(
         destinationAddress, 
-        constants.chains,
-        ethers.BigNumber.from(amount)
+        constants.Chains,
+        ethers.BigNumber.from(amount),
+        // stub
+        constants.Chains[0]
         );
       setTransfers(transfers);
       setLoadingTransfers(false);

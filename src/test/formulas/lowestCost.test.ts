@@ -3,7 +3,7 @@ import { findCheapestCombination } from "../../formulas/lowestCost";
 import { generateChain, generateTransfer } from "./utils";
 import { ChainNames } from "@/app/constants";
 
-const eth = generateChain(ChainNames.ETHEREUM);
+const eth = generateChain(ChainNames.ethereum);
 
 test('findCheapestCombination 1', () => {
     const bundles = [

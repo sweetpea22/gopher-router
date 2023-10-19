@@ -60,7 +60,12 @@ export const calculateNativeTransfer = async (from: string, chains: ChainInfo[],
     if (destinationChain == null) {
         
         // Contains a list of transfers with assosiated costs across all the chains
-        let possibleTransfers = await getAllTransfers(amount, accountDetails, true);
+        let possibleTransfers = await getAllTransfers({
+            amount, 
+            accountDetails,
+            // @TODO change
+            to: from
+        });
         
         // Sort the transfers based on cheapest -> most expensive
         possibleTransfers = sortByTransfersByCost(possibleTransfers);
@@ -87,8 +92,20 @@ export const calculateNativeTransfer = async (from: string, chains: ChainInfo[],
         const bridgeChainsBalances = accountDetails.filter(chain => chain.chain.name !== destinationChain.name);
 
         // Lists of transfers with assosiated costs across all the chains
-        const currentChainTransfer = await getAllTransfers(amount, [destinationAccountDetails!], false); // always length=1
-        let bridgedTransfers = await getAllTransfers(amount, bridgeChainsBalances, true);
+        const currentChainTransfer = await getAllTransfers({
+            amount, 
+            accountDetails: [destinationAccountDetails!], 
+            destinationChain,
+            // @TODO change
+            to: from
+        }); // always length=1
+        let bridgedTransfers = await getAllTransfers({
+            amount, 
+            accountDetails: bridgeChainsBalances, 
+            destinationChain,
+            // @TODO change
+            to: from
+        });
         
         // Sort the birdgedTransfer based on cheapest -> most expensive
         bridgedTransfers = sortByTransfersByCost(bridgedTransfers);
