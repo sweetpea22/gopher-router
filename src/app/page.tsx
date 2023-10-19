@@ -1,11 +1,19 @@
-import { useState } from 'react';
+"use client"
 import BasicTable from './components/BasicTable';
-import { BigNumber } from 'ethers';
+import { RouteContext } from './context/route';
+import { SlideOutContext } from './context/slideOut';
+import { TransferContext } from './context/transfers';
 
 export default function Home() {
   return (
-      <div className="h-full">
-        <BasicTable />
-      </div>
+    <RouteContext>
+      <SlideOutContext>
+        <TransferContext>
+          <div className="h-full">
+            <BasicTable />
+          </div>
+          </TransferContext>
+      </SlideOutContext>
+    </RouteContext>
   )
 }
