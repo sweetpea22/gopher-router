@@ -1,22 +1,36 @@
-"use client"
 import { ConnectButton } from '@rainbow-me/rainbowkit'
-import { useFeeData } from 'wagmi';
-import { centeredDiv, standardButton } from '../styles/styles'
-import { actions } from '@/formulas'
-import { BigNumber } from 'ethers'
-import { ChainInfo, Transfer } from '@/app/interfaces'
+import { centeredDiv } from '../styles/styles'
 import { EthOverview } from './TableContents/eth/EthOverview';
-import { Token, TokenOverview } from './TableContents/tokens/tokenOverview';
-import { RouteContext } from '../context/route';
-import SlideOut from './SlideOut';
-import { SlideOutContext } from '../context/slideOut';
+import { RouteData } from '../context/route';
+import {SlideOut} from './SlideOut/index';
+import { TrasnferData } from '../context/transfers';
+import { useContext, useEffect } from 'react';
+import { actions } from '@/formulas';
+import * as constants  from '../constants';
+import { ethers } from 'ethers';
 
-export default function BasicTable({children}: any) { 
+export default function BasicTable({children}: any) {
+  const {setTransfers, setLoadingTransfers, loadingTransfers} = useContext(TrasnferData);
+  const {etherAmount, destinationAddress} = useContext(RouteData);
 
-  const tokens: Token[] = [
-    {name:"usdc"},
-    {name: "tether"},
-  ];
+  useEffect(() => {
+    const fetchTransfers = async () => {
+      const amount = ethers.utils.parseEther(etherAmount.toString());
+      const transfers = await actions.calculateNativeTransfer(
+        destinationAddress, 
+        constants.chains,
+        ethers.BigNumber.from(amount)
+        );
+      setTransfers(transfers);
+      setLoadingTransfers(false);
+    };
+
+    // Add actual validations here
+    if (ethers.utils.isAddress(destinationAddress)) {
+      setLoadingTransfers(true);
+      fetchTransfers();
+    }
+  }, [etherAmount, destinationAddress])
 
   return (
     <RouteContext>
@@ -41,8 +55,8 @@ export default function BasicTable({children}: any) {
               })
             } */}
             </div>
+
         </div>
-      </SlideOutContext>
-    </RouteContext>
+    </div>
   )
 }
