@@ -21,13 +21,13 @@ export const sdkConfig: SdkConfig = {
 };
 
 export const domainMap: {[x: string]: string} = {
-    [ChainNames.ethereum]: "6648936",
+    // [ChainNames.ethereum]: "6648936",
     [ChainNames.goerli]: "1735353714",
     [ChainNames.opGoerli]: "1735356532",
 }
 
 export const wethMapping: {[x: string]: string} = {
-    [ChainNames.ethereum]: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+    // [ChainNames.ethereum]: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
     [ChainNames.goerli]: "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6",
     [ChainNames.opGoerli]: "0x74c6FD7D2Bc6a8F0Ebd7D78321A95471b8C2B806",
 }

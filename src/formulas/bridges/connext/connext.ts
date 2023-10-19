@@ -5,9 +5,10 @@ import {ethers, BigNumber} from "ethers";
 import { ChainInfo } from "@/app/interfaces";
 import { FeeData } from "@/formulas/gasCosts";
 
-export const connextGasCosts = async (originChain: ChainInfo, destinationChain: ChainInfo, to: string): Promise<FeeData> => {
+export const connextGasCosts = async (originChain: ChainInfo, destinationChain: ChainInfo, to: string): Promise<FeeData | undefined> => {
     const originProvider = new ethers.providers.JsonRpcProvider(originChain.rpcUrl);
-    const {sdkBase} = await create(Connext.sdkConfig, new Logger({name: "SDK", level:"silent"})); 
+    const {sdkBase} = await create(Connext.sdkConfig);
+    // const {sdkBase} = await create(Connext.sdkConfig, new Logger({name: "SDK", level:"silent"})); 
     const originDomain = Connext.domainMap[originChain.name];
     const destinationDomain = Connext.domainMap[destinationChain.name];
     const params = { originDomain, destinationDomain };
@@ -39,7 +40,12 @@ export const connextGasCosts = async (originChain: ChainInfo, destinationChain: 
             maxPriorityFeePerGas
         };
     } catch (e: any) {
-        console.log(e.code == "UNPREDICTABLE_GAS_LIMIT")
+        if(e.code == "UNPREDICTABLE_GAS_LIMIT") {
+            // discard this tx, they don't have enough gas to make the transfer
+            return {} as FeeData;
+        } else {
+            console.log("connext error", e)
+        }
     }
 
 
