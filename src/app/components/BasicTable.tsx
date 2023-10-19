@@ -11,17 +11,16 @@ import { ethers } from 'ethers';
 
 export default function BasicTable({children}: any) {
   const {setTransfers, setLoadingTransfers, loadingTransfers} = useContext(TrasnferData);
-  const {etherAmount, destinationAddress} = useContext(RouteData);
+  const {etherAmount, destinationAddress, destinationChain} = useContext(RouteData);
 
   useEffect(() => {
     const fetchTransfers = async () => {
-      const amount = ethers.utils.parseEther(etherAmount.toString());
       const transfers = await actions.calculateNativeTransfer(
         destinationAddress, 
         constants.Chains,
-        ethers.BigNumber.from(amount),
+        etherAmount,
         // stub
-        constants.Chains[0]
+        // destinationChain
         );
       setTransfers(transfers);
       setLoadingTransfers(false);
@@ -38,7 +37,7 @@ export default function BasicTable({children}: any) {
     <div className={`${centeredDiv} bg-gray-200 py-10`}>
       <ConnectButton />
       <SlideOut />
-      <p>Ether: {etherAmount.toString()} destinationAddress: {destinationAddress} </p>
+      <p>Dummy address: 0x7AE8b0D6353F0931EB9FaC0A3562fA9e4C6Ff933</p>
       <div className='my-4'>
         <h1 className='text-gray-600'>Demo case: I want to transfer 0.1 eth to [address]. Show me the cheapest route.</h1>
       </div>

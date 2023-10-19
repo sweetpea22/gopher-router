@@ -11,7 +11,7 @@ export const ChainNames: {[x: string]: string} = {
 export const Chains: ChainInfo[] = [
     { 
         name: ChainNames.goerli, 
-        rpcUrl: "https://eth-goerli.api.onfinality.io/public" 
+        rpcUrl: "https://goerli.infura.io/v3/5db0726c373b4e99a389e664e4db0d94" 
     },
     { 
         name: ChainNames.sepolia, 

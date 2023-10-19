@@ -40,18 +40,18 @@ interface IGetAllTransfers {
  * @returns 
  */
 export const getAllTransfers = async ({amount, accountDetails, destinationChain, to}: IGetAllTransfers): Promise<Transfer[]> => {
-    const tranfers = await Promise.all(accountDetails.map(async (account) => {
-      const feeData = destinationChain ? await calculateBridgeCost(account.chain, destinationChain, to) : await calculateBaseGasCost(account.chain);
-      if (!feeData) return {} as Transfer;
-      const hasFullBalance = account.balance.gte(amount.add(feeData.cost));
-      return {
-          chain: account.chain,
-          balance: account.balance,
-          hasFullBalance,
-          feeData,
-      } as Transfer;
-    }));
-    return tranfers.filter(x => Object.keys(x).length > 0);
+  const tranfers = await Promise.all(accountDetails.map(async (account) => {
+    const feeData = destinationChain ? await calculateBridgeCost(account.chain, destinationChain, to) : await calculateBaseGasCost(account.chain);
+    if (!feeData || Object.keys(feeData).length === 0) return {} as Transfer;
+    const hasFullBalance = account.balance.gte(amount.add(feeData.cost));
+    return {
+        chain: account.chain,
+        balance: account.balance,
+        hasFullBalance,
+        feeData,
+    } as Transfer;
+  }));
+  return tranfers.filter(x => Object.keys(x).length > 0);  // const tranfers = await Promise.all(accountDetails.map(async (account) => {
 };
 
 /**

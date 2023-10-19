@@ -50,15 +50,16 @@ export const calculateAmountToSend = (transferAmount: BigNumber, transfers: Tran
  * @param destinationChain 
  * @returns 
  */
-export const calculateNativeTransfer = async (from: string, chains: ChainInfo[], amount: BigNumber, destinationChain: ChainInfo | null = null): Promise<Transfer[]> => {
+export const calculateNativeTransfer = async (from: string, chains: ChainInfo[], amount: BigNumber, destinationChain?: ChainInfo): Promise<Transfer[]> => {
     // Step 1 - Get balances across all chains
     const accountDetails = await getAllBalances(from, chains);
 
     // Step 2.1 - If `destinationChain == null`
     // In this case we can simply find the best set of chains to combine that will make the transfer occur at the cheapest rate
     // Best outcome, we transfer everything from one single chain
-    if (destinationChain == null) {
-        
+    console.log(destinationChain)
+    if (!destinationChain) {
+    
         // Contains a list of transfers with assosiated costs across all the chains
         let possibleTransfers = await getAllTransfers({
             amount, 
@@ -87,6 +88,7 @@ export const calculateNativeTransfer = async (from: string, chains: ChainInfo[],
     // In this case we need to calculate the costs of bridging between chains, and finding the cheapest bundle
     // The best outcome is that the destinationChain is the cheapest, otherwise we need to combine all the options    
     } else {
+        console.log("here")
         // There HAS TO BE a better way
         const destinationAccountDetails = accountDetails.find(chain => chain.chain.name === destinationChain.name);
         const bridgeChainsBalances = accountDetails.filter(chain => chain.chain.name !== destinationChain.name);
@@ -99,18 +101,18 @@ export const calculateNativeTransfer = async (from: string, chains: ChainInfo[],
             // @TODO change
             to: from
         }); // always length=1
-        let bridgedTransfers = await getAllTransfers({
+        let bridgedTransfers: Transfer[] = (await getAllTransfers({
             amount, 
             accountDetails: bridgeChainsBalances, 
             destinationChain,
             // @TODO change
             to: from
-        });
+        })).map(x => { return {...x, isBridged: true }});
         
         // Sort the birdgedTransfer based on cheapest -> most expensive
         bridgedTransfers = sortByTransfersByCost(bridgedTransfers);
 
-        if (currentChainTransfer[0].hasFullBalance) {
+        if (currentChainTransfer[0] && currentChainTransfer[0].hasFullBalance) {
             // We want to prioritize the destinationChain if it has balance
             const { transfers, bundleCost } = calculateBundledTransactions(amount, bridgedTransfers);
             return currentChainTransfer[0].feeData.cost!.lte(bundleCost) ? currentChainTransfer : transfers;
