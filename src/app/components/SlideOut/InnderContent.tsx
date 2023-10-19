@@ -4,7 +4,7 @@ import { ethers } from "ethers";
 import { useContext, useState } from "react";
 
 export function InnerContent() {
-  const {destinationAddress, etherAmount} = useContext(RouteData);
+  const {destinationAddress, etherAmount, destinationChain} = useContext(RouteData);
   const {transfers, loadingTransfers} = useContext(TrasnferData);
 
   const renderTransfers = () => {
@@ -25,7 +25,7 @@ export function InnerContent() {
             return (
               <div key={transfer.chain.name + transfer.amountToTransfer?.toString()}>
                 <p>Transfer #{i}</p>
-                <p>{transfer.chain.name}</p>
+                <p>Path: {transfer.chain.name} {'->'} {transfer.isBridged ? destinationChain.name : transfer.chain.name}</p>
                 <p>Amount to transfer: {ethers.utils.formatUnits(transfer.amountToTransfer) }</p>
                 <p>Cost to transfer: ${transfer.feeData.cost.toString()}</p>
                 <p>Bridged TX: {transfer.isBridged ? "Yes":"No"}</p>
@@ -42,6 +42,9 @@ export function InnerContent() {
     <div>
       <p>Destination Address: {destinationAddress}</p>
       <p>Ether Amount: {etherAmount.toString()}</p>
+      {Object.keys(destinationChain).length > 0 ? 
+            <p>Destination Chain: {destinationChain.name}</p> : null
+          }
       <div>
         <br/>
         {renderTransfers()}

@@ -1,25 +1,27 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { centeredDiv } from '../styles/styles'
 import { EthOverview } from './TableContents/eth/EthOverview';
-import { RouteData } from '../context/route';
+import { RouteContext, RouteData } from '../context/route';
 import {SlideOut} from './SlideOut/index';
 import { TrasnferData } from '../context/transfers';
 import { useContext, useEffect } from 'react';
 import { actions } from '@/formulas';
 import * as constants  from '../constants';
 import { ethers } from 'ethers';
+import { SlideOutContext } from '../context/slideOut';
 
 export default function BasicTable({children}: any) {
   const {setTransfers, setLoadingTransfers, loadingTransfers} = useContext(TrasnferData);
-  const {etherAmount, destinationAddress} = useContext(RouteData);
+  const {etherAmount, destinationAddress, destinationChain} = useContext(RouteData);
 
   useEffect(() => {
     const fetchTransfers = async () => {
-      const amount = ethers.utils.parseEther(etherAmount.toString());
       const transfers = await actions.calculateNativeTransfer(
         destinationAddress, 
-        constants.chains,
-        ethers.BigNumber.from(amount)
+        constants.Chains,
+        etherAmount,
+        // stub
+        // destinationChain
         );
       setTransfers(transfers);
       setLoadingTransfers(false);
@@ -33,30 +35,31 @@ export default function BasicTable({children}: any) {
   }, [etherAmount, destinationAddress])
 
   return (
+
     <RouteContext>
       <SlideOutContext>
-            <div className='flex flex-col text-gray-900 text-center items-center my-8 gap-2'>
-              Current Gas Price (Gwei):
-              {/* {renderGasPrice()} */}
-          </div>
-        <div className={`${centeredDiv} bg-gray-200 py-10 my-8`}>
-          <ConnectButton />
-          <SlideOut />
-          <div>
-            {/* Ether Balances */}
-            <EthOverview />
-            {/* Token Overviews */}
-            </div>
-            <div>
-            {/* {
-              // TODO: Add token overviews
-              tokens.map(token => {
-                return <TokenOverview token={token}/>
-              })
-            } */}
-            </div>
-
+         <div className={`${centeredDiv} bg-gray-200 py-10`}>
+      <ConnectButton />
+      <SlideOut />
+      <p>Dummy address: 0x7AE8b0D6353F0931EB9FaC0A3562fA9e4C6Ff933</p>
+      <div className='my-4'>
+        <h1 className='text-gray-600'>Demo case: I want to transfer 0.1 eth to [address]. Show me the cheapest route.</h1>
+      </div>
+      <div>
+        {/* Ether Balances */}
+        <EthOverview />
+        {/* Token Overviews */}
         </div>
-    </div>
+        <div>
+        {/* {
+          // TODO: Add token overviews
+          tokens.map(token => {
+            return <TokenOverview token={token}/>
+          })
+        } */}
+        </div>
+        </div>
+      </SlideOutContext>
+      </RouteContext>
   )
 }

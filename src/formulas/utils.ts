@@ -26,6 +26,12 @@ export const sortByTransfersByBalance = (t: Transfer[]): Transfer[] => {
     });
 }
 
+interface IGetAllTransfers {
+  amount: BigNumber;
+  accountDetails: AccountDetails[];
+  destinationChain?: ChainInfo;
+  to: string
+}
 /**
  * Returns all the possibile transfers with assosiated costs, on one single chain.
  * @param amount 
@@ -33,17 +39,19 @@ export const sortByTransfersByBalance = (t: Transfer[]): Transfer[] => {
  * @param costFn 
  * @returns 
  */
-export const getAllTransfers = async (amount: BigNumber, AccountDetails: AccountDetails[], isBaseCost: boolean): Promise<Transfer[]> => {
-    return await Promise.all(AccountDetails.map(async (account) => {
-      const feeData = isBaseCost ? await calculateBaseGasCost(account.chain) : await calculateBridgeCost(account.chain);
-      const hasFullBalance = account.balance.gte(amount.add(feeData.cost));
-      return {
-          chain: account.chain,
-          balance: account.balance,
-          hasFullBalance,
-          feeData,
-      } as Transfer;
-    }));
+export const getAllTransfers = async ({amount, accountDetails, destinationChain, to}: IGetAllTransfers): Promise<Transfer[]> => {
+  const tranfers = await Promise.all(accountDetails.map(async (account) => {
+    const feeData = destinationChain ? await calculateBridgeCost(account.chain, destinationChain, to) : await calculateBaseGasCost(account.chain);
+    if (!feeData || Object.keys(feeData).length === 0) return {} as Transfer;
+    const hasFullBalance = account.balance.gte(amount.add(feeData.cost));
+    return {
+        chain: account.chain,
+        balance: account.balance,
+        hasFullBalance,
+        feeData,
+    } as Transfer;
+  }));
+  return tranfers.filter(x => Object.keys(x).length > 0);  // const tranfers = await Promise.all(accountDetails.map(async (account) => {
 };
 
 /**

@@ -3,7 +3,7 @@ import { ChainNames } from "./constants";
 import { FeeData } from "@/formulas/gasCosts";
 
 export interface ChainInfo {
-    name: ChainNames;
+    name: string;
     rpcUrl: string;
 }
 
