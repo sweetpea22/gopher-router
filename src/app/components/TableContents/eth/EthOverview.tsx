@@ -22,20 +22,10 @@ export function EthOverview() {
   }, [address, Chains])
 
   return (
-    <div className='flex flex-col items-center shadow-md p-4 bg-gray-100 rounded-xl'>      
-      <div className='flex flex-row shadow-lg rounded-xl py-3 px-5' style={{width: "80%"}}>
+    <div className='flex flex-col  shadow-md p-4 mt-12 bg-gray-100 rounded-xl'>      
+      <div className='flex flex-row justify-start rounded-xl py-3 px-5 w-4/6'>
         <div>
-          <h2 className='text-gray-800 '>Cumulative Balance: 
-            <span>
-            {
-              balances.length > 0 ? 
-              formatEther(balances.reduce((acc, n) => { 
-                return acc.add(n.balance)
-              }, BigNumber.from(0)))
-              : null
-            }
-            </span>
-          </h2>
+          <h2 className='text-gray-800 '>Cumulative Balance:</h2>
           <div>
             {balances ? balances.map((item:any, index:number) => (
               <p className='text-indigo-500' key={index}>{item.chain.name}: <strong>{formatEther(item.balance)} ETH</strong></p>
