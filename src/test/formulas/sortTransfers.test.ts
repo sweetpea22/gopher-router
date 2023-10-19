@@ -8,8 +8,8 @@ let chains: ChainInfo[] = [];
 let transfers: Transfer[] = [];
 
 beforeEach(() => {
-    chains.push(generateChain(ChainNames.ETHEREUM));
-    chains.push(generateChain(ChainNames.GOERLI))
+    chains.push(generateChain(ChainNames.ethereum));
+    chains.push(generateChain(ChainNames.goerli))
     return;
 });
 
@@ -19,7 +19,7 @@ afterEach(() => {
 })
 
 test('sortByTransfersByCost 1', () => {
-    const eth = generateChain(ChainNames.ETHEREUM);
+    const eth = generateChain(ChainNames.ethereum);
     transfers.push(generateTransfer({chain: eth, cost: BigNumber.from("1")}));
     transfers.push(generateTransfer({chain: eth, cost: BigNumber.from("2")}));
     transfers.push(generateTransfer({chain: eth, cost: BigNumber.from("3")}));
@@ -29,7 +29,7 @@ test('sortByTransfersByCost 1', () => {
 });
 
 test('sortByTransfersByCost 1', () => {
-    const eth = generateChain(ChainNames.ETHEREUM);
+    const eth = generateChain(ChainNames.ethereum);
     transfers.push(generateTransfer({chain: eth, cost: BigNumber.from("5"), balance: BigNumber.from("1")}));
     transfers.push(generateTransfer({chain: eth, cost: BigNumber.from("2"), balance: BigNumber.from("1")}));
     transfers.push(generateTransfer({chain: eth, cost: BigNumber.from("1"), balance: BigNumber.from("1")}));
@@ -47,7 +47,7 @@ test('sortByTransfersByCost 1', () => {
 });
 
 test('sortByTransfersByBalance 1', () => {
-    const eth = generateChain(ChainNames.ETHEREUM);
+    const eth = generateChain(ChainNames.ethereum);
     transfers.push(generateTransfer({chain: eth, cost: BigNumber.from("1"), balance: BigNumber.from("1")}));
     transfers.push(generateTransfer({chain: eth, cost: BigNumber.from("2"), balance: BigNumber.from("2")}));
     transfers.push(generateTransfer({chain: eth, cost: BigNumber.from("3"), balance: BigNumber.from("3")}));
@@ -57,7 +57,7 @@ test('sortByTransfersByBalance 1', () => {
 });
 
 test('sortByTransfersByBalance 2', () => {
-    const eth = generateChain(ChainNames.ETHEREUM);
+    const eth = generateChain(ChainNames.ethereum);
     transfers.push(generateTransfer({chain: eth, cost: BigNumber.from("5"), balance: BigNumber.from("4")}));
     transfers.push(generateTransfer({chain: eth, cost: BigNumber.from("2"), balance: BigNumber.from("3")}));
     transfers.push(generateTransfer({chain: eth, cost: BigNumber.from("1"), balance: BigNumber.from("2")}));

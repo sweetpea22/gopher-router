@@ -9,8 +9,8 @@ let transfers: Transfer[] = [];
 const transferAmount = BigNumber.from("10");
 
 beforeEach(() => {
-    chains.push(generateChain(ChainNames.ETHEREUM));
-    chains.push(generateChain(ChainNames.GOERLI))
+    chains.push(generateChain(ChainNames.ethereum));
+    chains.push(generateChain(ChainNames.goerli))
     return;
 });
 
