@@ -4,20 +4,22 @@ import InputFields from './InputFields';
 import { getAllBalances } from '@/formulas/utils';
 import { useEffect, useState } from 'react';
 import { formatEther } from 'ethers/lib/utils';
-import { chains } from '@/app/constants';
+import { Chains } from '@/app/constants';
+import { BigNumber } from 'ethers';
+import { AccountDetails } from '@/app/interfaces';
 
 export function EthOverview() {
   const { address } = useAccount();
-  const [balances, setBalances] = useState<any>([]);
+  const [balances, setBalances] = useState<AccountDetails[]>([]);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   
   useEffect(() => {
     const getBalanceByChain = async () => {
-      const data = await getAllBalances(address as string, chains)
+      const data = await getAllBalances(address as string, Chains)
       setBalances(data);
     }
     getBalanceByChain();
-  }, [address, chains])
+  }, [address, Chains])
 
   return (
     <div className='flex flex-col  shadow-md p-4 mt-12 bg-gray-100 rounded-xl'>      

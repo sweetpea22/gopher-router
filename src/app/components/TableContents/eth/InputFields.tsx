@@ -1,7 +1,7 @@
 import { standardInput } from '@/app/styles/styles'
 import { ChangeEvent, useContext, useState } from 'react'
 import { standardButton } from '@/app/styles/styles';
-import { BigNumber } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 import { RouteData } from '@/app/context/route';
 import { SlideOutData } from '@/app/context/slideOut';
 import NetworkInput from './NetworkInput';
@@ -26,7 +26,7 @@ export default function InputFields() {
   const getRoutes = () => {
     if (!isOpen) setOpen(true);
     setDestinationAddress(localAddress);
-    setEtherAmount(BigNumber.from(localAmount));
+    setEtherAmount(BigNumber.from(ethers.utils.parseEther(localAmount)));
   }
 
   return (
