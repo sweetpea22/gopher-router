@@ -5,7 +5,7 @@ import {ethers, BigNumber} from "ethers";
 import { ChainInfo } from "@/app/interfaces";
 import { FeeData } from "@/formulas/gasCosts";
 
-export const connextGasCosts = async (originChain: ChainInfo, destinationChain: ChainInfo, to: string): Promise<FeeData | undefined> => {
+export const connextGasCosts = async (originChain: ChainInfo, destinationChain: ChainInfo, to: string): Promise<FeeData> => {
     const originProvider = new ethers.providers.JsonRpcProvider(originChain.rpcUrl);
     const {sdkBase} = await create(Connext.sdkConfig);
     // const {sdkBase} = await create(Connext.sdkConfig, new Logger({name: "SDK", level:"silent"})); 
@@ -44,7 +44,8 @@ export const connextGasCosts = async (originChain: ChainInfo, destinationChain: 
             // discard this tx, they don't have enough gas to make the transfer
             return {} as FeeData;
         } else {
-            console.log("connext error", e)
+            console.log("connext error", e);
+            return {} as FeeData;
         }
     }
 

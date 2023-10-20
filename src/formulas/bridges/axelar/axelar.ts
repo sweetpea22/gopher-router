@@ -13,20 +13,22 @@ const getSigner = () => {
   return new Wallet(privateKey);
 };
 
-export async function getAxelarCost(originChain: ChainInfo, destinationChain: ChainInfo, to?: string) {
+export async function getAxelarCost(originChain: ChainInfo, destinationChain: ChainInfo, to?: string): Promise<FeeData> {
   const axelarQuery = new AxelarQueryAPI({
     environment: Environment.TESTNET,
   });
   try {
     // get estimated cost
-    const feeQuery = await axelarQuery.getTransferFee(
-        originChain.name,
-        destinationChain.name,
-        //assuming we're transferring ETH
-        "eth-wei",
-        1000000
-      );
-    const cost = Object.values(feeQuery)[0]["amount"]
+    const {fee} = await axelarQuery.getTransferFee(
+      originChain.name,
+      destinationChain.name,
+      //assuming we're transferring ETH
+      "eth-wei",
+      1000000
+    );
+    if (!fee) {
+      return {} as FeeData;
+    }
     
     // create the transaction
     const provider = new ethers.providers.JsonRpcProvider(
@@ -55,11 +57,14 @@ export async function getAxelarCost(originChain: ChainInfo, destinationChain: Ch
     // api.sendToken(requestOptions)
   
     return {
-      cost,
-    };
+      cost: BigNumber.from(fee.amount),
+      maxPriorityFeePerGas: BigNumber.from(0),
+      gasPrice: BigNumber.from(0)
+    } as FeeData;
     
   } catch (err) {
     console.log(err);
+    return {} as FeeData;
   }
 }
 
