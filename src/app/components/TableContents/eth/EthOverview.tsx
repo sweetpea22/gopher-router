@@ -26,9 +26,6 @@ export function EthOverview() {
       let sum = (a: any[]) => a.reduce((x: any, y: any) => x + y);
     
       let totalAmount = sum(balances.map((x) => Number(formatEther(x.balance))));
-      
-        console.log('Total Amount', totalAmount)
-  
         setTotalEth(totalAmount)
       }
     }

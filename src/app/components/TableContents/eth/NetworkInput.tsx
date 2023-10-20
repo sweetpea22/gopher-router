@@ -1,17 +1,31 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useContext, useState } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
-import { ChainNames } from '@/app/constants'
+import { ChainNames, getChain } from '@/app/constants'
 import classNames from 'classnames';
+import { RouteData } from '@/app/context/route';
+import { ChainInfo } from '@/app/interfaces';
 
 
 export default function NetworkInput() {
-  const chainList = Object.values(ChainNames);
+  let chainList = Object.values(ChainNames);
+  chainList = ["None", ...chainList];
+  const {destinationChain, setDestinationChain } = useContext(RouteData);
   const [selectedNetwork, setSelectedNetwork] = useState(chainList[0].toLowerCase())
 
+  const onNetworkSelectChange = (chainName: string) => {
+    const chain = getChain(chainName);
+    if (chain) {
+      setSelectedNetwork(chainName.toLowerCase());
+      setDestinationChain(chain);
+    } else {
+      setSelectedNetwork(chainName.toLowerCase());
+      setDestinationChain({} as ChainInfo);
+    }
+  }
 
   return (
-    <Listbox value={selectedNetwork} onChange={setSelectedNetwork}>
+    <Listbox value={selectedNetwork} onChange={onNetworkSelectChange}>
       {({ open }) => (
         <>
           <Listbox.Label className="block text-sm font-medium leading-6 text-gray-900">Final Destination</Listbox.Label>
