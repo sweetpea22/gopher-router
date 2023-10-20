@@ -29,7 +29,7 @@ export async function getAxelarCost(originChain: ChainInfo, destinationChain: Ch
       );
     const cost = Object.values(feeQuery)[0]["amount"]
     
-    // submit the transaction
+    // create the transaction
     const provider = new ethers.providers.JsonRpcProvider(
       originChain.rpcUrl
     );
@@ -38,7 +38,7 @@ export async function getAxelarCost(originChain: ChainInfo, destinationChain: Ch
       fromChain: originChain.name,
       toChain: destinationChain.name,
       destinationAddress: to as string,
-      // map token string to symbol or denom
+      // todo map token string to symbol or denom
       asset: { symbol: "aUSDC" },
       //todo 
       amountInAtomicUnits: "5000000",
@@ -59,7 +59,6 @@ export async function getAxelarCost(originChain: ChainInfo, destinationChain: Ch
       cost,
     };
     
-
   } catch (err) {
     console.log(err);
   }
