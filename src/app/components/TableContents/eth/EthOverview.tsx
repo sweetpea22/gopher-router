@@ -1,36 +1,33 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useAccount } from 'wagmi';
 import { getAllBalances } from '@/formulas/utils';
-import { useEffect, useState, useCallback } from 'react';
 import { formatEther } from 'ethers/lib/utils';
+import { useEffect, useState } from 'react';
 import { Chains } from '@/app/constants';
 import { AccountDetails } from '@/app/interfaces';
-
 export function EthOverview() {
   const { address } = useAccount();
   const [balances, setBalances] = useState<AccountDetails[]>([]);
   const [totalEth, setTotalEth] = useState<Number | any>(0);
 
-  const getBalanceByChain = useCallback(async () => {
-    const data = await getAllBalances(address as string, Chains)
-    setBalances(data);
-  }, [address])
-
-  const getTotalEth = () => {
-    if (balances.length > 1) {
-    let sum = (a: any[]) => a.reduce((x: any, y: any) => x + y);
-  
-    let totalAmount = sum(balances.map((x) => Number(formatEther(x.balance)))).toFixed(3);
-      setTotalEth(totalAmount)
-    }
-  }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    getBalanceByChain()
+    const getBalanceByChain = async () => {
+      const data = await getAllBalances(address as string, Chains)
+      setBalances(data);
+    }
+    getBalanceByChain();
+
+    const getTotalEth = () => {
+      if (balances.length > 1) {
+      let sum = (a: any[]) => a.reduce((x: any, y: any) => x + y);
+    
+      let totalAmount = sum(balances.map((x) => Number(formatEther(x.balance))));
+        setTotalEth(totalAmount)
+      }
+    }
     getTotalEth()
-  }, [address, getBalanceByChain, getTotalEth])
-
-
+  }, [address, balances, totalEth])
 
   return (
     <tr>
