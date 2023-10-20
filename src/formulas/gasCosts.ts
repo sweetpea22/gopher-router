@@ -34,19 +34,23 @@ export const calculateBaseGasCost = async (chain: ChainInfo): Promise<FeeData> =
     }
 };
 
-export const calculateBridgeCost = async (originChain: ChainInfo, destinationChain: ChainInfo, to: string): Promise<FeeData | undefined> => {
-    const bridgeOptions = [];
+export const calculateBridgeCost = async (originChain: ChainInfo, destinationChain: ChainInfo, to: string): Promise<FeeData> => {
+    const bridgeOptions: FeeData[] = [];
     if (typeof Connext.domainMap[originChain.name] !== 'undefined' && typeof Connext.domainMap[destinationChain.name] !== 'undefined') {
         const option = await connextGasCosts(originChain, destinationChain, to);
-        option ? bridgeOptions.push(option) : null;
+        if (Object.keys(option).length > 0) {
+            bridgeOptions.push(option)
+        }
     }
 
     if (typeof Axelar.domainMap[originChain.name] !== 'undefined' && typeof Axelar.domainMap[destinationChain.name] !== 'undefined') {
         const option = await getAxelarCost(originChain, destinationChain, to); 
-        option ? bridgeOptions.push(option) : null;
+        if (Object.keys(option).length > 0) {
+            bridgeOptions.push(option)
+        }
     }
 
-    // Sort
+    // Sort and return cheapest
     if (bridgeOptions.length > 0) {
         const sorted = bridgeOptions.sort((a,b) => {
             if(a?.cost.gt(b.cost)) {
