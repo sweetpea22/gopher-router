@@ -6,6 +6,7 @@
 .pnp.js
 /.swc
 *.env
+.gitignore
 
 # testing
 /coverage
