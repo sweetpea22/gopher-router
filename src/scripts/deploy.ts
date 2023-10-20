@@ -5,9 +5,11 @@ import verify from './verify';
 export interface networkConfigItem {
   blockConfirmations?: number
 }
+
 export interface networkConfigInfo {
   [key: string]: networkConfigItem
 }
+
 export const networkConfig: networkConfigInfo = {
   localhost: {},
   hardhat: {},
@@ -17,13 +19,13 @@ export const networkConfig: networkConfigInfo = {
   scrollGoerli: { blockConfirmations: 6},
   gnosis: { blockConfirmations: 6 },
 }
+
 export const developmentChains = ["hardhat", "localhost"]
 
 async function main() {
-
   //@ts-ignore
   const { getNamedAccounts, deployments, network } = hre;
-  const { deploy, log } = deployments
+  const { deploy } = deployments
   const { deployer } = await getNamedAccounts()
 
   // add deploy args here
