@@ -1,61 +1,35 @@
 import { AxelarAssetTransfer, Environment,   AxelarQueryAPI,
   CHAINS } from "@axelar-network/axelarjs-sdk";
+import * as Axelar from './axelarConfig'; 
+import { ChainNames, getChain } from "@/app/constants";
+import { FeeData } from "@/formulas/gasCosts";
+import {ethers, BigNumber} from "ethers";
+import { ChainInfo } from "@/app/interfaces";
 
-const axelarAssetTransfer = new AxelarAssetTransfer({
-  environment: Environment.TESTNET,
-});
 
-interface IAxelarFeeProps {
-  originChain: string;
-  destinationChain: string;
-}
+// const axelarAssetTransfer = new AxelarAssetTransfer({
+//   environment: Environment.TESTNET,
+// });
 
-const supportedNetworks = [
-  "optimism",
-  "goerli",
-  "mantle",
 
-]
-
-export async function getFee(originChain:string, destinationChain:string) {
+export async function getAxelarCost(originChain: ChainInfo, destinationChain: ChainInfo, to?: string) {
   const axelarQuery = new AxelarQueryAPI({
     environment: Environment.TESTNET,
   });
-
-  console.log(CHAINS.TESTNET);
-  // todo: handle unsupported networks better here
-  // warning!! assuming we are using axlWETH // 
-  if (supportedNetworks.includes(originChain) && supportedNetworks.includes(destinationChain)) {
-
-    // goerli on axelar is known as ethereum-2
-    if (originChain === "goerli") {
-      const fee = await axelarQuery.getTransferFee(
-          CHAINS.TESTNET.ETHEREUM,
-          destinationChain,
-          "eth-wei",
-          1000000
-      );
-      return Object.values(fee)[0]["amount"]
-    } else if (destinationChain === "goerli") {
-      const fee = await axelarQuery.getTransferFee(
-        originChain,
-        CHAINS.TESTNET.ETHEREUM,
-          "eth-wei",
-          1000000
-      );
-      return Object.values(fee)[0]["amount"]
-
-    }
-
+  try {
+    const originProvider = new ethers.providers.JsonRpcProvider(originChain.rpcUrl);
     const fee = await axelarQuery.getTransferFee(
-        originChain,
-        destinationChain,
+        originChain.name,
+        destinationChain.name,
+        //assuming we're transferring ETH
         "eth-wei",
         1000000
-    );
-    return Object.values(fee)[0]["amount"]
-  }
+      );
+      return Object.values(fee)[0]["amount"]
 
-  return console.error("Unsupported network"); 
+  } catch (err) {
+    console.log(err);
+  }
 }
 
+// getAxelarCost(getChain('goerli'), getChain('optimism'));
