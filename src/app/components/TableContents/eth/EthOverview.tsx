@@ -11,21 +11,39 @@ import { AccountDetails } from '@/app/interfaces';
 export function EthOverview() {
   const { address } = useAccount();
   const [balances, setBalances] = useState<AccountDetails[]>([]);
+  const [totalEth, setTotalEth] = useState<Number | any>(0);
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  
   useEffect(() => {
     const getBalanceByChain = async () => {
       const data = await getAllBalances(address as string, Chains)
       setBalances(data);
     }
     getBalanceByChain();
-  }, [address, Chains])
+
+    const getTotalEth = () => {
+      if (balances.length > 1) {
+      let sum = (a: any[]) => a.reduce((x: any, y: any) => x + y);
+    
+      let totalAmount = sum(balances.map((x) => Number(formatEther(x.balance))));
+      
+        console.log('Total Amount', totalAmount)
+  
+        setTotalEth(totalAmount)
+      }
+    }
+    getTotalEth()
+  }, [address, balances, totalEth])
+  
+  
+
+
 
   return (
     <div className='flex flex-col  shadow-md p-4 mt-12 bg-gray-100 rounded-xl'>      
       <div className='flex flex-row justify-start rounded-xl py-3 px-5 w-4/6'>
         <div>
-          <h2 className='text-gray-800 '>Cumulative Balance:</h2>
+          <h2 className='text-gray-800 '>Cumulative Balance: {totalEth}</h2>
           <div>
             {balances ? balances.map((item:any, index:number) => (
               <p className='text-indigo-500' key={index}>{item.chain.name}: <strong>{formatEther(item.balance)} ETH</strong></p>
