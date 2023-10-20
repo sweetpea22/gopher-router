@@ -3,11 +3,9 @@ import { ChainInfo } from "../app/interfaces";
 import {ChainNames} from "../app/constants";
 import * as Connext from "./bridges/connext/connnextConfig";
 import { connextGasCosts } from "./bridges/connext/connext";
-import * as Axelar from "./bridges/axelar/axelarConfig";
-import { getAxelarCost } from "./bridges/axelar/axelar";
 
 // Populate list of common gas costs where available
-const standardEVM = [ChainNames.ethereum, ChainNames.goerli, ChainNames.sepolia, ChainNames.opGoerli, ChainNames.scrollSepolia, ChainNames.mantle]; // assume 21000 gas
+const standardEVM = [ChainNames.ethereum, ChainNames.goerli, ChainNames.sepolia, ChainNames.opGoerli]; // assume 21000 gas
 
 export interface FeeData {
     gasPrice: BigNumber;
@@ -38,11 +36,6 @@ export const calculateBridgeCost = async (originChain: ChainInfo, destinationCha
     const bridgeOptions = [];
     if (typeof Connext.domainMap[originChain.name] !== 'undefined' && typeof Connext.domainMap[destinationChain.name] !== 'undefined') {
         const option = await connextGasCosts(originChain, destinationChain, to);
-        option ? bridgeOptions.push(option) : null;
-    }
-
-    if (typeof Axelar.domainMap[originChain.name] !== 'undefined' && typeof Axelar.domainMap[destinationChain.name] !== 'undefined') {
-        const option = await getAxelarCost(originChain, destinationChain, to); 
         option ? bridgeOptions.push(option) : null;
     }
 
