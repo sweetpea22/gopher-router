@@ -39,7 +39,6 @@ export default function BasicTable({children}: any) {
   <div className={`${centeredDiv} py-10`}>
     <ConnectButton />
     <SlideOut />
-    <div className='my-4'> </div>
     <AssetsTable />
   </div>
   )
