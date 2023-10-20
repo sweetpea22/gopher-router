@@ -1,6 +1,6 @@
 import {BigNumber, ethers} from "ethers";
 import { ChainInfo } from "../app/interfaces";
-import {ChainNames} from "../app/constants";
+import {ChainNames, Chains} from "../app/constants";
 import * as Connext from "./bridges/connext/connnextConfig";
 import { connextGasCosts } from "./bridges/connext/connext";
 import * as Axelar from "./bridges/axelar/axelarConfig";

@@ -24,8 +24,9 @@ export const Chains: ChainInfo[] = [
         rpcUrl: "https://optimism-goerli.infura.io/v3/4e6a0901020c4328a241bcf2fc69ca6c" 
     },
     { 
+        // have to find a new provider for scroll 
         name: ChainNames.scrollSepolia, 
-        rpcUrl: "https://sepolia-rpc.scroll.io/" 
+        rpcUrl: "https://sepolia.infura.io/v3/4e6a0901020c4328a241bcf2fc69ca6c" 
     },
     { 
         name: ChainNames.ethereum, 
