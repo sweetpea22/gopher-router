@@ -2,7 +2,7 @@ import { standardInput } from '@/app/styles/styles'
 import { ChangeEvent, useContext, useState } from 'react'
 import { standardButton } from '@/app/styles/styles';
 import { BigNumber, ethers } from 'ethers';
-import { RouteData } from '@/app/context/route';
+import { RouteData } from '@/app/context/transferRoute';
 import { SlideOutData } from '@/app/context/slideOut';
 import NetworkInput from './NetworkInput';
 

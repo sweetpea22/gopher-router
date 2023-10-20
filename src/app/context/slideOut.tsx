@@ -1,4 +1,5 @@
-import { BigNumber } from "ethers";
+"use client"
+
 import { createContext, useState } from "react";
 
 interface ISlideOutContext {

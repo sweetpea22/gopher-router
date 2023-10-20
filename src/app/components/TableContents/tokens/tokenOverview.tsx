@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useAccount } from 'wagmi';
 import InputFields from './InputFields';
-import { getAllBalances } from '@/formulas/utils';
 import { useEffect, useState } from 'react';
 import { formatEther } from 'ethers/lib/utils';
 import { Chains } from '@/app/constants';

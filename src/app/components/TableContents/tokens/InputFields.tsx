@@ -4,7 +4,7 @@ import { ChangeEvent, useContext, useState } from 'react'
 import { parseEther } from "viem";
 import { useDebounce } from "use-debounce";
 import { standardButton } from '@/app/styles/styles';
-import { RouteData } from '@/app/context';
+import { RouteData } from '@/app/context/transferRoute';
 import { BigNumber } from 'ethers';
 
 // const HARDCODED_ADDRESS = '0x18f32D6c9075796a74a403e575c27299EdABfE2D';

@@ -1,7 +1,7 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { centeredDiv } from '../styles/styles'
 import { EthOverview } from './TableContents/eth/EthOverview';
-import { RouteContext, RouteData } from '../context/route';
+import { RouteContext, RouteData } from '../context/transferRoute';
 import {SlideOut} from './SlideOut/index';
 import { TrasnferData } from '../context/transfers';
 import { useContext, useEffect } from 'react';

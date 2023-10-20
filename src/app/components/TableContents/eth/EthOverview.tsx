@@ -28,7 +28,7 @@ export function EthOverview() {
   useEffect(() => {
     getBalanceByChain()
     getTotalEth()
-  }, [address, getBalanceByChain])
+  }, [address, getBalanceByChain, getTotalEth])
 
 
 
