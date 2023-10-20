@@ -45,7 +45,7 @@ export function SlideOut() {
                       </div>
                     </div>
                     <div style={{"color": "black"}} className="relative mt-6 flex-1 px-4 sm:px-6">
-                      {/* Inner content */}
+
                       
                       <InnerContent />
 
