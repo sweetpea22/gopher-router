@@ -19,7 +19,6 @@ export async function getAxelarCost(originChain: ChainInfo, destinationChain: Ch
   });
   try {
     // get estimated cost
-    const originProvider = new ethers.providers.JsonRpcProvider(originChain.rpcUrl);
     const feeQuery = await axelarQuery.getTransferFee(
         originChain.name,
         destinationChain.name,
