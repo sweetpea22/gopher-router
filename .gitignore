@@ -7,6 +7,7 @@
 /.swc
 *.env
 .gitignore
+.env
 
 # testing
 /coverage
