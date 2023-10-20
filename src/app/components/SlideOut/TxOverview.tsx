@@ -11,7 +11,7 @@ export default function TxOverview({  destinationAddress, destinationChain, ethe
   return (
     <>
       <div className="px-3">
-          {/* Review Order */}
+        {/* Review Order */}
         <div className='px-2 py-6 shadow-xl rounded-lg bg-white ring-1 ring-gray-100'>
           <div className='px-3 flex flex-col items-start justify-between'>
             <h3 className='font-medium font-lg'>Total Amount</h3>

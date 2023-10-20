@@ -9,6 +9,7 @@ import { actions } from '@/formulas';
 import * as constants  from '../constants';
 import { ethers } from 'ethers';
 import { SlideOutContext } from '../context/slideOut';
+import AssetsTable from './AssetsTable';
 
 export default function BasicTable({children}: any) {
   const {setTransfers, setLoadingTransfers} = useContext(TrasnferData);
@@ -35,24 +36,11 @@ export default function BasicTable({children}: any) {
   }, [etherAmount, destinationAddress, destinationChain])
 
   return (
-  <div className={`${centeredDiv} bg-gray-200 py-10`}>
+  <div className={`${centeredDiv} py-10`}>
     <ConnectButton />
     <SlideOut />
-    <div className='my-4'>
-      </div>
-        <div>
-        {/* Ether Balances */}
-        <EthOverview />
-        {/* Token Overviews */}
-        </div>
-      <div>
-      {/* {
-        // TODO: Add token overviews
-        tokens.map(token => {
-          return <TokenOverview token={token}/>
-        })
-      } */}
-    </div>
+    <div className='my-4'> </div>
+    <AssetsTable />
   </div>
   )
 }
