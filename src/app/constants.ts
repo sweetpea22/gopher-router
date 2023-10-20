@@ -1,5 +1,6 @@
 import { ChainInfo } from "@/app/interfaces";
 import "dotenv/config"
+import "dotenv/config"
 
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY as string;
 
