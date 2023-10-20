@@ -7,6 +7,7 @@ import { formatEther } from 'ethers/lib/utils';
 import { Chains } from '@/app/constants';
 import { BigNumber } from 'ethers';
 import { AccountDetails } from '@/app/interfaces';
+import { getFee } from '@/formulas/bridges/axelar/axelar';
 
 export function EthOverview() {
   const { address } = useAccount();
@@ -19,6 +20,7 @@ export function EthOverview() {
       setBalances(data);
     }
     getBalanceByChain();
+    getFee('goerli', 'optimism');
   }, [address, Chains])
 
   return (
