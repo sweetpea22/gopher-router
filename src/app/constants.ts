@@ -1,7 +1,7 @@
 import { ChainInfo } from "@/app/interfaces";
 import "dotenv/config"
 
-const INFURA_API_KEY = process.env.INFURA_API_KEY as string;
+const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY as string;
 
 export const ChainNames: {[x: string]: string} = {
     ethereum: "ETHEREUM",
