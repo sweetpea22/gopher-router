@@ -8,7 +8,7 @@ import { Chains } from '@/app/constants';
 import { BigNumber } from 'ethers';
 import { AccountDetails } from '@/app/interfaces';
 
-export function EthOverview() {
+export function EthOverviewOld() {
   const { address } = useAccount();
   const [balances, setBalances] = useState<AccountDetails[]>([]);
   const [totalEth, setTotalEth] = useState<Number | any>(0);
@@ -31,28 +31,24 @@ export function EthOverview() {
     }
     getTotalEth()
   }, [address, balances, totalEth])
-
+  
   
 
+
+
   return (
-    <tr>
-      <td className="flex flex-col whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-100 sm:pl-6">
-        <div className='flex flex-row items-center'>
-          <div className='bg-indigo-200 rounded-xl h-6 w-6 mr-2'></div>Ethereum
-        </div>
+    <div className='flex flex-col  shadow-md p-4 mt-12 bg-gray-100 rounded-xl'>      
+      <div className='flex flex-row justify-start rounded-xl py-3 px-5 w-4/6'>
         <div>
-           {balances ? balances.map((item:any, index:number) => (
-              <p key={index} className='mt-2 text-gray-200'>{item.chain.name}</p>
+          <h2 className='text-gray-800 '>Cumulative Balance: {totalEth}</h2>
+          <div>
+            {balances ? balances.map((item:any, index:number) => (
+              <p className='text-indigo-500' key={index}>{item.chain.name}: <strong>{formatEther(item.balance)} ETH</strong></p>
             )) : null}
+          </div>
         </div>
-        </td>
-        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">$1,323 USD</td>
-      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">{totalEth}</td>
-        <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-          <a href="#" className="text-indigo-100 hover:text-indigo-400">
-            Send
-          </a>
-        </td>
-    </tr>
+        <InputFields />
+      </div>
+    </div>
   );
 }
