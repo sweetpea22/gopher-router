@@ -57,7 +57,6 @@ export const calculateNativeTransfer = async (from: string, chains: ChainInfo[],
     // Step 2.1 - If `destinationChain == null`
     // In this case we can simply find the best set of chains to combine that will make the transfer occur at the cheapest rate
     // Best outcome, we transfer everything from one single chain
-    console.log(destinationChain)
     if (!destinationChain) {
     
         // Contains a list of transfers with assosiated costs across all the chains
@@ -88,7 +87,6 @@ export const calculateNativeTransfer = async (from: string, chains: ChainInfo[],
     // In this case we need to calculate the costs of bridging between chains, and finding the cheapest bundle
     // The best outcome is that the destinationChain is the cheapest, otherwise we need to combine all the options    
     } else {
-        console.log("here")
         // There HAS TO BE a better way
         const destinationAccountDetails = accountDetails.find(chain => chain.chain.name === destinationChain.name);
         const bridgeChainsBalances = accountDetails.filter(chain => chain.chain.name !== destinationChain.name);

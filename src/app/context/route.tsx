@@ -17,7 +17,7 @@ const defaultRouteContext: IRouteContext = {
     setDestinationAddress: (address: string) => {},
     etherAmount: BigNumber.from(0),
     setEtherAmount: (amount: BigNumber) => {},
-    destinationChain: constants.Chains[0],
+    destinationChain: {} as ChainInfo,
     setDestinationChain: (chain: ChainInfo) => {},
 }
 export const RouteData = createContext<IRouteContext>(defaultRouteContext);
@@ -26,7 +26,7 @@ export const RouteData = createContext<IRouteContext>(defaultRouteContext);
 export function RouteContext({children}) {
     const [destinationAddress, setDestinationAddress] = useState("");
     const [etherAmount, setEtherAmount] = useState(BigNumber.from(0));
-    const [destinationChain, setDestinationChain] = useState(constants.Chains[0]);
+    const [destinationChain, setDestinationChain] = useState({} as ChainInfo);
 
     return (
         <RouteData.Provider value={{ 
