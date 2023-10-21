@@ -5,6 +5,7 @@ import { formatEther } from 'ethers/lib/utils';
 import { useEffect, useState } from 'react';
 import { Chains } from '@/app/constants';
 import { AccountDetails } from '@/app/interfaces';
+
 export function EthOverview() {
   const { address } = useAccount();
   const [balances, setBalances] = useState<AccountDetails[]>([]);

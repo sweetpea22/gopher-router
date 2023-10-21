@@ -4,7 +4,13 @@ import { useEffect, useState, useCallback } from 'react';
 import { formatEther } from 'ethers/lib/utils';
 import { Chains } from '@/app/constants';
 import { AccountDetails } from '@/app/interfaces';
-const tabs = [
+
+interface Tab {
+  name: string;
+  href: string;
+  current: boolean;
+}
+const defaultTabs: Tab[] = [
   { name: 'Ether', href: '#', current: true },
   { name: 'Tokens', href: '#', current: false },
 ]
@@ -25,10 +31,26 @@ function truncate(numberString: string, trunk = 2) {
 export default function NetworkBreakdown() {
   const { address } = useAccount();
   const [balances, setBalances] = useState<AccountDetails[]>([]);
+  const [tabs, setTabs] = useState<Tab[]>(defaultTabs)
+
+  // so ugly
+  const changeTab = (name: string) => {
+    if (name == "Ether") {
+      const newTabs = [...tabs];
+      newTabs[0].current = true;
+      newTabs[1].current = false;
+      setTabs(newTabs);
+    } else {
+      const newTabs = [...tabs];
+      newTabs[0].current = false;
+      newTabs[1].current = true;
+      setTabs(newTabs);
+    }
+  }
 
   const getBalanceByChain = useCallback(async () => {
-  const data = await getAllBalances(address as string, Chains)
-  setBalances(data);
+    const data = await getAllBalances(address as string, Chains)
+    setBalances(data);
   }, [address])
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -54,7 +76,9 @@ export default function NetworkBreakdown() {
             defaultValue={tabs[0].name}
           >
             {tabs.map((tab) => (
-              <option key={tab.name}>{tab.name}</option>
+              <option key={tab.name}>
+                {tab.name}
+              </option>
             ))}
           </select>
         </div>
@@ -65,10 +89,11 @@ export default function NetworkBreakdown() {
                 <a
                   key={tab.name}
                   href={tab.href}
+                  onClick={() => {tab.current ? null : changeTab(tab.name)}}
                   className={classNames(
                     tab.current
                       ? 'border-indigo-500 text-indigo-600 text-center'
-                      : 'border-transparent text-gray-500 hover:border-gray-300 cursor-not-allowed',
+                      : 'border-transparent text-gray-500 hover:border-gray-300',
                     'whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium '
                   )}
                   aria-current={tab.current ? 'page' : undefined}
