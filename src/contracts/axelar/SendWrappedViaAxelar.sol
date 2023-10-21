@@ -18,9 +18,6 @@ contract SendWrappedViaAxelar is AxelarExecutable {
     // Immutable reference to the gas service contract
     IAxelarGasService public immutable gasService;
 
-    // Variables to track airdrop details
-    uint256 public amountReceived;
-    address[] public airdropRecipients;
 
     // Constructor to initialize the contract
     constructor(address weth_, address gateway_, address gasReceiver_) AxelarExecutable(gateway_) {
@@ -51,8 +48,8 @@ contract SendWrappedViaAxelar is AxelarExecutable {
         // Approve the gateway to spend tokens on behalf of this contract
         IERC20(tokenAddress).approve(address(gateway), amount);
 
-        // Encode the recipient addresses into a payload
-        bytes memory payload = abi.encode(destinationAddresses);
+        // Stuck: don't know what payload we need to unwrap?
+        // bytes memory payload = abi.encode(??);
 
         // Pay for native gas using the gas service contract
         gasService.payNativeGasForContractCallWithToken{value: msg.value}(
@@ -73,30 +70,6 @@ contract SendWrappedViaAxelar is AxelarExecutable {
             symbol,
             amount
         );
-    }
-
-
-    // Internal function to execute airdrop on the current chain
-    function _executeWithToken(
-        string calldata,
-        string calldata,
-        bytes calldata payload,
-        string calldata tokenSymbol,
-        uint256 amount
-    ) internal override {
-        // Decode the payload to get the recipient addresses
-        address[] memory recipients = abi.decode(payload, (address[]));
-
-        // Get the token address associated with the provided symbol
-        address tokenAddress = gateway.tokenAddresses(tokenSymbol);
-
-        // Set amountReceived and airdropRecipients variables
-        amountReceived = amount;
-
-        // Calculate the amount of tokens to send to each recipient
-        uint256 sentAmount = amount / recipients.length;
-
-        // Transfer tokens to each recipient
     }
 
     function unwrap(uint256 _amount) public payable {
