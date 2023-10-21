@@ -6,7 +6,7 @@ interface TxOverviewProps {
   destinationChain: ChainInfo;
 }
 
-export default function TxOverview({  destinationAddress, destinationChain, etherAmount}: TxOverviewProps) {
+export default function TxOverview({ destinationAddress, destinationChain, etherAmount }: TxOverviewProps) {
   return (
     <>
       {/* Review Order */}

@@ -1,14 +1,13 @@
 import { RouteData } from "@/app/context/transferRoute";
 import { TrasnferData } from "@/app/context/transfers";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import ShowTransfers from "./ShowTransfers";
 import TxOverview from "./TxOverview";
 
 export function InnerContent() {
   const {destinationAddress, etherAmount, destinationChain} = useContext(RouteData);
-  const {transfers, loadingTransfers} = useContext(TrasnferData);
+  const { transfers, loadingTransfers } = useContext(TrasnferData);
 
-  
   
   return (
     <div>

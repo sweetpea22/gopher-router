@@ -1,6 +1,6 @@
 import * as constants from "@/app/constants";
 import { EthOverview } from "../TableContents/eth/EthOverview";
-import { TokenOverview } from "../TableContents/tokens/TokenOverview";
+import { TokenOverview } from "../TableContents/tokens/tokenOverview";
 import { TokenBalance } from "@/app/interfaces";
 import { useContext, useState } from "react";
 import { BalancesData } from "@/app/context/balances";
@@ -63,7 +63,7 @@ export default function AssetsTable() {
                   />
 
                   {/* Token Overview */}
-                   {
+                   {/* {
                     // TODO: Add token overviews
                     constants.Tokens.map(token => {
                       return <TokenOverview 
@@ -73,7 +73,7 @@ export default function AssetsTable() {
                         selected={selected === token.name ? true : false}
                       />
                     })
-                  }
+                  } */}
                 </tbody>
               </table>
             </div>

@@ -23,7 +23,7 @@ export function EthOverview(opts: IOpts) {
       const data = await getAllBalances(address as string, Chains);
       setEthBalance(data);
     }
-    getBalanceByChain();
+    // getBalanceByChain();
 
     const getTotalEth = () => {
       if (ethBalance.length > 1) {
@@ -34,7 +34,8 @@ export function EthOverview(opts: IOpts) {
       }
     }
     getTotalEth()
-  }, [address, ethBalance, totalEth])
+  }, [address, ethBalance, setEthBalance, totalEth])
+  
 
   return (
     <tr onClick={() => opts.onClick("eth")}>

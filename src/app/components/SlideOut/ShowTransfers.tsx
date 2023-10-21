@@ -2,6 +2,7 @@ import { Transfer } from '@/app/interfaces';
 import React from 'react';
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import Button from '../Button';
+import { sendViaConnext } from '@/formulas/bridges/connext/sendViaConnext';
 
 type Props = {
   transfers: Transfer[];
@@ -9,7 +10,8 @@ type Props = {
   destinationChain: string;
 };
 
-const ShowTransfers = ({transfers, loadingTransfers, destinationChain}: Props) => {
+const ShowTransfers = ({ transfers, loadingTransfers, destinationChain }: Props) => {
+  
   const renderTransfers = () => {
     if (loadingTransfers) {
       return (
@@ -48,6 +50,7 @@ const ShowTransfers = ({transfers, loadingTransfers, destinationChain}: Props) =
                         : null
                       }
                     </div>
+                    <Button className='w-full mt-4' onClick={() => {console.log('something')}}>Execute</Button>
                   </div>
                 ) 
               })
@@ -77,7 +80,6 @@ const ShowTransfers = ({transfers, loadingTransfers, destinationChain}: Props) =
       {/* Route Info */}
         {renderTransfers()}
       </div>
-      <Button className='w-full mt-4' onClick={() => {console.log('something')}}>Execute</Button>
 
     </>
   )
