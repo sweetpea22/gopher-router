@@ -52,34 +52,9 @@ export function EthOverview() {
             )) : null}
         </div>
       </td>
-      <td className="whitespace-nowrap text-sm text-gray-300">$1,323 USD</td>
+      <td className="whitespace-nowrap text-sm text-gray-300"><div>$1,595 USD</div></td>
       <td className="whitespace-nowrap text-sm text-gray-300">{totalEth}</td>
-      <td className="relative whitespace-nowrap py-4 text-right text-sm">
-        <Disclosure as='div'>
-          {({ open }) => (
-            <>
-              <dt>
-                <Disclosure.Button className='flex w-full items-center justify-center text-left text-gray-200'>
-                  <div>
-                    Send 
-                  </div>
-                  <span className='ml-6 flex h-7 items-center'>
-                    {open ? (
-                      <ChevronUpIcon className='h-6 w-6 text-gray-600' aria-hidden='true' />
-                    ) : (
-                      <ChevronDownIcon className='h-6 w-6 text-brand-400' aria-hidden='true' />
-                    )}
-                  </span>
-                </Disclosure.Button>
-              </dt>
-              <Disclosure.Panel as='dd' className='h-[300px]'>
-                <p className='text-sm leading-7 text-gray-400'>
-                  Input fields go in here
-                </p>
-              </Disclosure.Panel>
-            </>
-          )}
-        </Disclosure>
+      <td className="whitespace-nowrap text-right text-sm pr-4">
       </td>
     </tr>
   );

@@ -30,10 +30,10 @@ export default function InputFields() {
   }
 
   return (
-    <div className='py-2 px-12'>
-      <div className='py-2 w-[5rem]'>
-        <label htmlFor="address" className="block text-sm font-medium leading-6 text-gray-900">
-          Send to
+    <div className='w-1/2 mt-4 py-5 px-5 rounded-xl min-w-full ring-1 ring-inset ring-gray-800'>
+      <div className='py-2'>
+        <label htmlFor="address" className="block text-base font-medium leading-6 text-gray-200">
+          Send All To
         </label>
         <div className="mt-2">
           <input
@@ -48,7 +48,7 @@ export default function InputFields() {
         </div>
         </div>
       <div className='py-2'>
-        <label htmlFor="amount" className="block text-sm font-medium leading-6 text-gray-900">
+        <label htmlFor="amount" className="block text-base font-medium leading-6 text-gray-200">
           Amount to send
         </label>
         <div className="mt-2">

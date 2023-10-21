@@ -18,29 +18,26 @@ export default function AssetsTable() {
         </div>
       </div>
       {/* Table */}
-      <div className="flow-root">
+      <div className="mt-4 flow-root">
         <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-            <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
-              <table className="min-w-full divide-y divide-gray-800">
-                <thead className="bg-stone-800">
+            <div className="overflow-hidden">
+              <table className="rounded-xl min-w-full divide-y divide-gray-800 ring-1 ring-inset ring-gray-800 ">
+                <thead className="">
                   <tr>
                     <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-200 sm:pl-6">
                       Asset
                     </th>
-                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-200">
+                    <th scope="col" className="py-3.5 text-left text-sm font-semibold text-gray-200">
                       Price
                     </th>
-                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-200">
-                      Balance
+                    <th scope="col" className="py-3.5 text-left text-sm font-semibold text-gray-200">
+                      Cumulative Balance
                     </th>
-                  
-                    <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
-                      <span className="sr-only">Sweep</span>
-                    </th>
+                
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-700 bg-stone-900">
+                <tbody className="divide-y divide-slate-700">
                   {/* show ether first */}
                   <EthOverview />
 

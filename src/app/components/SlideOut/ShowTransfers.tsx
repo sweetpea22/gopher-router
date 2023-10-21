@@ -29,7 +29,7 @@ const ShowTransfers = ({transfers, loadingTransfers, destinationChain}: Props) =
                   <div key={i}>
                     <div className='grid grid-cols-2 place-items-stretch mt-3'>
                       <td className='justify-self-start'>
-                              <p  className='text-gray-900'>{transfer.chain.name}</p>
+                              <p className='text-gray-900'>{transfer.chain.name}</p>
                       </td>
                       <p className='text-gray-900 justify-self-end'>{destinationChain}</p>
                     </div>
