@@ -2,7 +2,7 @@
 import { WagmiConfig } from "wagmi";
 import { RainbowKitProvider, getDefaultWallets } from '@rainbow-me/rainbowkit'
 import { configureChains, createConfig } from 'wagmi'
-import { mainnet, goerli, baseGoerli, scrollSepolia, sepolia } from 'wagmi/chains'
+import { mainnet, goerli, baseGoerli, scrollSepolia, sepolia, optimismGoerli} from 'wagmi/chains'
 import { infuraProvider } from '@wagmi/core/providers/infura'
 import { publicProvider } from 'wagmi/providers/public'
 import { useEffect, useState } from "react";
@@ -13,7 +13,7 @@ const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 
 const { chains, publicClient } = configureChains(
 
-  [mainnet, goerli, baseGoerli, scrollSepolia, sepolia],
+  [mainnet, goerli, baseGoerli, scrollSepolia, sepolia, optimismGoerli],
   [infuraProvider({ apiKey: INFURA_API_KEY as string }),  publicProvider(), publicProvider()],
 )
 

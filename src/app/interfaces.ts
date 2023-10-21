@@ -14,6 +14,7 @@ export interface TokenBalance {
 
 export interface ChainInfo {
     name: string;
+    chainId: number;
     rpcUrl: string;
 }
 

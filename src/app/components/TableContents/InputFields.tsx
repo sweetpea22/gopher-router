@@ -26,7 +26,7 @@ export default function InputFields() {
 
   const getRoutes = () => {
     setDestinationAddress(localAddress);
-    setEtherAmount(BigNumber.from(ethers.utils.parseEther(localAmount)));
+    setEtherAmount(ethers.utils.parseEther(localAmount));
   }
 
   return (
