@@ -71,7 +71,7 @@ export function TokenOverview(opts: IOpts) {
           <span className={opts.selected ? "bg-green-200 text-black" : ""}>{name}</span>
         </div>
         <div className='flex flex-row'>
-           {balances ? balances.map(({chain}, index:number) => (
+           {balances ? balances.sort((a,b) => a.chain.name.localeCompare(b.chain.name)).map(({chain}, index:number) => (
              <p key={index} className='mt-2 mr-2 text-gray-200'>  
                {chain.name.charAt(0) + chain.name.slice(1).toLowerCase()}{index === balances.length - 1 ? null : ','}</p>
             )) : null}
