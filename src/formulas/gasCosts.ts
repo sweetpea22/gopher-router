@@ -9,10 +9,16 @@ import { getAxelarCost } from "./bridges/axelar/axelar";
 // Populate list of common gas costs where available
 const standardEVM = [ChainNames.ethereum, ChainNames.goerli, ChainNames.sepolia, ChainNames.opGoerli, ChainNames.scrollSepolia, ChainNames.mantle]; // assume 21000 gas
 
+export enum BridgeType {
+    connext = "Connext",
+    axelar = "Axelar"
+}
+
 export interface FeeData {
     gasPrice: BigNumber;
     maxPriorityFeePerGas: BigNumber;
     cost: BigNumber;
+    bridgeType: BridgeType;
 }
 
 export const calculateBaseGasCost = async (chain: ChainInfo): Promise<FeeData> => {
@@ -20,8 +26,15 @@ export const calculateBaseGasCost = async (chain: ChainInfo): Promise<FeeData> =
         // Usage of 21000 gas
         const provider = new ethers.providers.JsonRpcProvider(chain.rpcUrl);
         const {gasPrice, maxPriorityFeePerGas} = await provider.getFeeData();
-        // @ts-ignore let the app blow up if gasPrice isn't available yolo
-        const cost = BigNumber.from(21000).mul((gasPrice.add(maxPriorityFeePerGas)));
+        let cost: BigNumber;
+        if (!maxPriorityFeePerGas) {
+            // @ts-ignore let the app blow up if gasPrice isn't available yolo
+            cost = BigNumber.from(21000).mul(gasPrice);
+        } else {
+            // @ts-ignore let the app blow up if gasPrice isn't available yolo
+            cost = BigNumber.from(21000).mul((gasPrice.add(maxPriorityFeePerGas)));
+        }
+
         return {
             // @ts-ignore
             gasPrice,
@@ -39,6 +52,7 @@ export const calculateBridgeCost = async (originChain: ChainInfo, destinationCha
     if (typeof Connext.domainMap[originChain.name] !== 'undefined' && typeof Connext.domainMap[destinationChain.name] !== 'undefined') {
         const option = await connextGasCosts(originChain, destinationChain, to);
         if (Object.keys(option).length > 0) {
+            option.bridgeType = BridgeType.connext;
             bridgeOptions.push(option)
         }
     }
@@ -46,6 +60,7 @@ export const calculateBridgeCost = async (originChain: ChainInfo, destinationCha
     if (typeof Axelar.domainMap[originChain.name] !== 'undefined' && typeof Axelar.domainMap[destinationChain.name] !== 'undefined') {
         const option = await getAxelarCost(originChain, destinationChain, to); 
         if (Object.keys(option).length > 0) {
+            option.bridgeType = BridgeType.axelar;
             bridgeOptions.push(option)
         }
     }

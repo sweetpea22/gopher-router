@@ -1,6 +1,5 @@
 import { ChainInfo } from "@/app/interfaces";
 import "dotenv/config"
-import "dotenv/config"
 
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY as string;
 
@@ -29,7 +28,7 @@ export const Chains: ChainInfo[] = [
     { 
         // have to find a new provider for scroll 
         name: ChainNames.scrollSepolia, 
-        rpcUrl: `https://sepolia.infura.io/v3/${INFURA_API_KEY}`
+        rpcUrl: `https://sepolia-rpc.scroll.io`
     },
     { 
         name: ChainNames.ethereum, 

@@ -17,7 +17,9 @@ const ShowTransfers = ({transfers, loadingTransfers, destinationChain}: Props) =
       )
     } else if (transfers.length == 0) {
       return (
-        <p className='mt-2'>No routes available!</p>
+        <div>
+          <p className='mt-2'>No routes available!</p>
+        </div>
       )
     } else {
       return (
@@ -28,14 +30,23 @@ const ShowTransfers = ({transfers, loadingTransfers, destinationChain}: Props) =
                 return (
                   <div key={i}>
                     <div className='grid grid-cols-2 place-items-stretch mt-3'>
-                      <td className='justify-self-start'>
-                        <p className='text-gray-900'>{transfer.chain.name}</p>
-                      </td>
+                      <table>
+                        <tbody>
+                          <tr>
+                            <td className='justify-self-start'>
+                              <p className='text-gray-900'>{transfer.chain.name}</p>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
                       <p className='text-gray-900 justify-self-end'>{destinationChain}</p>
                     </div>
                     <div className='flex flex-col'>
                       <p>Cost to transfer: {(transfer.feeData.cost.toNumber() / 10e18).toFixed(8) } ETH</p>
-                      <p>Bridged TX: {transfer.isBridged ? "Yes":"No"}</p>
+                      {transfer.isBridged ? 
+                        <p>Bridge: {transfer.feeData.bridgeType}</p>
+                        : null
+                      }
                     </div>
                   </div>
                 ) 

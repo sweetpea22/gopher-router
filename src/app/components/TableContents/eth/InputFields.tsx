@@ -11,7 +11,6 @@ import { TrasnferData } from '@/app/context/transfers';
 export default function InputFields() {
   const {setDestinationAddress, setEtherAmount} = useContext(RouteData);
   const {setLoadingTransfers} = useContext(TrasnferData);
-  const {isOpen, setOpen} = useContext(SlideOutData);
   const [localAddress, setLocalAddress] = useState("");
   const [localAmount, setLocalAmount] = useState("");
 
@@ -24,7 +23,6 @@ export default function InputFields() {
   }
 
   const getRoutes = () => {
-    if (!isOpen) setOpen(true);
     setDestinationAddress(localAddress);
     setEtherAmount(BigNumber.from(ethers.utils.parseEther(localAmount)));
   }
