@@ -4,14 +4,15 @@ import { standardButton } from '@/app/styles/styles';
 import { BigNumber, ethers } from 'ethers';
 import { RouteData } from '@/app/context/transferRoute';
 import { SlideOutData } from '@/app/context/slideOut';
-import NetworkInput from './NetworkInput';
+import NetworkInput from './eth/NetworkInput';
 
 import { TrasnferData } from '@/app/context/transfers';
+import { BalancesData } from '@/app/context/balances';
 
 export default function InputFields() {
   const {setDestinationAddress, setEtherAmount} = useContext(RouteData);
+  const {selected} = useContext(BalancesData);
   const {setLoadingTransfers} = useContext(TrasnferData);
-  const {isOpen, setOpen} = useContext(SlideOutData);
   const [localAddress, setLocalAddress] = useState("");
   const [localAmount, setLocalAmount] = useState("");
 
@@ -24,7 +25,6 @@ export default function InputFields() {
   }
 
   const getRoutes = () => {
-    if (!isOpen) setOpen(true);
     setDestinationAddress(localAddress);
     setEtherAmount(BigNumber.from(ethers.utils.parseEther(localAmount)));
   }
@@ -33,7 +33,7 @@ export default function InputFields() {
     <div className='w-1/2 mt-4 py-5 px-5 rounded-xl min-w-full ring-1 ring-inset ring-gray-800'>
       <div className='py-2'>
         <label htmlFor="address" className="block text-base font-medium leading-6 text-gray-200">
-          Send To
+          Send {selected == "eth" ? "Ethereum" : selected}
         </label>
         <div className="mt-2">
           <input
@@ -57,7 +57,7 @@ export default function InputFields() {
             name="amount"
             id="amount"
             className={`${standardInput}`}
-            placeholder="Amount in ether"
+            placeholder={selected == "eth" ? "Amount in Ether" : `Amount in ${selected}`}
             onChange={changeAmount}
             value={localAmount}
           />

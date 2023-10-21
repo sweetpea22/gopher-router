@@ -8,13 +8,14 @@ import { useContext, useEffect } from 'react';
 import { actions } from '@/formulas';
 import * as constants  from '../constants';
 import { ethers } from 'ethers';
-import { SlideOutContext } from '../context/slideOut';
+import { SlideOutContext, SlideOutData } from '../context/slideOut';
 import AssetsTable from './TableContainers/AssetsTable';
-import InputFields from './TableContents/eth/InputFields';
+import InputFields from './TableContents/InputFields';
 import NetworkBreakdown from './TableContainers/NetworkBreakdown';
 
 export default function BasicTable({children}: any) {
   const {setTransfers, setLoadingTransfers} = useContext(TrasnferData);
+  const {isOpen, setOpen} = useContext(SlideOutData);
   const {etherAmount, destinationAddress, destinationChain} = useContext(RouteData);
 
   useEffect(() => {
@@ -23,19 +24,19 @@ export default function BasicTable({children}: any) {
         destinationAddress, 
         constants.Chains,
         etherAmount,
-        // stub
         Object.keys(destinationChain).length > 0 ? destinationChain : undefined
-        );
+      );
       setTransfers(transfers);
       setLoadingTransfers(false);
     };
 
     // Add actual validations here
     if (ethers.utils.isAddress(destinationAddress)) {
+      if (!isOpen) setOpen(true);
       setLoadingTransfers(true);
       fetchTransfers();
     }
-  }, [etherAmount, destinationAddress, destinationChain])
+  }, [etherAmount, destinationAddress])
 
   return (
   <div className={`${centeredDiv} py-10`}>

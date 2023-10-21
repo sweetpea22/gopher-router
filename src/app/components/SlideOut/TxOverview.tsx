@@ -7,7 +7,6 @@ interface TxOverviewProps {
 }
 
 export default function TxOverview({  destinationAddress, destinationChain, etherAmount}: TxOverviewProps) {
-
   return (
     <>
       {/* Review Order */}
@@ -19,8 +18,8 @@ export default function TxOverview({  destinationAddress, destinationChain, ethe
           </div>
         </div>
         <div className='px-3 py-2 flex flex-col items-start justify-between'>
-          <h3 className='font-medium font-lg'>Destination Chain</h3>
-          {Object.keys(destinationChain).length > 0 ? <div className='rounded-xl bg-slate-50 py-2 px-3'>
+        {destinationChain?.name  ? <div className='rounded-xl bg-slate-50 py-2 px-3'>
+            <h3 className='font-medium font-lg'>Destination Chain</h3>
             <p className='font-medium'>{destinationChain.name}</p>
           </div> : null} 
         </div>

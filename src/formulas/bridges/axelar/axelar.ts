@@ -32,9 +32,6 @@ export async function getAxelarCost(originChain: ChainInfo, destinationChain: Ch
     if (!fee) {
       return {} as FeeData;
     }
-    console.log(fee?.amount); // returns 140000000
-
-      
 
     // @TODO - Deploy the contracts, this will error
     // @TODO - If we want to unwrap on the destination chain we will need to use GMP
@@ -63,7 +60,7 @@ export async function getAxelarCost(originChain: ChainInfo, destinationChain: Ch
     } as FeeData;
     
   } catch (err) {
-    console.log(err);
+    console.log("Axelar error: ", err);
     return {} as FeeData;
   }
 }

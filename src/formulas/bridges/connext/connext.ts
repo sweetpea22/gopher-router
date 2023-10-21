@@ -4,6 +4,7 @@ import {Logger} from "@connext/nxtp-utils"
 import {ethers, BigNumber} from "ethers";
 import { ChainInfo } from "@/app/interfaces";
 import { FeeData } from "@/formulas/gasCosts";
+import { wethMapping } from "@/app/constants";
 
 export const connextGasCosts = async (originChain: ChainInfo, destinationChain: ChainInfo, to: string): Promise<FeeData> => {
     const originProvider = new ethers.providers.JsonRpcProvider(originChain.rpcUrl);
@@ -17,7 +18,7 @@ export const connextGasCosts = async (originChain: ChainInfo, destinationChain: 
         origin: originDomain,
         destination: destinationDomain,
         to,
-        asset: Connext.wethMapping[originChain.name],
+        asset: wethMapping[originChain.name], // If Native Asset (eth) use wrapper for weth
         amount: "1", // override later, we can't know this yet until amountToSend is determined later
         slippage: "30", // maybe lower
         callData: "0x",
