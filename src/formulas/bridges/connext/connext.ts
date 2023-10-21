@@ -30,13 +30,13 @@ export const connextGasCosts = async (originChain: ChainInfo, destinationChain: 
     try {
         const xcallTxReq = await sdkBase.xcall(xcallParams);
         const gasUsed = await originProvider.estimateGas(xcallTxReq);
-        const {gasPrice, maxPriorityFeePerGas} = await originProvider.getFeeData();
+        const {maxFeePerGas, maxPriorityFeePerGas} = await originProvider.getFeeData();
         // @ts-ignore let the app blow up if gasPrice isn't available yolo
-        const cost = BigNumber.from(gasUsed).mul((gasPrice.add(maxPriorityFeePerGas)));
+        const cost = BigNumber.from(gasUsed).mul((maxFeePerGas.add(maxPriorityFeePerGas)));
         return {
             cost,
             // @ts-ignore
-            gasPrice,
+            maxFeePerGas,
             // @ts-ignore
             maxPriorityFeePerGas
         };

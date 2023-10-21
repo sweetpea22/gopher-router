@@ -15,7 +15,7 @@ export enum BridgeType {
 }
 
 export interface FeeData {
-    gasPrice: BigNumber;
+    maxFeePerGas: BigNumber;
     maxPriorityFeePerGas: BigNumber;
     cost: BigNumber;
     bridgeType: BridgeType;
@@ -25,19 +25,19 @@ export const calculateBaseGasCost = async (chain: ChainInfo): Promise<FeeData> =
     if (standardEVM.includes(chain.name)) {
         // Usage of 21000 gas
         const provider = new ethers.providers.JsonRpcProvider(chain.rpcUrl);
-        const {gasPrice, maxPriorityFeePerGas} = await provider.getFeeData();
+        const {maxFeePerGas, maxPriorityFeePerGas} = await provider.getFeeData();
         let cost: BigNumber;
         if (!maxPriorityFeePerGas) {
             // @ts-ignore let the app blow up if gasPrice isn't available yolo
-            cost = BigNumber.from(21000).mul(gasPrice);
+            cost = BigNumber.from(21000).mul(maxFeePerGas);
         } else {
             // @ts-ignore let the app blow up if gasPrice isn't available yolo
-            cost = BigNumber.from(21000).mul((gasPrice.add(maxPriorityFeePerGas)));
+            cost = BigNumber.from(21000).mul((maxFeePerGas.add(maxPriorityFeePerGas)));
         }
 
         return {
             // @ts-ignore
-            gasPrice,
+            maxFeePerGas,
             // @ts-ignore
             maxPriorityFeePerGas,
             cost
