@@ -38,12 +38,6 @@ const config: HardhatUserConfig = {
       accounts: [PRIVATE_KEY],
       chainId: 534351,
     },
-    mantleTestnet: {
-      url: "https://rpc.testnet.mantle.xyz/",
-      gasPrice: 1000000000,
-      accounts: [PRIVATE_KEY],
-      chainId: 5001,
-    },
   },
   solidity: {
     version: '0.8.19',

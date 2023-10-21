@@ -32,7 +32,7 @@ async function main() {
   const { deploy } = deployments
   const { deployer } = await getNamedAccounts()
 
-  // Deploy Axelar on Goerli
+  // Deploy Axelar on Goerli, Scroll and OpGoerli. It uses the same args.
   const SendWrappedViaAxelar = await deploy(
     'SendWrappedViaAxelar',  {
     from: deployer,
@@ -47,20 +47,6 @@ async function main() {
   `Deployed Axelar Bridge Contract on Goerli at ${SendWrappedViaAxelar.address}!`
   )
 
-  // Axelar on Op Goerli
-  // const SendWrappedViaAxelar = await deploy(
-  //   'SendWrappedViaAxelar',  {
-  //   from: deployer,
-  //     args: [
-  //       '0xe432150cce91c13a887f7D836923d5597adD8E31',
-  //       '0xbE406F0189A0B4cf3A05C286473D23791Dd44Cc6'
-  //     ],
-  //   log: true,
-  //   waitConfirmations: 6
-  // })
-  // console.log(
-  // `Deployed Axelar Bridge Contract on Goerli at ${SendWrappedViaAxelar.address}!`
-  // )
 
   // Deploy CCIP
   const TokenTrasferor = await deploy(
@@ -77,7 +63,7 @@ async function main() {
   `Deployed CCIP Bridge Contract on Sepolia  at ${TokenTrasferor.address}!`
   )
 
-  // CCIP on Op Goerli
+  // Deploy CCIP on Op Goerli (args are different)
   // const TokenTrasferor = await deploy(
   //   'TokenTrasferor',  {
   //   from: deployer,
