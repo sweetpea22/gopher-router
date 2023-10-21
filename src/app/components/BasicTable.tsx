@@ -10,7 +10,7 @@ import * as constants  from '../constants';
 import { ethers } from 'ethers';
 import { SlideOutContext, SlideOutData } from '../context/slideOut';
 import AssetsTable from './TableContainers/AssetsTable';
-import InputFields from './TableContents/eth/InputFields';
+import InputFields from './TableContents/InputFields';
 import NetworkBreakdown from './TableContainers/NetworkBreakdown';
 
 export default function BasicTable({children}: any) {
