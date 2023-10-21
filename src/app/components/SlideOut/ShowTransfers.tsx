@@ -3,12 +3,15 @@ import React from 'react';
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import Button from '../Button';
 import { sendViaConnext } from '@/formulas/bridges/connext/sendViaConnext';
+import SendButton from '../SendButton';
+
 
 type Props = {
   transfers: Transfer[];
   loadingTransfers: boolean;
   destinationChain: string;
 };
+
 
 const ShowTransfers = ({ transfers, loadingTransfers, destinationChain }: Props) => {
   
@@ -50,7 +53,7 @@ const ShowTransfers = ({ transfers, loadingTransfers, destinationChain }: Props)
                         : null
                       }
                     </div>
-                    <Button className='w-full mt-4' onClick={() => {console.log('something')}}>Execute</Button>
+                    {/* <Button className='w-full mt-4' onClick={() => {console.log('something')}}>Execute</Button> */}
                   </div>
                 ) 
               })
@@ -59,6 +62,7 @@ const ShowTransfers = ({ transfers, loadingTransfers, destinationChain }: Props)
       )
     }
   }
+
   return (
     <>
       <div className='mt-2 px-5 py-6 shadow-xl rounded-lg bg-white ring-1 ring-gray-100'>
@@ -71,12 +75,13 @@ const ShowTransfers = ({ transfers, loadingTransfers, destinationChain }: Props)
         </div>
         <div
           className='h-[1.5px] top-4 bg-gradient-to-r from-indigo-500  w-[100%]'
-        ></div>
+          ></div>
         <div>
           <div className='bg-gray-200 rounded-xl items-center flex h-4 w-4 flex-col'>
           </div>
         </div>
       </div>
+          <SendButton>Send</SendButton>
       {/* Route Info */}
         {renderTransfers()}
       </div>

@@ -10,12 +10,10 @@ import "hardhat-deploy"
 import { HardhatUserConfig } from 'hardhat/config';
 
 const GOERLI_RPC_URL =
-  process.env.GOERLI_RPC_URL ||
-  'https://eth-sepolia.g.alchemy.com/v2/YOUR-API-KEY';
+  process.env.GOERLI_RPC_URL as string;
 
 const PRIVATE_KEY = process.env.PRIVATE_KEY as string;
-const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY as string
-const MANTLE_EXPLORER_API_KEY = process.env.MANTLE_EXPLORER_API_KEY as string;
+const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY as string;
 
 const config: HardhatUserConfig = {
   defaultNetwork: 'hardhat',
@@ -61,8 +59,6 @@ const config: HardhatUserConfig = {
   etherscan: {
     apiKey: {
       goerli: ETHERSCAN_API_KEY,
-      mantle: MANTLE_EXPLORER_API_KEY,
-
     },
   },
 

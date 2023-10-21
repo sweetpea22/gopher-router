@@ -8,18 +8,8 @@ import { ChainInfo } from "@/app/interfaces";
 import "dotenv/config"
 import { wethMapping } from "@/app/constants";
 
-
-const privateKey = process.env.NEXT_PUBLIC_PRIVATE_KEY as string;
-const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY as string;
-
-
-export async function sendViaConnext(originChain: ChainInfo, destinationChain: ChainInfo, to: string) {
+export async function sendViaConnext(originChain: ChainInfo, destinationChain: ChainInfo, to: string, signer:any) {
   
-  let signer = new ethers.Wallet(privateKey);
-  
-  const provider = new ethers.providers.JsonRpcProvider(`https://goerli.infura.io/v3/${INFURA_API_KEY}`);
-  
-  signer = signer.connect(provider);
 
   const { sdkBase } = await create(Connext.sdkConfig);
 
@@ -51,7 +41,7 @@ export async function sendViaConnext(originChain: ChainInfo, destinationChain: C
   // Necessary because funds will first be sent to the Connext contract in xcall.
   const approveTxReq = await sdkBase.approveIfNeeded(
     originDomain,
-    destinationDomain,
+    wethMapping[originChain.name],
     // i hardcoded the amount to 0.01 eth 
     '10000000000000000'
   )
