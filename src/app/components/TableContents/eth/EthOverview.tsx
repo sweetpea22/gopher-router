@@ -16,6 +16,14 @@ export function EthOverview() {
     setBalances(data);
   }, [address])
 
+  const getTotalEth = () => {
+    if (balances.length > 1) {
+    let sum = (a: any[]) => a.reduce((x: any, y: any) => x + y);
+  
+    let totalAmount = sum(balances.map((x) => Number(formatEther(x.balance)))).toFixed(3);
+      setTotalEth(totalAmount)
+    }
+  }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     getBalanceByChain()
@@ -23,14 +31,6 @@ export function EthOverview() {
   }, [address, getBalanceByChain])
 
 
-  const getTotalEth = () => {
-    if (balances.length > 1) {
-    let sum = (a: any[]) => a.reduce((x: any, y: any) => x + y);
-  
-    let totalAmount = sum(balances.map((x) => Number(formatEther(x.balance))));
-      setTotalEth(totalAmount)
-    }
-  }
 
   return (
     <tr>

@@ -33,7 +33,7 @@ export default function InputFields() {
     <div className='w-1/2 mt-4 py-5 px-5 rounded-xl min-w-full ring-1 ring-inset ring-gray-800'>
       <div className='py-2'>
         <label htmlFor="address" className="block text-base font-medium leading-6 text-gray-200">
-          Send All To
+          Send To
         </label>
         <div className="mt-2">
           <input

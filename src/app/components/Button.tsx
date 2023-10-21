@@ -1,18 +1,19 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 
 type Props = {
-  text: string;
-  to: string;
+  children: string | ReactElement;
+  to?: string;
   onClick: () => void;
+  className?: string;
 };
 
-const Button = ({text, to, onClick}: Props) => {
+const Button = ({children, className, onClick}: Props) => {
   return <button
         type="button"
-    className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+    className={`rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ${className}`}
     onClick={onClick}
   >
-    {text}
+    {children}
   </button>;
 };
 
