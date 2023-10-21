@@ -1,8 +1,8 @@
+"use client"
+
 import { BigNumber } from "ethers";
 import { createContext, useState } from "react";
-import { Chain } from "wagmi";
 import { ChainInfo } from "../interfaces";
-import * as constants  from '../constants';
 
 interface IRouteContext {
     destinationAddress: string,

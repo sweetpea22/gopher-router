@@ -5,6 +5,7 @@ interface ERC20{
   function withdraw(uint256 amount) external;
   function approve(address guy, uint256 wad) external;
 }
+
 interface Gateway{
     function sendToken(
         string memory destinationChain,

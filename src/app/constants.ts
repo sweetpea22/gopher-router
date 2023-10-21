@@ -1,5 +1,8 @@
 import { ChainInfo } from "@/app/interfaces";
+import "dotenv/config"
+import "dotenv/config"
 
+const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY as string;
 
 export const ChainNames: {[x: string]: string} = {
     ethereum: "ETHEREUM",
@@ -13,23 +16,24 @@ export const ChainNames: {[x: string]: string} = {
 export const Chains: ChainInfo[] = [
     { 
         name: ChainNames.goerli, 
-        rpcUrl: "https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161" 
+        rpcUrl: `https://goerli.infura.io/v3/${INFURA_API_KEY}`
     },
     {
         name: ChainNames.sepolia,
-        rpcUrl: "https://sepolia.infura.io/v3/5db0726c373b4e99a389e664e4db0d94"
+        rpcUrl: `https://sepolia.infura.io/v3/${INFURA_API_KEY}`
     },
     { 
         name: ChainNames.opGoerli, 
-        rpcUrl: "https://optimism-goerli.infura.io/v3/4e6a0901020c4328a241bcf2fc69ca6c" 
+        rpcUrl: `https://optimism-goerli.infura.io/v3/${INFURA_API_KEY}` 
     },
     { 
+        // have to find a new provider for scroll 
         name: ChainNames.scrollSepolia, 
-        rpcUrl: "https://sepolia-rpc.scroll.io/" 
+        rpcUrl: `https://sepolia.infura.io/v3/${INFURA_API_KEY}`
     },
     { 
         name: ChainNames.ethereum, 
-        rpcUrl: "https://mainnet.infura.io/v3/5db0726c373b4e99a389e664e4db0d94" 
+        rpcUrl: `https://mainnet.infura.io/v3/${INFURA_API_KEY}`
     }
 ]
 

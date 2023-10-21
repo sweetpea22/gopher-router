@@ -1,7 +1,7 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { centeredDiv } from '../styles/styles'
 import { EthOverview } from './TableContents/eth/EthOverview';
-import { RouteContext, RouteData } from '../context/route';
+import { RouteContext, RouteData } from '../context/transferRoute';
 import {SlideOut} from './SlideOut/index';
 import { TrasnferData } from '../context/transfers';
 import { useContext, useEffect } from 'react';
@@ -9,6 +9,9 @@ import { actions } from '@/formulas';
 import * as constants  from '../constants';
 import { ethers } from 'ethers';
 import { SlideOutContext } from '../context/slideOut';
+import AssetsTable from './TableContainers/AssetsTable';
+import InputFields from './TableContents/eth/InputFields';
+import NetworkBreakdown from './TableContainers/NetworkBreakdown';
 
 export default function BasicTable({children}: any) {
   const {setTransfers, setLoadingTransfers} = useContext(TrasnferData);
@@ -35,26 +38,16 @@ export default function BasicTable({children}: any) {
   }, [etherAmount, destinationAddress, destinationChain])
 
   return (
-  <div className={`${centeredDiv} bg-gray-200 py-10`}>
+  <div className={`${centeredDiv} py-10`}>
     <ConnectButton />
-    <SlideOut />
-    <p>Dummy address: 0x7AE8b0D6353F0931EB9FaC0A3562fA9e4C6Ff933</p>
-    <div className='my-4'>
-      <h1 className='text-gray-600'>Demo case: I want to transfer 0.1 eth to [address]. Show me the cheapest route.</h1>
-      </div>
-        <div>
-        {/* Ether Balances */}
-        <EthOverview />
-        {/* Token Overviews */}
+      <SlideOut />
+      <div className='flex flex-col justify-start'>
+        <AssetsTable />
+        <div className='grid sm:grid-cols-2 gap-4 px-8'>
+          <InputFields />
+          <NetworkBreakdown />
         </div>
-      <div>
-      {/* {
-        // TODO: Add token overviews
-        tokens.map(token => {
-          return <TokenOverview token={token}/>
-        })
-      } */}
-    </div>
+      </div>
   </div>
   )
 }

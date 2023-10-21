@@ -2,7 +2,7 @@ import { standardInput } from '@/app/styles/styles'
 import { ChangeEvent, useContext, useState } from 'react'
 import { standardButton } from '@/app/styles/styles';
 import { BigNumber, ethers } from 'ethers';
-import { RouteData } from '@/app/context/route';
+import { RouteData } from '@/app/context/transferRoute';
 import { SlideOutData } from '@/app/context/slideOut';
 import NetworkInput from './NetworkInput';
 
@@ -30,10 +30,10 @@ export default function InputFields() {
   }
 
   return (
-    <div className='py-2 px-12'>
-      <div className='py-2 w-[5rem]'>
-        <label htmlFor="address" className="block text-sm font-medium leading-6 text-gray-900">
-          Send to
+    <div className='w-1/2 mt-4 py-5 px-5 rounded-xl min-w-full ring-1 ring-inset ring-gray-800'>
+      <div className='py-2'>
+        <label htmlFor="address" className="block text-base font-medium leading-6 text-gray-200">
+          Send To
         </label>
         <div className="mt-2">
           <input
@@ -48,7 +48,7 @@ export default function InputFields() {
         </div>
         </div>
       <div className='py-2'>
-        <label htmlFor="amount" className="block text-sm font-medium leading-6 text-gray-900">
+        <label htmlFor="amount" className="block text-base font-medium leading-6 text-gray-200">
           Amount to send
         </label>
         <div className="mt-2">
