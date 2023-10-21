@@ -8,7 +8,6 @@ import { getChain } from '@/app/constants';
 import { useAccount, useSendTransaction, useSwitchNetwork } from 'wagmi';
 import { RouteData } from '@/app/context/transferRoute';
 import { useEthersSigner } from '@/app/wagmi/ethers';
-import { ethers } from 'ethers';
 
 type Props = {
   transfers: Transfer[];

@@ -1,6 +1,6 @@
 import * as constants from "@/app/constants";
 import { EthOverview } from "../TableContents/eth/EthOverview";
-import { TokenOverview } from "../TableContents/tokens/TokenOverview";
+import { TokenOverview } from "../TableContents/tokens/tokenOverview";
 import { TokenBalance } from "@/app/interfaces";
 import { useContext, useState } from "react";
 import { BalancesData } from "@/app/context/balances";
@@ -33,12 +33,12 @@ export default function AssetsTable() {
         </div>
       </div>
       {/* Table */}
-      <div className="flow-root">
+      <div className="mt-2 flow-root">
         <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-            <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
+            <div className="overflow-hidden shadow ring-1 ring-opacity-5 sm:rounded-lg ">
               <table className="min-w-full divide-y divide-gray-800">
-                <thead className="bg-stone-800">
+                <thead className="">
                   <tr>
                     <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-200 sm:pl-6">
                       Asset
@@ -55,7 +55,7 @@ export default function AssetsTable() {
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-700 bg-stone-900">
+                <tbody className="divide-y divide-slate-700 ">
                   {/* show ether first */}
                   <EthOverview 
                     onClick={handleSelect} 

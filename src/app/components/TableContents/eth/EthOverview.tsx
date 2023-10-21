@@ -37,11 +37,11 @@ export function EthOverview(opts: IOpts) {
   }, [address, ethBalance, totalEth])
 
   return (
-    <tr onClick={() => opts.onClick("eth")}>
+    <tr onClick={() => opts.onClick("eth")} className='hover:bg-gray-800 transition-all cursor-pointer'>
       <td className="flex flex-col whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-100 sm:pl-6">
-        <div className="flex flex-row items-center">
+        <div className="flex flex-row items-center ">
           <div className='bg-indigo-200 rounded-xl h-6 w-6 mr-2'></div>
-          <span className={opts.selected ? "bg-green-200 text-black" : ""}>Ethereum</span>
+          <span className={opts.selected ? "text-blue-500" : "text-white "}>Ethereum</span>
         </div>
         <div className='flex flex-row'>
            {ethBalance.length > 0 ? ethBalance.sort((a,b) => a.chain.name.localeCompare(b.chain.name)).map(({chain}, index:number) => (

@@ -30,7 +30,7 @@ export default function InputFields() {
   }
 
   return (
-    <div className='w-1/2 mt-4 py-5 px-5 rounded-xl min-w-full ring-1 ring-inset ring-gray-800'>
+    <div className='w-1/2 mt-4 py-5 px-5 rounded-xl min-w-full ring-1 ring-inset'>
       <div className='py-2'>
         <label htmlFor="address" className="block text-base font-medium leading-6 text-gray-200">
           Send {selected == "eth" ? "Ethereum" : selected}
@@ -65,7 +65,7 @@ export default function InputFields() {
           <button
             onClick={getRoutes}
             type='button'
-            className={`${standardButton} w-[150px] my-5`}
+            className={`${standardButton} w-[150px] cursor-pointer my-5`}
             disabled={!localAddress && !localAmount}
             >
             Get Routes
