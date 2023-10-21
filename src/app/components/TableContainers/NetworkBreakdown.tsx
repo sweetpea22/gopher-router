@@ -25,7 +25,7 @@ export default function NetworkBreakdown() {
 
   const renderTable = () => {
     if (selected == "eth") {
-      return ethBalance.length > 0 ? ethBalance.map(({chain, balance}, index: number) => (
+      return ethBalance.length > 0 ? ethBalance.sort((a,b) => a.chain.name.localeCompare(b.chain.name)).map(({chain, balance}, index: number) => (
         <tr key={index} className=''>  
           <td>
             <span className='py-3 px-2 text-gray-200'>{chain.name.charAt(0) + chain.name.slice(1).toLowerCase()}</span>
@@ -37,7 +37,7 @@ export default function NetworkBreakdown() {
         </tr>
       )) : null
     } else {
-      return tokenBalances[selected] && tokenBalances[selected].length > 0 ? tokenBalances[selected].map(({chain, balance}, index: number) => (
+      return tokenBalances[selected] && tokenBalances[selected].length > 0 ? tokenBalances[selected].sort((a,b) => a.chain.name.localeCompare(b.chain.name)).map(({chain, balance}, index: number) => (
         <tr key={index} className=''>  
           <td>
             <span className='py-3 px-2 text-gray-200'>{chain.name.charAt(0) + chain.name.slice(1).toLowerCase()}</span>
