@@ -9,8 +9,9 @@ import { actions } from '@/formulas';
 import * as constants  from '../constants';
 import { ethers } from 'ethers';
 import { SlideOutContext } from '../context/slideOut';
-import AssetsTable from './AssetsTable';
+import AssetsTable from './TableContainers/AssetsTable';
 import InputFields from './TableContents/eth/InputFields';
+import NetworkBreakdown from './TableContainers/NetworkBreakdown';
 
 export default function BasicTable({children}: any) {
   const {setTransfers, setLoadingTransfers} = useContext(TrasnferData);
@@ -42,9 +43,9 @@ export default function BasicTable({children}: any) {
       <SlideOut />
       <div className='flex flex-col justify-start'>
         <AssetsTable />
-        <div className='grid sm:grid-cols-2 px-8'>
+        <div className='grid sm:grid-cols-2 gap-4 px-8'>
           <InputFields />
-          <div className='w-1/3'></div>
+          <NetworkBreakdown />
         </div>
       </div>
   </div>

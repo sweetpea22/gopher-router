@@ -1,16 +1,10 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useAccount } from 'wagmi';
-import InputFields from './InputFields';
 import { getAllBalances } from '@/formulas/utils';
 import { useEffect, useState, useCallback } from 'react';
-import { computeAddress, formatEther } from 'ethers/lib/utils';
+import { formatEther } from 'ethers/lib/utils';
 import { Chains } from '@/app/constants';
-import { BigNumber } from 'ethers';
 import { AccountDetails } from '@/app/interfaces';
-import { Disclosure } from '@headlessui/react';
-import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/20/solid';
-import Button from '../../Button';
-import { standardButton } from '@/app/styles/styles';
 
 export function EthOverview() {
   const { address } = useAccount();
@@ -24,8 +18,8 @@ export function EthOverview() {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    // getBalanceByChain()
-    // getTotalEth()
+    getBalanceByChain()
+    getTotalEth()
   }, [address, getBalanceByChain])
 
 
@@ -45,10 +39,9 @@ export function EthOverview() {
           <div className='bg-indigo-200 rounded-xl h-6 w-6 mr-2'></div>Ethereum
         </div>
         <div className='flex flex-row'>
-           {balances ? balances.map((item:any, index:number) => (
-             <p key={index} className='mt-2 mr-2 text-gray-200'>
-              
-               {item.chain.name.toLowerCase()}{index === balances.length - 1 ? null : ', '} </p>
+           {balances ? balances.map(({chain}, index:number) => (
+             <p key={index} className='mt-2 mr-2 text-gray-200'>  
+               {chain.name.charAt(0) + chain.name.slice(1).toLowerCase()}{index === balances.length - 1 ? null : ','}</p>
             )) : null}
         </div>
       </td>

@@ -25,7 +25,7 @@ export function TokenOverview(props: Token) {
       // const data = await getAllBalances(address as string, chains)
       // setBalances(data);
     }
-    getBalanceByChain();
+    // getBalanceByChain();
   }, [address, Chains])
 
   return (

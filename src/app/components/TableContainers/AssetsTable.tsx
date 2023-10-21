@@ -1,4 +1,4 @@
-import { EthOverview } from "./TableContents/eth/EthOverview";
+import { EthOverview } from "../TableContents/eth/EthOverview";
 
 
 export default function AssetsTable() {
