@@ -5,7 +5,7 @@ import Button from '../Button';
 import { BridgeType } from '@/formulas/gasCosts';
 import { connextSend } from '@/formulas/bridges/connext/connextSend';
 import { getChain } from '@/app/constants';
-import { useAccount, useSendTransaction } from 'wagmi';
+import { useAccount, useSendTransaction, useSwitchNetwork } from 'wagmi';
 import { RouteData } from '@/app/context/transferRoute';
 import { useEthersSigner } from '@/app/wagmi/ethers';
 import { ethers } from 'ethers';
@@ -19,6 +19,7 @@ const ShowTransfers = ({transfers, loadingTransfers}: Props) => {
   const { address } = useAccount();
   const {destinationAddress, destinationChain} = useContext(RouteData);
   const signer = useEthersSigner();
+  const {switchNetworkAsync} = useSwitchNetwork()
 
   const handleExecute = async () => {
     for (let i=0; i < transfers.length; i ++) {
@@ -31,14 +32,13 @@ const ShowTransfers = ({transfers, loadingTransfers}: Props) => {
           destinationAddress,
           transfer.amountToTransfer
         );
-        console.log(transfer.feeData)
-        console.log(ethers.utils.formatUnits(transfer.feeData.maxFeePerGas, "gwei"))
-        console.log(ethers.utils.formatUnits(transfer.feeData.maxPriorityFeePerGas))
-        const res = await signer?.sendTransaction({
-          ...txData,
-          // maxPriorityFeePerGas: transfer.feeData.maxPriorityFeePerGas,
-          // maxFeePerGas: transfer.feeData.maxFeePerGas
-        });
+        // lulz
+        delete txData.from;
+        // If ChainIds don't line up switch em out
+        if (await signer?.getChainId() !== transfer.chain.chainId) {
+          await switchNetworkAsync?.(transfer.chain.chainId);
+        }
+        const res = await signer?.sendTransaction(txData);
         console.log(res)
       }
     }

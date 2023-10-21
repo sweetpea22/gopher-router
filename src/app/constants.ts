@@ -15,24 +15,29 @@ export const ChainNames: {[x: string]: string} = {
 export const Chains: ChainInfo[] = [
     { 
         name: ChainNames.goerli, 
-        rpcUrl: `https://goerli.infura.io/v3/${INFURA_API_KEY}`
+        rpcUrl: `https://goerli.infura.io/v3/${INFURA_API_KEY}`,
+        chainId: 5
     },
     {
         name: ChainNames.sepolia,
-        rpcUrl: `https://sepolia.infura.io/v3/${INFURA_API_KEY}`
+        rpcUrl: `https://sepolia.infura.io/v3/${INFURA_API_KEY}`,
+        chainId: 11155111
     },
     { 
         name: ChainNames.opGoerli, 
-        rpcUrl: `https://optimism-goerli.infura.io/v3/${INFURA_API_KEY}` 
+        rpcUrl: `https://optimism-goerli.infura.io/v3/${INFURA_API_KEY}`,
+        chainId: 420
     },
     { 
         // have to find a new provider for scroll 
         name: ChainNames.scrollSepolia, 
-        rpcUrl: `https://sepolia-rpc.scroll.io`
+        rpcUrl: `https://sepolia-rpc.scroll.io`,
+        chainId: 534351
     },
     { 
         name: ChainNames.ethereum, 
-        rpcUrl: `https://mainnet.infura.io/v3/${INFURA_API_KEY}`
+        rpcUrl: `https://mainnet.infura.io/v3/${INFURA_API_KEY}`,
+        chainId: 1
     }
 ]
 
