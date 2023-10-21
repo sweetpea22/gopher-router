@@ -1,3 +1,4 @@
+
 import { create } from "@connext/sdk";
 import * as Connext from "../../bridges/connext/connnextConfig";
 import {Logger} from "@connext/nxtp-utils"
@@ -11,9 +12,10 @@ export const connextGasCosts = async (originChain: ChainInfo, destinationChain: 
     const {sdkBase} = await create(Connext.sdkConfig);
     // const {sdkBase} = await create(Connext.sdkConfig, new Logger({name: "SDK", level:"silent"})); 
     const originDomain = Connext.domainMap[originChain.name];
+    console.log('origin domain', originDomain)
     const destinationDomain = Connext.domainMap[destinationChain.name];
     const params = { originDomain, destinationDomain };
-    const relayerFee = await sdkBase.estimateRelayerFee(params);
+    // const relayerFee = await sdkBase.estimateRelayerFee(params);
     const xcallParams = {
         origin: originDomain,
         destination: destinationDomain,
@@ -23,13 +25,12 @@ export const connextGasCosts = async (originChain: ChainInfo, destinationChain: 
         slippage: "30", // maybe lower
         callData: "0x",
         delegate: Connext.sdkConfig.signerAddress,
-        relayerFee: relayerFee.toString(),
+        relayerFee: '1',
         wrapNativeOnOrigin: true,
         unwrapNativeOnDestination: true,
         };
     try {
         const xcallTxReq = await sdkBase.xcall(xcallParams);
-        console.log(xcallTxReq);
         const gasUsed = await originProvider.estimateGas(xcallTxReq);
         const {gasPrice, maxPriorityFeePerGas} = await originProvider.getFeeData();
         // @ts-ignore let the app blow up if gasPrice isn't available yolo
@@ -52,51 +53,50 @@ export const connextGasCosts = async (originChain: ChainInfo, destinationChain: 
     }
 }
 
-export const getCallParams = async (originChain: ChainInfo, destinationChain: ChainInfo, to: string) => {
+// export const getCallParams = async (originChain: ChainInfo, destinationChain: ChainInfo, to: string) => {
     
- const originProvider = new ethers.providers.JsonRpcProvider(originChain.rpcUrl);
-    const {sdkBase} = await create(Connext.sdkConfig);
-    // const {sdkBase} = await create(Connext.sdkConfig, new Logger({name: "SDK", level:"silent"})); 
-    const originDomain = Connext.domainMap[originChain.name];
-    const destinationDomain = Connext.domainMap[destinationChain.name];
-    const params = { originDomain, destinationDomain };
-    const relayerFee = await sdkBase.estimateRelayerFee(params);
+//     const originProvider = new ethers.providers.JsonRpcProvider('https://goerli.infura.io/v3/64e589f7552c4a3e9835baa617ef952b');
 
-    const xcallParams = {
-        origin: originDomain,
-        destination: destinationDomain,
-        to,
-        asset: wethMapping[originChain.name], // If Native Asset (eth) use wrapper for weth
-        amount: "1", // override later, we can't know this yet until amountToSend is determined later
-        slippage: "30", // maybe lower
-        callData: "0x",
-        delegate: Connext.sdkConfig.signerAddress,
-        relayerFee: relayerFee.toString(),
-        wrapNativeOnOrigin: true,
-        unwrapNativeOnDestination: true,
-        };
-    try {
-        const xcallTxReq = await sdkBase.xcall(xcallParams);
-        console.log(xcallTxReq);
-        const gasUsed = await originProvider.estimateGas(xcallTxReq);
-        const {gasPrice, maxPriorityFeePerGas} = await originProvider.getFeeData();
-        // @ts-ignore let the app blow up if gasPrice isn't available yolo
-        const cost = BigNumber.from(gasUsed).mul((gasPrice.add(maxPriorityFeePerGas)));
-        return {
-            cost,
-            // @ts-ignore
-            gasPrice,
-            // @ts-ignore
-            maxPriorityFeePerGas, 
-            xcallParams
-        };
-    } catch (e: any) {
-        if(e.code == "UNPREDICTABLE_GAS_LIMIT") {
-            // discard this tx, they don't have enough gas to make the transfer
-            return {} as FeeData;
-        } else {
-            console.log("connext error", e);
-            return {} as FeeData;
-        }
-    }
-}
+//     const {sdkBase} = await create(Connext.sdkConfig);
+
+//     // const {sdkBase} = await create(Connext.sdkConfig, new Logger({name: "SDK"})); 
+//     const originDomain = Connext.domainMap[originChain.name];
+//     const destinationDomain = Connext.domainMap[destinationChain.name];
+    
+//     // const relayerFee = (
+//     // await sdkBase.estimateRelayerFee({
+//     //     originDomain, 
+//     //     destinationDomain
+//     // })
+//     // ).toString();
+
+//     const xcallParams = {
+//         origin: originDomain,
+//         destination: destinationDomain,
+//         to,
+//         asset: wethMapping[originChain.name], // If Native Asset (eth) use wrapper for weth
+//         amount: "1", // override later, we can't know this yet until amountToSend is determined later
+//         slippage: "30", // maybe lower
+//         callData: "0x",
+//         delegate: Connext.sdkConfig.signerAddress,
+//         relayerFee: '10000',
+//         wrapNativeOnOrigin: true,
+//         unwrapNativeOnDestination: true,
+//     };
+    
+//     try {
+//         // const xcallTxReq = await sdkBase.xcall(xcallParams);
+//         console.log('xcallTxParams: ', xcallParams);
+//         // console.log('xcallTxReq: ',xcallTxReq);
+
+//         return xcallParams;
+//     } catch (e: any) {
+//         if(e.code == "UNPREDICTABLE_GAS_LIMIT") {
+//             // discard this tx, they don't have enough gas to make the transfer
+//             return {} as FeeData;
+//         } else {
+//             console.log("connext error", e);
+//             return {} as FeeData;
+//         }
+//     }
+// }

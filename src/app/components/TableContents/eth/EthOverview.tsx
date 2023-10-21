@@ -3,9 +3,10 @@ import { useAccount } from 'wagmi';
 import { getAllBalances } from '@/formulas/utils';
 import { formatEther } from 'ethers/lib/utils';
 import { useContext, useEffect, useState } from 'react';
-import { Chains } from '@/app/constants';
+import { Chains, getChain } from '@/app/constants';
 import { AccountDetails } from '@/app/interfaces';
 import { BalancesData } from '@/app/context/balances';
+import { sendViaConnext } from '@/formulas/bridges/connext/sendViaConnext';
 
 interface IOpts {
   onClick: (name: string) => void;
@@ -33,7 +34,7 @@ export function EthOverview(opts: IOpts) {
         setTotalEth(totalAmount)
       }
     }
-    getTotalEth()
+    // getTotalEth()
   }, [address, ethBalance, setEthBalance, totalEth])
   
 

@@ -1,36 +1,57 @@
+
 import * as Connext from "./connnextConfig";
 import { create } from "@connext/sdk";
 import { BigNumber } from "ethers";
 import { ethers } from "ethers";
-import { ChainInfo } from "@axelar-network/axelarjs-sdk";
-import { getCallParams } from "./connext";
+import { ChainInfo } from "@/app/interfaces";
+// import { getCallParams } from "./connext";
 import "dotenv/config"
-import { getChain } from "@/app/constants";
+import { wethMapping } from "@/app/constants";
 
-let signer = new ethers.Wallet(process.env.PRIVATE_KEY || '');
 
-const provider = new ethers.providers.JsonRpcProvider(getChain('goerli').rpcUrl);
-signer = signer.connect(provider);
+const privateKey = process.env.NEXT_PUBLIC_PRIVATE_KEY as string;
+const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY as string;
 
 
 export async function sendViaConnext(originChain: ChainInfo, destinationChain: ChainInfo, to: string) {
-  // change this to getSigner() or useAccount();
-  const signerAddress = Connext.sdkConfig.signerAddress;
+  
+  let signer = new ethers.Wallet(privateKey);
+  
+  const provider = new ethers.providers.JsonRpcProvider(`https://goerli.infura.io/v3/${INFURA_API_KEY}`);
+  
+  signer = signer.connect(provider);
 
   const { sdkBase } = await create(Connext.sdkConfig);
 
-  // get xcall params from a function getCallParams
-  // Prepare the xcall params
+    const originDomain = Connext.domainMap[originChain.name];
+    const destinationDomain = Connext.domainMap[destinationChain.name];
+  
+    const relayerFee = (
+    await sdkBase.estimateRelayerFee({
+      originDomain, 
+      destinationDomain
+    })
+    ).toString();
 
-  // @ts-ignore
-  const data = await getCallParams(originChain, destinationChain, to)
-  console.log(data);
-
+    const xcallParams = {
+      origin: originDomain,
+      destination: destinationDomain,
+      to,
+      asset: wethMapping[originChain.name], // If Native Asset (eth) use wrapper for weth
+      amount: "1", // override later, we can't know this yet until amountToSend is determined later
+      slippage: "30", // maybe lower
+      callData: "0x",
+      delegate: Connext.sdkConfig.signerAddress,
+      relayerFee: relayerFee,
+      wrapNativeOnOrigin: true,
+      unwrapNativeOnDestination: true,
+  };
+  
   // Approve the asset transfer if the current allowance is lower than the amount.
   // Necessary because funds will first be sent to the Connext contract in xcall.
   const approveTxReq = await sdkBase.approveIfNeeded(
-    Connext.domainMap.originChain,
-    Connext.domainMap.destinationChain,
+    originDomain,
+    destinationDomain,
     // i hardcoded the amount to 0.01 eth 
     '10000000000000000'
   )
@@ -42,13 +63,9 @@ export async function sendViaConnext(originChain: ChainInfo, destinationChain: C
   }
   
   // Send the xcall
-  const xcallTxReq = await sdkBase.xcall(data);
+  const xcallTxReq = await sdkBase.xcall(xcallParams);
   xcallTxReq.gasLimit = BigNumber.from("30000000"); 
   const xcallTxReceipt = await signer.sendTransaction(xcallTxReq);
   console.log('receipt built:', xcallTxReceipt);
   await xcallTxReceipt.wait();
-
 }
-
-// @ts-ignore
-sendViaConnext(getChain('goerli'), getChain('opGoerli'), '0x7d78A8bF127410DBEeaCEF3E3991E802dB46bd03')

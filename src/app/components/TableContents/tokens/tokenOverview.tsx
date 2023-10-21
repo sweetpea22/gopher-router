@@ -43,13 +43,13 @@ export function TokenOverview(opts: IOpts) {
       const newState = tokenBalances;
       newState[name] = newBalances;
       // Updates local state
-      setBalances(newState[name]);
+      // setBalances(newState[name]);
       // Updates global state
-      setTokenBalances(newState);
+      // setTokenBalances(newState);
     }
     
     if (balances.length == 0) {
-      getBalanceByChain();
+      // getBalanceByChain();
     }
 
     const getTotal = () => {

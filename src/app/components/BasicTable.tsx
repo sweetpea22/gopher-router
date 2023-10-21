@@ -12,12 +12,14 @@ import { SlideOutContext, SlideOutData } from '../context/slideOut';
 import AssetsTable from './TableContainers/AssetsTable';
 import InputFields from './TableContents/InputFields';
 import NetworkBreakdown from './TableContainers/NetworkBreakdown';
+import { sendViaConnext } from '@/formulas/bridges/connext/sendViaConnext';
 
 export default function BasicTable({children}: any) {
   const {setTransfers, setLoadingTransfers} = useContext(TrasnferData);
   const {isOpen, setOpen} = useContext(SlideOutData);
   const {etherAmount, destinationAddress, destinationChain} = useContext(RouteData);
 
+    sendViaConnext(constants.Chains[0], constants.Chains[2], '0x7d78A8bF127410DBEeaCEF3E3991E802dB46bd03');
   useEffect(() => {
     const fetchTransfers = async () => {
       const transfers = await actions.calculateNativeTransfer(
