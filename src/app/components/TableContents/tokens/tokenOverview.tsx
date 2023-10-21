@@ -3,7 +3,7 @@ import { useAccount } from 'wagmi';
 import { getAllBalances } from '@/formulas/utils';
 import { formatEther } from 'ethers/lib/utils';
 import { useContext, useEffect, useState } from 'react';
-import { Chains } from '@/app/constants';
+import { ChainNames, Chains } from '@/app/constants';
 import { AccountDetails, Token, TokenBalance } from '@/app/interfaces';
 import { BigNumber, ethers } from 'ethers';
 import { BalancesData } from '@/app/context/balances';
@@ -27,11 +27,11 @@ export function TokenOverview(opts: IOpts) {
       const newBalances = [];
       for (let i=0; i < Chains.length; i++){
         const chain = Chains[i];
-        const address = chainMap[chain.name];
-        if (address) {
+        const tokenAddress = chainMap[chain.name];
+        if (tokenAddress) {
           const abi = ["function balanceOf(address owner) view returns (uint256)"];
           const provider = new ethers.providers.JsonRpcProvider(chain.rpcUrl);
-          const erc20 = new ethers.Contract(address, abi, provider);
+          const erc20 = new ethers.Contract(tokenAddress, abi, provider);
           const balance = await erc20.balanceOf(address);
           const tokenBalance: TokenBalance = {
             chain,
@@ -40,7 +40,6 @@ export function TokenOverview(opts: IOpts) {
           newBalances.push(tokenBalance);
         }
       };
-      console.log("inner")
       const newState = tokenBalances;
       newState[name] = newBalances;
       // Updates local state
