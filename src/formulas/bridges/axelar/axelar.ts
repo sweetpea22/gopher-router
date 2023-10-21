@@ -48,10 +48,15 @@ export async function getAxelarCost(originChain: ChainInfo, destinationChain: Ch
       { amount: amount }
     );
 
-    const { maxFeePerGas, maxPriorityFeePerGas } = await originProvider.getFeeData();
-    
-    // @ts-ignore let the app blow up if gasPrice isn't available yolo
-    const cost = BigNumber.from(gasUsed).mul((maxFeePerGas.add(maxPriorityFeePerGas)));
+    const {maxFeePerGas, maxPriorityFeePerGas, gasPrice} = await originProvider.getFeeData();
+    let cost: BigNumber;
+    if (!maxPriorityFeePerGas) {
+        // @ts-ignore let the app blow up if gasPrice isn't available yolo
+        cost = BigNumber.from(gasUsed).mul(gasPrice);
+    } else {
+        // @ts-ignore let the app blow up if gasPrice isn't available yolo
+        cost = BigNumber.from(gasUsed).mul((maxFeePerGas.add(maxPriorityFeePerGas)));
+    }
     return {
       cost,
       maxFeePerGas: BigNumber.from(0),

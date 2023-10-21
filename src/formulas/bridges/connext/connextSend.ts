@@ -14,8 +14,7 @@ export const connextSend = async (
     amount: BigNumber
 ): Promise<providers.TransactionRequest> => {
     const originProvider = new ethers.providers.JsonRpcProvider(originChain.rpcUrl);
-    // const {sdkBase} = await create(Connext.sdkConfig);
-    const {sdkBase} = await create(Connext.sdkConfig, new Logger({name: "SDK", level:"silent"})); 
+    const {sdkBase} = await create(Connext.sdkConfig);
     const originDomain = Connext.domainMap[originChain.name];
     const destinationDomain = Connext.domainMap[destinationChain.name];
     const params = { originDomain, destinationDomain };

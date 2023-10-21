@@ -8,8 +8,7 @@ import { wethMapping } from "@/app/constants";
 
 export const connextGasCosts = async (originChain: ChainInfo, destinationChain: ChainInfo, to: string): Promise<FeeData> => {
     const originProvider = new ethers.providers.JsonRpcProvider(originChain.rpcUrl);
-    const {sdkBase} = await create(Connext.sdkConfig);
-    // const {sdkBase} = await create(Connext.sdkConfig, new Logger({name: "SDK", level:"silent"})); 
+    const {sdkBase} = await create(Connext.sdkConfig, new Logger({name: "SDK", level:"silent"})); 
     const originDomain = Connext.domainMap[originChain.name];
     const destinationDomain = Connext.domainMap[destinationChain.name];
     const params = { originDomain, destinationDomain };
@@ -30,9 +29,15 @@ export const connextGasCosts = async (originChain: ChainInfo, destinationChain: 
     try {
         const xcallTxReq = await sdkBase.xcall(xcallParams);
         const gasUsed = await originProvider.estimateGas(xcallTxReq);
-        const {maxFeePerGas, maxPriorityFeePerGas} = await originProvider.getFeeData();
-        // @ts-ignore let the app blow up if gasPrice isn't available yolo
-        const cost = BigNumber.from(gasUsed).mul((maxFeePerGas.add(maxPriorityFeePerGas)));
+        const {maxFeePerGas, maxPriorityFeePerGas, gasPrice} = await originProvider.getFeeData();
+        let cost: BigNumber;
+        if (!maxPriorityFeePerGas) {
+            // @ts-ignore let the app blow up if gasPrice isn't available yolo
+            cost = BigNumber.from(gasUsed).mul(gasPrice);
+        } else {
+            // @ts-ignore let the app blow up if gasPrice isn't available yolo
+            cost = BigNumber.from(gasUsed).mul((maxFeePerGas.add(maxPriorityFeePerGas)));
+        }
         return {
             cost,
             // @ts-ignore

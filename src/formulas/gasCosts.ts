@@ -25,11 +25,11 @@ export const calculateBaseGasCost = async (chain: ChainInfo): Promise<FeeData> =
     if (standardEVM.includes(chain.name)) {
         // Usage of 21000 gas
         const provider = new ethers.providers.JsonRpcProvider(chain.rpcUrl);
-        const {maxFeePerGas, maxPriorityFeePerGas} = await provider.getFeeData();
+        const {maxFeePerGas, gasPrice, maxPriorityFeePerGas} = await provider.getFeeData();
         let cost: BigNumber;
         if (!maxPriorityFeePerGas) {
             // @ts-ignore let the app blow up if gasPrice isn't available yolo
-            cost = BigNumber.from(21000).mul(maxFeePerGas);
+            cost = BigNumber.from(21000).mul(gasPrice);
         } else {
             // @ts-ignore let the app blow up if gasPrice isn't available yolo
             cost = BigNumber.from(21000).mul((maxFeePerGas.add(maxPriorityFeePerGas)));

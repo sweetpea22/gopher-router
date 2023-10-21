@@ -24,7 +24,17 @@ const ShowTransfers = ({transfers, loadingTransfers}: Props) => {
   const handleExecute = async () => {
     for (let i=0; i < transfers.length; i ++) {
       const transfer = transfers[i];
-      if (transfer.isBridged && transfer.feeData.bridgeType == BridgeType.connext) {
+      if (!transfer.isBridged) {
+        // regular tx
+        // If ChainIds don't line up switch em out
+        if (await signer?.getChainId() !== transfer.chain.chainId) {
+          await switchNetworkAsync?.(transfer.chain.chainId);
+        }
+        const res = await signer?.sendTransaction({
+          to: destinationAddress,
+          value: transfer.amountToTransfer
+        });
+      } else if (transfer.isBridged && transfer.feeData.bridgeType == BridgeType.connext) {
         const txData = await connextSend(
           transfer.chain,
           destinationChain,
