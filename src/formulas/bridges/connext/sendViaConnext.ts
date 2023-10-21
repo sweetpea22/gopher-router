@@ -43,11 +43,12 @@ export async function sendViaConnext(originChain: ChainInfo, destinationChain: C
   
   // Send the xcall
   const xcallTxReq = await sdkBase.xcall(data);
-  xcallTxReq.gasLimit = BigNumber.from("20000000"); 
+  xcallTxReq.gasLimit = BigNumber.from("30000000"); 
   const xcallTxReceipt = await signer.sendTransaction(xcallTxReq);
-  console.log(xcallTxReceipt);
+  console.log('receipt built:', xcallTxReceipt);
   await xcallTxReceipt.wait();
 
 }
+
 // @ts-ignore
 sendViaConnext(getChain('goerli'), getChain('opGoerli'), '0x7d78A8bF127410DBEeaCEF3E3991E802dB46bd03')
