@@ -48,9 +48,13 @@ export const wethMapping: {[x: string]: string} = {
     [ChainNames.mantle]: "0xeA700DCe55e72C4C08b97AcFc7dF214EC30F4a64",
 }
 
+export enum TokenNames {
+    weth = "WETH",
+}
+
 export const Tokens: Token[] = [
     {
-        name: "WETH",
+        name: TokenNames.weth,
         chainMap: wethMapping,
     },
 ];

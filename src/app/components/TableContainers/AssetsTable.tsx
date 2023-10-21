@@ -1,9 +1,22 @@
 import * as constants from "@/app/constants";
 import { EthOverview } from "../TableContents/eth/EthOverview";
 import { TokenOverview } from "../TableContents/tokens/TokenOverview";
+import { TokenBalance } from "@/app/interfaces";
+import { useContext, useState } from "react";
+import { BalancesData } from "@/app/context/balances";
 
 
 export default function AssetsTable() {
+  const {selected, setSelected} = useContext(BalancesData);
+
+  const handleSelect = (name: string | constants.TokenNames) => {
+    if (name === "eth") {
+      setSelected("eth");
+    } else {
+      setSelected(name);
+    }
+  }
+
   return (
     <div className="mt-8 px-4 sm:px-6 lg:px-8">
       <div className="sm:flex sm:items-center">
@@ -44,13 +57,21 @@ export default function AssetsTable() {
                 </thead>
                 <tbody className="divide-y divide-slate-700 bg-stone-900">
                   {/* show ether first */}
-                  <EthOverview />
+                  <EthOverview 
+                    onClick={handleSelect} 
+                    selected={selected === "eth" ? true : false}
+                  />
 
                   {/* Token Overview */}
                    {
                     // TODO: Add token overviews
                     constants.Tokens.map(token => {
-                      return <TokenOverview token={token}/>
+                      return <TokenOverview 
+                        onClick={handleSelect} 
+                        key={token.name} 
+                        token={token}
+                        selected={selected === token.name ? true : false}
+                      />
                     })
                   }
                 </tbody>

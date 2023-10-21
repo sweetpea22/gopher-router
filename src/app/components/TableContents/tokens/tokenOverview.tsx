@@ -2,25 +2,22 @@
 import { useAccount } from 'wagmi';
 import { getAllBalances } from '@/formulas/utils';
 import { formatEther } from 'ethers/lib/utils';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Chains } from '@/app/constants';
 import { AccountDetails, Token, TokenBalance } from '@/app/interfaces';
 import { BigNumber, ethers } from 'ethers';
-// export interface Token {
-//   name: string;
-//   chainMap: {[x: string]: string};
-//   balacnes?: TokenBalance[];
-// }
-// export interface TokenBalance {
-//   chain: ChainInfo;
-//   balance: BigNumber;
-// }
+import { BalancesData } from '@/app/context/balances';
+
 interface IOpts {
   token: Token;
+  onClick: (name: string) => void;
+  selected: boolean;
 }
+
 export function TokenOverview(opts: IOpts) {
   const {name, chainMap} = opts.token;
   const { address } = useAccount();
+  const {tokenBalances, setTokenBalances} = useContext(BalancesData);
   const [balances, setBalances] = useState<TokenBalance[]>([]);
   const [total, setTotal] = useState<BigNumber>(BigNumber.from(0));
 
@@ -43,9 +40,18 @@ export function TokenOverview(opts: IOpts) {
           newBalances.push(tokenBalance);
         }
       };
-      setBalances(newBalances);
+      console.log("inner")
+      const newState = tokenBalances;
+      newState[name] = newBalances;
+      // Updates local state
+      setBalances(newState[name]);
+      // Updates global state
+      setTokenBalances(newState);
     }
-    getBalanceByChain();
+    
+    if (balances.length == 0) {
+      getBalanceByChain();
+    }
 
     const getTotal = () => {
       if (balances.length > 1) {
@@ -56,13 +62,14 @@ export function TokenOverview(opts: IOpts) {
       }
     }
     getTotal()
-  }, [address, balances, total])
+  }, [address, balances])
 
   return (
-    <tr>
+    <tr onClick={() => opts.onClick(name)}>
       <td className="flex flex-col whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-100 sm:pl-6">
         <div className='flex flex-row items-center'>
-          <div className='bg-indigo-200 rounded-xl h-6 w-6 mr-2'></div>{name}
+          <div className='bg-indigo-200 rounded-xl h-6 w-6 mr-2'></div>
+          <span className={opts.selected ? "bg-green-200 text-black" : ""}>{name}</span>
         </div>
         <div className='flex flex-row'>
            {balances ? balances.map(({chain}, index:number) => (

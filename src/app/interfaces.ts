@@ -1,9 +1,9 @@
 import {BigNumber} from "ethers";
-import { ChainNames } from "./constants";
+import { ChainNames, TokenNames } from "./constants";
 import { FeeData } from "@/formulas/gasCosts";
 
 export interface Token {
-    name: string;
+    name: TokenNames;
     chainMap: {[x: string]: string};
     balacnes?: TokenBalance[];
 }
