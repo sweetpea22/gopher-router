@@ -55,7 +55,7 @@ export default function AssetsTable() {
                   />
 
                   {/* Token Overview */}
-                   {/* {
+                   {
                     // TODO: Add token overviews
                     constants.Tokens.map(token => {
                       return <TokenOverview 
@@ -65,7 +65,7 @@ export default function AssetsTable() {
                         selected={selected === token.name ? true : false}
                       />
                     })
-                  } */}
+                  }
                 </tbody>
               </table>
             </div>
