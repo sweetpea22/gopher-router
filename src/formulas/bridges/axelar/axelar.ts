@@ -15,7 +15,7 @@ export async function getAxelarCost(originChain: ChainInfo, destinationChain: Ch
   try {
     // @TODO - Deploy the contracts, this will error
     // @TODO - If we want to unwrap on the destination chain we will need to use GMP
-    const originProvider = new ethers.providers.JsonRpcProvider(originChain.rpcUrl);
+    const originProvider = originChain.provider;
     
     // This is the fee paid to the relayer
     const relayerFeeWei = await axelarQuery.estimateGasFee(

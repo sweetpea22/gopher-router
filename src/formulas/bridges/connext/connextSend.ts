@@ -20,7 +20,7 @@ export const connextSend = async (
     isToken: boolean,
     tokenName: TokenNames
 ): Promise<ConnextXcallResponse> => {
-    const originProvider = new ethers.providers.JsonRpcProvider(originChain.rpcUrl);
+    const originProvider = originChain.provider;
     const {sdkBase} = await create(Connext.sdkConfig);
     const originDomain = Connext.domainMap[originChain.name];
     const destinationDomain = Connext.domainMap[destinationChain.name];

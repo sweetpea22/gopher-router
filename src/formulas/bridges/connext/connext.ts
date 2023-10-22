@@ -8,7 +8,7 @@ import { FeeData } from "@/formulas/gasCosts";
 import { TokenNames, wethMapping } from "@/app/constants";
 
 export const connextGasCosts = async (originChain: ChainInfo, destinationChain: ChainInfo, to: string, isToken: boolean, tokenName?: TokenNames): Promise<FeeData> => {
-    const originProvider = new ethers.providers.JsonRpcProvider(originChain.rpcUrl);
+    const originProvider = originChain.provider;
     const {sdkBase} = await create(Connext.sdkConfig, new Logger({name: "SDK", level:"silent"})); 
     const originDomain = Connext.domainMap[originChain.name];
     const destinationDomain = Connext.domainMap[destinationChain.name];

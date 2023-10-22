@@ -75,7 +75,7 @@ export const getAllBalances = async (address: string, chains: ChainInfo[], isTok
     for (const x in chains) {
       const chain = chains[x];
     // return await Promise.all(chains.map(async (chain) => {
-        const provider = new ethers.providers.JsonRpcProvider(chain.rpcUrl);
+        const provider = chain.provider;
         if (isToken) {
           const token = getToken(tokenName);
           const tokenAddress = token.chainMap[chain.name];

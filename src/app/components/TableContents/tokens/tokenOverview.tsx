@@ -31,7 +31,7 @@ export function TokenOverview(opts: IOpts) {
         const tokenAddress = chainMap[chain.name];
         if (tokenAddress) {
           const abi = ["function balanceOf(address owner) view returns (uint256)"];
-          const provider = new ethers.providers.JsonRpcProvider(chain.rpcUrl);
+          const provider = chain.provider;
           const erc20 = new ethers.Contract(tokenAddress, abi, provider);
           const balance = await erc20.balanceOf(address);
           const tokenBalance: TokenBalance = {

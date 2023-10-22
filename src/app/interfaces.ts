@@ -1,4 +1,4 @@
-import {BigNumber} from "ethers";
+import {BigNumber, ethers} from "ethers";
 import { ChainNames, TokenNames } from "./constants";
 import { FeeData } from "@/formulas/gasCosts";
 
@@ -15,7 +15,7 @@ export interface TokenBalance {
 export interface ChainInfo {
     name: string;
     chainId: number;
-    rpcUrl: string;
+    provider: ethers.providers.JsonRpcProvider;
 }
 
 export interface AccountDetails {

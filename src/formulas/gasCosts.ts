@@ -32,7 +32,7 @@ export interface FeeData {
 
 export const calculateBaseGasCost = async (chain: ChainInfo, from: string): Promise<FeeData> => {
     if (standardEVM.includes(chain.name)) {
-        const provider = new ethers.providers.JsonRpcProvider(chain.rpcUrl);
+        const provider = chain.provider;
         try {
             const {maxFeePerGas, gasPrice, maxPriorityFeePerGas} = await provider.getFeeData();
             const gasUsed = await provider.estimateGas({
