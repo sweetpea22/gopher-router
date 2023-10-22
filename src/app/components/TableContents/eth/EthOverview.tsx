@@ -26,17 +26,20 @@ export function EthOverview(opts: IOpts) {
       const data = await getAllBalances(address as string, Chains, isToken, selected as TokenNames);
       setEthBalance(data);
     }
-    getBalanceByChain();
 
     const getTotalEth = () => {
       if (ethBalance.length > 1) {
-      let sum = (a: any[]) => a.reduce((x: any, y: any) => x + y);
-    
-      let totalAmount = sum(ethBalance.map((x) => Number(formatEther(x.balance))));
+        let sum = (a: any[]) => a.reduce((x: any, y: any) => x + y);
+      
+        let totalAmount = sum(ethBalance.map((x) => Number(formatEther(x.balance))));
         setTotalEth(totalAmount)
       }
     }
-    getTotalEth()
+    // console.log("length", ethBalance.length)
+    // if (ethBalance.length === 0) {
+    //   getBalanceByChain();
+    // }
+    // getTotalEth()
   }, [address, ethBalance, totalEth])
   
 
