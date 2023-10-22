@@ -6,8 +6,8 @@ import Providers from './context/providers'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Gopher Best Price Router',
-  description: 'Guarantees the best price for transfers',
+  title: 'Gopher Router',
+  description: 'Sweep funds cross-chain from several accounts',
 }
 
 

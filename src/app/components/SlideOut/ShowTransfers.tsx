@@ -1,6 +1,6 @@
 "use client"
 
-import { Transfer } from '@/app/interfaces';
+import { Transfer } from '../../interfaces';
 import React, { useContext, useState } from 'react';
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import Button from '../Button';
@@ -22,10 +22,6 @@ const ShowTransfers = ({transfers, loadingTransfers}: Props) => {
   const { switchNetworkAsync } = useSwitchNetwork()
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  // can use diff to signal tx has settled 
-  const { data: accountBalance } = useBalance({ address: address })
-  console.log(accountBalance)
 
   const handleExecute = async () => {
     for (let i=0; i < transfers.length; i ++) {
@@ -99,6 +95,7 @@ const ShowTransfers = ({transfers, loadingTransfers}: Props) => {
                         : null
                       }
                     </div>
+                    {/* <Button className='w-full mt-4' onClick={() => {console.log('something')}}>Execute</Button> */}
                   </div>
                 ) 
               })
@@ -120,7 +117,7 @@ const ShowTransfers = ({transfers, loadingTransfers}: Props) => {
         </div>
         <div
           className='h-[1.5px] top-4 bg-gradient-to-r from-indigo-500  w-[100%]'
-        ></div>
+          ></div>
         <div>
           <div className='bg-gray-200 rounded-xl items-center flex h-4 w-4 flex-col'>
           </div>

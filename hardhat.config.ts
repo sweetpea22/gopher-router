@@ -1,21 +1,15 @@
 "use client"
-
-import "dotenv/config"
-import "@typechain/hardhat"
-import "@nomiclabs/hardhat-ethers"
-import "hardhat-gas-reporter"
-import "solidity-coverage"
-import "@nomicfoundation/hardhat-verify"
-import "hardhat-deploy"
-import { HardhatUserConfig } from 'hardhat/config';
+import { config as dotEnvConfig } from "dotenv";
+dotEnvConfig();
+import type { HardhatUserConfig } from 'hardhat/config';
 
 const GOERLI_RPC_URL =
-  process.env.GOERLI_RPC_URL ||
-  'https://eth-sepolia.g.alchemy.com/v2/YOUR-API-KEY';
+  process.env.NEXT_PUBLIC_GOERLI_RPC_URL as string;
+const OPGOERLI_RPC_URL =
+  process.env.NEXT_PUBLIC_OPGOERLI_RPC_URL as string;
 
-const PRIVATE_KEY = process.env.PRIVATE_KEY as string;
-const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY as string
-const MANTLE_EXPLORER_API_KEY = process.env.MANTLE_EXPLORER_API_KEY as string;
+const PRIVATE_KEY = process.env.NEXT_PUBLIC_PRIVATE_KEY as string;
+const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY as string;
 
 const config: HardhatUserConfig = {
   defaultNetwork: 'hardhat',
@@ -40,12 +34,12 @@ const config: HardhatUserConfig = {
       accounts: [PRIVATE_KEY],
       chainId: 534351,
     },
-    mantleTestnet: {
-      url: "https://rpc.testnet.mantle.xyz/",
-      gasPrice: 1000000000,
+    OpGoerli: {
+      url: OPGOERLI_RPC_URL,
       accounts: [PRIVATE_KEY],
-      chainId: 5001,
-    },
+      gasPrice: 225000000000,
+      chainId: 420,
+    }
   },
   solidity: {
     version: '0.8.19',
@@ -61,8 +55,6 @@ const config: HardhatUserConfig = {
   etherscan: {
     apiKey: {
       goerli: ETHERSCAN_API_KEY,
-      mantle: MANTLE_EXPLORER_API_KEY,
-
     },
   },
 

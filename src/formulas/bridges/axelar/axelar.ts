@@ -1,61 +1,34 @@
-import { AxelarAssetTransfer, Environment, SendTokenParams, AxelarQueryAPI,
-  CHAINS } from "@axelar-network/axelarjs-sdk";
+import { Environment, SendTokenParams, AxelarQueryAPI,
+  AxelarAssetTransfer } from "@axelar-network/axelarjs-sdk";
 import * as Axelar from './axelarConfig'; 
-import { ChainNames, getChain } from "@/app/constants";
 import { BridgeType, FeeData } from "@/formulas/gasCosts";
-import {ethers, BigNumber, Wallet} from "ethers";
+import {ethers, BigNumber } from "ethers";
 import { ChainInfo } from "@/app/interfaces";
-import { jumpContractAbi } from "./jumpContract";
 
-const api = new AxelarAssetTransfer({ environment: Environment.TESTNET });
-
-const getSigner = () => {
-  const privateKey = process.env.PRIVATE_KEY as string;
-  return new Wallet(privateKey);
-};
 
 export async function getAxelarCost(originChain: ChainInfo, destinationChain: ChainInfo, to?: string): Promise<FeeData> {
-  const axelarQuery = new AxelarQueryAPI({environment: Environment.TESTNET});
-  const symbol = "eth-wei";
-  // need to convert
-  const amount = ethers.utils.parseUnits("1", "ether");
+  const axelarQuery = new AxelarQueryAPI({ environment: Environment.TESTNET });
+  
   try {
-    // get estimated cost
-    const { fee } = await axelarQuery.getTransferFee(
-      originChain.name,
-      destinationChain.name,
-      //assuming we're transferring ETH
-      symbol,
-      1,
-    );
-    
-    if (!fee) {
-      return {} as FeeData;
-    }
-
     // @TODO - Deploy the contracts, this will error
     // @TODO - If we want to unwrap on the destination chain we will need to use GMP
     const originProvider = new ethers.providers.JsonRpcProvider(originChain.rpcUrl);
-    const jumpContractAddress = Axelar.axlJumpContractMapping[originChain.name];
-    const jumpContract = new ethers.Contract(jumpContractAddress, jumpContractAbi, originProvider);
-
-    // function sendEth(string memory _destChain, string memory _destAddress, string memory _symbol) public payable {
     
-    const gasUsed = await jumpContract.estimateGas.sendEth(
-      Axelar.domainMap[destinationChain.name],
-      to,
-      symbol,
-      { amount: amount }
-    );
+    // only estimates gas for ETH
+    const gasEstimate = await axelarQuery.estimateGasFee(
+    Axelar.domainMap[originChain.name], Axelar.domainMap[destinationChain.name],
+    'ETH',
+    3000000,
+    )
 
     const {maxFeePerGas, maxPriorityFeePerGas, gasPrice} = await originProvider.getFeeData();
     let cost: BigNumber;
     if (!maxPriorityFeePerGas) {
         // @ts-ignore let the app blow up if gasPrice isn't available yolo
-        cost = BigNumber.from(gasUsed).mul(gasPrice);
+        cost = BigNumber.from(gasEstimate).mul(gasPrice);
     } else {
         // @ts-ignore let the app blow up if gasPrice isn't available yolo
-        cost = BigNumber.from(gasUsed).mul((maxFeePerGas.add(maxPriorityFeePerGas)));
+        cost = BigNumber.from(gasEstimate).mul((maxFeePerGas.add(maxPriorityFeePerGas)));
     }
     return {
       cost,
@@ -69,3 +42,5 @@ export async function getAxelarCost(originChain: ChainInfo, destinationChain: Ch
     return {} as FeeData;
   }
 }
+
+

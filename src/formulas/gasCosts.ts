@@ -72,6 +72,7 @@ export const calculateBridgeCost = async (originChain: ChainInfo, destinationCha
             bridgeOptions.push(option)
         }
     }
+    console.log('All options: ', bridgeOptions);
 
     // Sort and return cheapest
     if (bridgeOptions.length > 0) {

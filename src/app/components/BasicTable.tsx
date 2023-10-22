@@ -13,6 +13,7 @@ import AssetsTable from './TableContainers/AssetsTable';
 import InputFields from './TableContents/InputFields';
 import NetworkBreakdown from './TableContainers/NetworkBreakdown';
 import Navbar from './Navbar';
+import SplitFunds from './TableContainers/SplitFunds';
 
 export default function BasicTable({children}: any) {
   const {setTransfers, setLoadingTransfers} = useContext(TrasnferData);
@@ -41,19 +42,22 @@ export default function BasicTable({children}: any) {
 
   return (
     <>
-    <div className={`${centeredDiv} py-10`}>
-      <div className='flex flex-row items-center'>
-    <Navbar />
+      <div className={`${centeredDiv} py-10`}>
+        <div className='flex flex-row items-center'>
+          <Navbar />
+        </div>
+        <SlideOut />
+        <div className='flex flex-col justify-start'>
+          <AssetsTable />
+          <div className='grid sm:grid-cols-2 gap-4 px-8'>
+            <InputFields />
+            <NetworkBreakdown />
+          </div>
+          <div className='grid sm:grid-cols-2 gap-4 px-8'>
+            {/* <SplitFunds /> */}
+          </div>
+        </div>
       </div>
-    <SlideOut />
-    <div className='flex flex-col justify-start'>
-      <AssetsTable />
-      <div className='grid sm:grid-cols-2 gap-4 px-8'>
-        <InputFields />
-        <NetworkBreakdown />
-      </div>
-    </div>
-      </div>
-      </>
+    </>
   )
 }

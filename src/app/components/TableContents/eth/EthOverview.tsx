@@ -4,7 +4,6 @@ import { getAllBalances } from '@/formulas/utils';
 import { formatEther } from 'ethers/lib/utils';
 import { useContext, useEffect, useState } from 'react';
 import { Chains } from '@/app/constants';
-import { AccountDetails } from '@/app/interfaces';
 import { BalancesData } from '@/app/context/balances';
 
 interface IOpts {
@@ -34,7 +33,8 @@ export function EthOverview(opts: IOpts) {
       }
     }
     getTotalEth()
-  }, [address, ethBalance, totalEth])
+  }, [address, ethBalance, setEthBalance, totalEth])
+  
 
   return (
     <tr onClick={() => opts.onClick("eth")} className='hover:bg-gray-800 transition-all cursor-pointer'>

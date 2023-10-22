@@ -1,3 +1,4 @@
+
 import { create } from "@connext/sdk";
 import * as Connext from "../../bridges/connext/connnextConfig";
 import {Logger} from "@connext/nxtp-utils"
@@ -10,9 +11,10 @@ export const connextGasCosts = async (originChain: ChainInfo, destinationChain: 
     const originProvider = new ethers.providers.JsonRpcProvider(originChain.rpcUrl);
     const {sdkBase} = await create(Connext.sdkConfig, new Logger({name: "SDK", level:"silent"})); 
     const originDomain = Connext.domainMap[originChain.name];
+    console.log('origin domain', originDomain)
     const destinationDomain = Connext.domainMap[destinationChain.name];
     const params = { originDomain, destinationDomain };
-    const relayerFee = await sdkBase.estimateRelayerFee(params);
+    // const relayerFee = await sdkBase.estimateRelayerFee(params);
     const xcallParams = {
         origin: originDomain,
         destination: destinationDomain,
@@ -22,7 +24,7 @@ export const connextGasCosts = async (originChain: ChainInfo, destinationChain: 
         slippage: "30", // maybe lower
         callData: "0x",
         delegate: Connext.sdkConfig.signerAddress,
-        relayerFee: relayerFee.toString(),
+        relayerFee: '1',
         wrapNativeOnOrigin: true,
         unwrapNativeOnDestination: true,
         };
@@ -54,6 +56,4 @@ export const connextGasCosts = async (originChain: ChainInfo, destinationChain: 
             return {} as FeeData;
         }
     }
-
-
 }
