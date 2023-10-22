@@ -100,4 +100,5 @@ export const getAllBalances = async (address: string, chains: ChainInfo[], isTok
         });
     // }));
     };
+    return accountDetails;
 };
