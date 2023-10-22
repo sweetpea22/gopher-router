@@ -58,4 +58,11 @@ From BaseGoerli -> BaseGoerli
 Gopher uses Axelar to generate routes, gas quotes and send tokens cross-chain. [Axelarscan Link](https://testnet.axelarscan.io/gmp/0xf0a74fb797f2cb19d9af1435236edc2f773071cdaba3535055e29d019a6b7e9a:11)
 Using GMP with WETH was challenging. In the end, using a deposit address and sending tokens via SDK was the way to go for this hack.
 
+2 positive experiences using Axelar: 
+- SDK is pretty well done.
+- Faster finality than other bridges.
 
+
+2 negative experiences using Axelar: 
+- The docs need improvement
+- Was more expensive than other bridges. 
