@@ -2,7 +2,7 @@ import { AxelarAssetTransfer, Environment, SendTokenParams, AxelarQueryAPI,
   CHAINS } from "@axelar-network/axelarjs-sdk";
 import * as Axelar from './axelarConfig'; 
 import { ChainNames, getChain } from "@/app/constants";
-import { FeeData } from "@/formulas/gasCosts";
+import { BridgeType, FeeData } from "@/formulas/gasCosts";
 import {ethers, BigNumber, Wallet} from "ethers";
 import { ChainInfo } from "@/app/interfaces";
 
@@ -20,17 +20,30 @@ export async function getAxelarCost(originChain: ChainInfo, destinationChain: Ch
     3000000,
     )
 
+<<<<<<< HEAD
     const { gasPrice, maxPriorityFeePerGas } = await originProvider.getFeeData();
     
     // @ts-ignore let the app blow up if gasPrice isn't available yolo
     const cost = BigNumber.from(gasEstimate);
     // const cost = BigNumber.from(gasEstimate).mul((gasPrice.add(maxPriorityFeePerGas)));
 
+=======
+    const {maxFeePerGas, maxPriorityFeePerGas, gasPrice} = await originProvider.getFeeData();
+    let cost: BigNumber;
+    if (!maxPriorityFeePerGas) {
+        // @ts-ignore let the app blow up if gasPrice isn't available yolo
+        cost = BigNumber.from(gasUsed).mul(gasPrice);
+    } else {
+        // @ts-ignore let the app blow up if gasPrice isn't available yolo
+        cost = BigNumber.from(gasUsed).mul((maxFeePerGas.add(maxPriorityFeePerGas)));
+    }
+>>>>>>> 2b21abd59f99df5bb4c6f74839eac7493492f45a
     return {
-      cost: cost,
+      cost,
+      maxFeePerGas: BigNumber.from(0),
       maxPriorityFeePerGas: BigNumber.from(0),
-      gasPrice: BigNumber.from(0)
-    } as FeeData;
+      bridgeType: BridgeType.axelar
+    }
     
   } catch (err) {
     console.log("Axelar error: ", err);

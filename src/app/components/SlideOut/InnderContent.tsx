@@ -12,9 +12,7 @@ export function InnerContent() {
   return (
     <div>
       <TxOverview destinationAddress={destinationAddress} etherAmount={etherAmount.toString()} destinationChain={destinationChain} />
-      
-      <ShowTransfers transfers={transfers} loadingTransfers={loadingTransfers} destinationChain={destinationChain.name} />
- 
+      <ShowTransfers transfers={transfers} loadingTransfers={loadingTransfers} />
     </div>
   )
 }
