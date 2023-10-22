@@ -19,7 +19,6 @@ export const axelarSend = async (
 
   let depositAddress: string;
 
-
   // need signers to instantiate the token contract, I think
   const originDomain = Axelar.domainMap[originChain.name];
   const destinationDomain = Axelar.domainMap[destinationChain.name];
@@ -29,7 +28,6 @@ export const axelarSend = async (
   
   const destProvider = getDefaultProvider(destinationChain.rpcUrl);
   const destConnectedWallet = Axelar.getWallet().connect(destProvider);
-
 
   // generate temporary address 
   depositAddress = await api.getDepositAddress(
@@ -44,7 +42,7 @@ export const axelarSend = async (
   const srcTokenAddress = await wethMapping[originChain.name];
   const srcErc20 = IERC20.connect(srcTokenAddress, originConnectedWallet);
 
-  // --- uses weth token --- 
+  // --- uses weth token addy --- 
   const destinationTokenAddress = await wethMapping[destinationChain.name];
   
   const destERC20 = IERC20.connect(
@@ -57,8 +55,8 @@ export const axelarSend = async (
   const transferFee: number = await getTransferFee(
     originDomain,
     destinationDomain,
-    // not sure about this 
-    "axlWETH",
+    // not sure about this, i think it preferes symbol
+    "eth-wei",
     amount = '1'
   );
 

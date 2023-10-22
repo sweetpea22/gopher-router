@@ -1,6 +1,6 @@
 "use client"
 
-import { Transfer } from '@/app/interfaces';
+import { Transfer } from '../../interfaces';
 import React, { useContext, useState } from 'react';
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import Button from '../Button';

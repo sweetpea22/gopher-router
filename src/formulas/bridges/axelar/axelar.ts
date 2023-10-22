@@ -21,8 +21,6 @@ export async function getAxelarCost(originChain: ChainInfo, destinationChain: Ch
     3000000,
     )
 
-    console.log(gasEstimate)
-
     const {maxFeePerGas, maxPriorityFeePerGas, gasPrice} = await originProvider.getFeeData();
     let cost: BigNumber;
     if (!maxPriorityFeePerGas) {

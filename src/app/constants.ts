@@ -31,7 +31,7 @@ export const Chains: ChainInfo[] = [
     { 
         // have to find a new provider for scroll 
         name: ChainNames.scrollSepolia, 
-        rpcUrl: `https://sepolia-rpc.scroll.io`,
+        rpcUrl: `https://rpc.ankr.com/scroll_sepolia_testnet`,
         chainId: 534351
     },
     { 
