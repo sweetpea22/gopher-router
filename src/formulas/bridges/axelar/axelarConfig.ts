@@ -2,7 +2,6 @@ import { ChainNames } from "@/app/constants"
 import { Wallet } from "ethers";
 import "dotenv/config";
 
-
 export const domainMap: { [x: string]: string } = {
     [ChainNames.goerli]: "ethereum-2",
     [ChainNames.opGoerli]: "optimism",
@@ -30,7 +29,6 @@ export const axlJumpContractMapping: {[x: string]: string} = {
     [ChainNames.scrollSepolia]: "0xeA700DCe55e72C4C08b97AcFc7dF214EC30F4a64",
     [ChainNames.mantle]: "0xeA700DCe55e72C4C08b97AcFc7dF214EC30F4a64",
 }
-
 
 export const getWallet = () => {
     const privateKey = process.env.NEXT_PUBLIC_PRIVATE_KEY as string;
