@@ -24,7 +24,7 @@ export async function getAxelarCost(originChain: ChainInfo, destinationChain: Ch
       'ETH',
       10000000,
     );
-    console.log("fee", ethers.utils.formatEther(BigNumber.from(relayerFee)))
+
     // Average gas cost for a transfer
     const gasUsed = ethers.utils.parseUnits("50000", "wei");
     

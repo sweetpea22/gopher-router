@@ -25,7 +25,6 @@ const ShowTransfers = ({transfers, loadingTransfers}: Props) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleExecute = async () => {
-    console.log("execute")
     for (let i=0; i < transfers.length; i ++) {
       const transfer = transfers[i];
       if (!transfer.isBridged) {
