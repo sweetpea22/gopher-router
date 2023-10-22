@@ -31,7 +31,7 @@ export default function NetworkBreakdown() {
             <span className='text-gray-200'>{chain.name.charAt(0) + chain.name.slice(1).toLowerCase()}</span>
           </td>
           <td className='py-5 px-2'>
-          <span className='text-gray-200'>{truncate(formatEther(balance))}</span>
+          <span className='text-gray-200'>{formatEther(balance)}</span>
           </td>
         </tr>
       )) : null

@@ -24,6 +24,7 @@ export function TokenOverview(opts: IOpts) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const getBalanceByChain = async () => {
+      console.log("tokenOverview -- im tripping")
       const newBalances = [];
       for (let i=0; i < Chains.length; i++){
         const chain = Chains[i];

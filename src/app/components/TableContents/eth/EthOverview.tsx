@@ -3,8 +3,9 @@ import { useAccount } from 'wagmi';
 import { getAllBalances } from '@/formulas/utils';
 import { formatEther } from 'ethers/lib/utils';
 import { useContext, useEffect, useState } from 'react';
-import { Chains } from '@/app/constants';
+import { Chains, TokenNames } from '@/app/constants';
 import { BalancesData } from '@/app/context/balances';
+import { RouteData } from '@/app/context/transferRoute';
 
 interface IOpts {
   onClick: (name: string) => void;
@@ -13,13 +14,16 @@ interface IOpts {
 
 export function EthOverview(opts: IOpts) {
   const { address } = useAccount();
-  const {ethBalance, setEthBalance} = useContext(BalancesData);
+  const {ethBalance, setEthBalance, selected} = useContext(BalancesData);
+  const {isToken} = useContext(RouteData);
   const [totalEth, setTotalEth] = useState<Number | any>(0);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const getBalanceByChain = async () => {
-      const data = await getAllBalances(address as string, Chains);
+      console.log("ethOverview -- im tripping")
+
+      const data = await getAllBalances(address as string, Chains, isToken, selected as TokenNames);
       setEthBalance(data);
     }
     getBalanceByChain();
@@ -33,7 +37,7 @@ export function EthOverview(opts: IOpts) {
       }
     }
     getTotalEth()
-  }, [address, ethBalance, setEthBalance, totalEth])
+  }, [address, ethBalance, totalEth])
   
 
   return (

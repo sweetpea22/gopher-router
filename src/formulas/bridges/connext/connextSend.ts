@@ -3,16 +3,23 @@ import * as Connext from "./connnextConfig";
 import {ethers, BigNumber, providers} from "ethers";
 import { ChainInfo } from "@/app/interfaces";
 import { FeeData } from "@/formulas/gasCosts";
-import { wethMapping } from "@/app/constants";
+import { TokenNames, wethMapping } from "@/app/constants";
 import { Logger } from "@connext/nxtp-utils";
+
+interface ConnextXcallResponse {
+    txData: providers.TransactionRequest;
+    relayerFee: BigNumber;
+} 
 
 export const connextSend = async (
     originChain: ChainInfo, 
     destinationChain: ChainInfo, 
     from: string,
     to: string,
-    amount: BigNumber
-): Promise<providers.TransactionRequest> => {
+    amount: BigNumber,
+    isToken: boolean,
+    tokenName: TokenNames
+): Promise<ConnextXcallResponse> => {
     const originProvider = new ethers.providers.JsonRpcProvider(originChain.rpcUrl);
     const {sdkBase} = await create(Connext.sdkConfig);
     const originDomain = Connext.domainMap[originChain.name];
@@ -29,13 +36,17 @@ export const connextSend = async (
         callData: "0x",
         delegate: from,
         relayerFee: relayerFee.toString(),
-        wrapNativeOnOrigin: true,
-        unwrapNativeOnDestination: true,
+        wrapNativeOnOrigin: isToken ? false : true,
+        unwrapNativeOnDestination: isToken ? false : true,
         };
     try {
-        return await sdkBase.xcall(xcallParams);
+        const txData = await sdkBase.xcall(xcallParams);
+        return {
+            txData,
+            relayerFee
+        }
     } catch (e: any) {
         console.log("connext error", e);
-        return {} as providers.TransactionRequest;
+        return {} as ConnextXcallResponse;
     }
 }

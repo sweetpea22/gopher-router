@@ -10,6 +10,9 @@ import { useAccount, useBalance, useSwitchNetwork } from 'wagmi';
 import { RouteData } from '@/app/context/transferRoute';
 import { useEthersSigner } from '@/app/wagmi/ethers';
 import { truncate } from '../TableContainers/NetworkBreakdown';
+import { ethers } from 'ethers';
+import { BalancesData } from '@/app/context/balances';
+import { TokenNames, getToken } from '@/app/constants';
 
 type Props = {
   transfers: Transfer[];
@@ -18,7 +21,8 @@ type Props = {
 
 const ShowTransfers = ({transfers, loadingTransfers}: Props) => {
   const { address } = useAccount();
-  const {destinationAddress, destinationChain} = useContext(RouteData);
+  const {destinationAddress, destinationChain, isToken} = useContext(RouteData);
+  const {selected} = useContext(BalancesData);
   const signer = useEthersSigner();
   const { switchNetworkAsync } = useSwitchNetwork()
 
@@ -33,17 +37,27 @@ const ShowTransfers = ({transfers, loadingTransfers}: Props) => {
         if (await signer?.getChainId() !== transfer.chain.chainId) {
           await switchNetworkAsync?.(transfer.chain.chainId);
         }
-        const res = await signer?.sendTransaction({
-          to: destinationAddress,
-          value: transfer.amountToTransfer
-        });
+        if (isToken) {
+          const token = getToken(selected as TokenNames);
+          const tokenAddress = token.chainMap[transfer.chain.name];
+          const abi = ["function transfer(address to, uint amount) returns (bool)"];
+          const erc20 = new ethers.Contract(tokenAddress, abi, signer);
+          const res = await erc20.transfer(destinationAddress, transfer.amountToTransfer)
+        } else {
+          const res = await signer?.sendTransaction({
+            to: destinationAddress,
+            value: transfer.amountToTransfer
+          });
+        }
       } else if (transfer.isBridged && transfer.feeData.bridgeType == BridgeType.connext) {
-        const txData = await connextSend(
+        const {txData} = await connextSend(
           transfer.chain,
           destinationChain,
           address as string,
           destinationAddress,
-          transfer.amountToTransfer
+          transfer.amountToTransfer,
+          isToken,
+          selected as TokenNames
         );
         // lulz
         delete txData.from;
@@ -57,6 +71,19 @@ const ShowTransfers = ({transfers, loadingTransfers}: Props) => {
         
       }
     }
+  }
+
+  const renderRelayerFee = ({feeData}: Transfer) => {
+    const {relayerFee, cost} = feeData;
+    if (relayerFee) {
+      return (
+        <div>
+          <p>Gas costs: {ethers.utils.formatEther(cost.sub(relayerFee))} ETH</p>
+          <p>Relayer fee: {ethers.utils.formatEther(relayerFee)} ETH</p>
+        </div>
+      )
+    }
+    return <></>
   }
 
   const renderTransfers = () => {
@@ -91,7 +118,8 @@ const ShowTransfers = ({transfers, loadingTransfers}: Props) => {
                       <p className='text-gray-900 justify-self-end'>{destinationChain.name}</p>
                     </div>
                     <div className='flex flex-col'>
-                      <p>Cost to transfer: {truncate(transfer.feeData.cost.toString(), 2)} ETH</p>
+                      <p>Cost to transfer: {ethers.utils.formatEther(transfer.feeData.cost)} ETH</p>
+                      {renderRelayerFee(transfer)}
                       {transfer.isBridged ? 
                         <p>Bridge: {transfer.feeData.bridgeType}</p>
                         : null

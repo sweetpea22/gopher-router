@@ -14,20 +14,24 @@ import InputFields from './TableContents/InputFields';
 import NetworkBreakdown from './TableContainers/NetworkBreakdown';
 import Navbar from './Navbar';
 import SplitFunds from './TableContainers/SplitFunds';
+import { BalancesData } from '../context/balances';
 
 export default function BasicTable({children}: any) {
   const {setTransfers, setLoadingTransfers} = useContext(TrasnferData);
   const {isOpen, setOpen} = useContext(SlideOutData);
-  const {etherAmount, destinationAddress, destinationChain} = useContext(RouteData);
+  const {etherAmount, destinationAddress, destinationChain, isToken} = useContext(RouteData);
+  const {selected} = useContext(BalancesData);
 
   useEffect(() => {
     const fetchTransfers = async () => {
-      const transfers = await actions.calculateNativeTransfer(
-        destinationAddress, 
-        constants.Chains,
-        etherAmount,
-        Object.keys(destinationChain).length > 0 ? destinationChain : undefined
-      );
+      const transfers = await actions.calculateNativeTransfer({
+        from: destinationAddress,
+        chains: constants.Chains,
+        amount: etherAmount,
+        destinationChain: Object.keys(destinationChain).length > 0 ? destinationChain : undefined,
+        isToken,
+        tokenName: selected as constants.TokenNames
+      });
       setTransfers(transfers);
       setLoadingTransfers(false);
     };

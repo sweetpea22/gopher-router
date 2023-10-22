@@ -1,6 +1,6 @@
 import {BigNumber, ethers} from "ethers";
 import { ChainInfo } from "../app/interfaces";
-import {ChainNames, Chains} from "../app/constants";
+import {ChainNames, Chains, TokenNames} from "../app/constants";
 import * as Connext from "./bridges/connext/connnextConfig";
 import { connextGasCosts } from "./bridges/connext/connext";
 import * as Axelar from "./bridges/axelar/axelarConfig";
@@ -27,6 +27,7 @@ export interface FeeData {
     maxPriorityFeePerGas: BigNumber;
     cost: BigNumber;
     bridgeType: BridgeType;
+    relayerFee?: BigNumber;
 }
 
 export const calculateBaseGasCost = async (chain: ChainInfo, from: string): Promise<FeeData> => {
@@ -64,10 +65,10 @@ export const calculateBaseGasCost = async (chain: ChainInfo, from: string): Prom
     }
 };
 
-export const calculateBridgeCost = async (originChain: ChainInfo, destinationChain: ChainInfo, to: string, from: string): Promise<FeeData> => {
+export const calculateBridgeCost = async (originChain: ChainInfo, destinationChain: ChainInfo, to: string, from: string, isToken: boolean, tokenName: TokenNames): Promise<FeeData> => {
     const bridgeOptions: FeeData[] = [];
     if (typeof Connext.domainMap[originChain.name] !== 'undefined' && typeof Connext.domainMap[destinationChain.name] !== 'undefined') {
-        const option = await connextGasCosts(originChain, destinationChain, to);
+        const option = await connextGasCosts(originChain, destinationChain, to, isToken, tokenName);
         if (Object.keys(option).length > 0) {
             option.bridgeType = BridgeType.connext;
             bridgeOptions.push(option)
@@ -89,7 +90,7 @@ export const calculateBridgeCost = async (originChain: ChainInfo, destinationCha
     // Sort and return cheapest
     if (bridgeOptions.length > 0) {
         const sorted = bridgeOptions.sort((a,b) => {
-            console.log("Cost: ", a.bridgeType, ethers.utils.formatEther(a.cost))
+            console.log("Cost: ", a.bridgeType, ethers.utils.formatEther(a.cost.toString()))
             console.log("Cost: ", b.bridgeType, ethers.utils.formatEther(b.cost.toString()))
             if(a?.cost.gt(b.cost)) {
                 return 1;

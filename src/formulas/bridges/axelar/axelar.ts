@@ -18,16 +18,17 @@ export async function getAxelarCost(originChain: ChainInfo, destinationChain: Ch
     const originProvider = new ethers.providers.JsonRpcProvider(originChain.rpcUrl);
     
     // This is the fee paid to the relayer
-    const relayerFee = await axelarQuery.estimateGasFee(
+    const relayerFeeWei = await axelarQuery.estimateGasFee(
       Axelar.domainMap[originChain.name], 
       Axelar.domainMap[destinationChain.name],
       'ETH',
       10000000,
     );
 
+    const relayerFee = ethers.utils.parseUnits(relayerFeeWei as string, "wei");
     // Average gas cost for a transfer
     const gasUsed = ethers.utils.parseUnits("50000", "wei");
-    
+
     const {maxFeePerGas, maxPriorityFeePerGas, gasPrice} = await originProvider.getFeeData();
     let cost: BigNumber;
     if (!maxPriorityFeePerGas) {

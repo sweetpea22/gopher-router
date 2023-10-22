@@ -2,6 +2,7 @@ import { ethers, BigNumber } from "ethers";
 import {ChainInfo, AccountDetails, Transfer, BundledTransfers} from "../app/interfaces";
 import {getAllBalances, getAllTransfers, sortByTransfersByBalance, sortByTransfersByCost} from "./utils";
 import { findCheapestCombination } from "./lowestCost";
+import { TokenNames } from "@/app/constants";
 
 const chains: ChainInfo[] = []; // import from somewhere
 
@@ -42,6 +43,14 @@ export const calculateAmountToSend = (transferAmount: BigNumber, transfers: Tran
     })
 }
 
+interface ICalculateNativeTransferOpts {
+    from: string;
+    chains: ChainInfo[];
+    amount: BigNumber;
+    destinationChain?: ChainInfo;
+    isToken: boolean;
+    tokenName: TokenNames;
+}
 /**
  * Returns best path to perfomring a native transfer
  * @param chains 
@@ -49,9 +58,9 @@ export const calculateAmountToSend = (transferAmount: BigNumber, transfers: Tran
  * @param destinationChain 
  * @returns 
  */
-export const calculateNativeTransfer = async (from: string, chains: ChainInfo[], amount: BigNumber, destinationChain?: ChainInfo): Promise<Transfer[]> => {
+export const calculateNativeTransfer = async ({from, chains, amount, destinationChain, isToken, tokenName}: ICalculateNativeTransferOpts): Promise<Transfer[]> => {
     // Step 1 - Get balances across all chains
-    const accountDetails = await getAllBalances(from, chains);
+    const accountDetails = await getAllBalances(from, chains, isToken, tokenName);
 
     // Step 2.1 - If `destinationChain == null`
     // In this case we can simply find the best set of chains to combine that will make the transfer occur at the cheapest rate
@@ -64,7 +73,9 @@ export const calculateNativeTransfer = async (from: string, chains: ChainInfo[],
             accountDetails,
             // @TODO change
             to: from,
-            from
+            from,
+            isToken,
+            tokenName
         });
         
         // Sort the transfers based on cheapest -> most expensive
@@ -73,7 +84,7 @@ export const calculateNativeTransfer = async (from: string, chains: ChainInfo[],
         // Find the cheapest single chain transfer, since its sorted it will always be the first one found
         const bestSingleChainTransfer = possibleTransfers.find(transfer => {
             if (transfer.hasFullBalance) {
-                transfer.amountToTransfer = amount.sub(transfer.feeData.cost);
+                transfer.amountToTransfer = amount;
                 return true;
             }
         });
@@ -98,7 +109,9 @@ export const calculateNativeTransfer = async (from: string, chains: ChainInfo[],
             destinationChain,
             // @TODO change
             to: from,
-            from
+            from,
+            isToken,
+            tokenName
         }); // always length=1
         let bridgedTransfers: Transfer[] = (await getAllTransfers({
             amount, 
@@ -106,7 +119,9 @@ export const calculateNativeTransfer = async (from: string, chains: ChainInfo[],
             destinationChain,
             // @TODO change
             to: from,
-            from
+            from,
+            isToken,
+            tokenName
         })).map(x => { return {...x, isBridged: true }});
         
         // Sort the birdgedTransfer based on cheapest -> most expensive
