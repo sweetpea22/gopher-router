@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT
+//SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
 import {AxelarExecutable} from "@axelar-network/axelar-gmp-sdk-solidity/contracts/executable/AxelarExecutable.sol";
@@ -6,52 +6,32 @@ import {IAxelarGateway} from "@axelar-network/axelar-gmp-sdk-solidity/contracts/
 import {IERC20} from "@axelar-network/axelar-gmp-sdk-solidity/contracts/interfaces/IERC20.sol";
 import {IAxelarGasService} from "@axelar-network/axelar-gmp-sdk-solidity/contracts/interfaces/IAxelarGasService.sol";
 
-// get weth contract methods
-interface ERC20{
-  function deposit() external payable;
-  function withdraw(uint256 amount) external;
-  function approve(address guy, uint256 wad) external;
-}
-
-// Wrap and send contract that inherits from AxelarExecutable
-contract SendWrappedViaAxelar is AxelarExecutable {
-    // Immutable reference to the gas service contract
+contract SendToManyAxelar is AxelarExecutable {
     IAxelarGasService public immutable gasService;
 
+    uint256 public amountReceived;
+    address[] public recipientArr;
 
-    // Constructor to initialize the contract
-    constructor(address weth_, address gateway_, address gasReceiver_) AxelarExecutable(gateway_) {
-        // Initialize the gas service contract
+    constructor(
+        address gateway_,
+        address gasReceiver_
+    ) AxelarExecutable(gateway_) {
         gasService = IAxelarGasService(gasReceiver_);
-        weth = ERC20(_weth);
     }
 
-    // Need GMP to send wrapped tokens...right? 
-    function sendEth(
+    function sendToMany(
         string memory destinationChain,
         string memory destinationAddress,
-        string memory wethAddress,
+        address[] calldata destinationAddresses,
+        string memory symbol,
         uint256 amount
-    ) public payable {
-        // Require a gas payment for the transaction
+    ) external payable {
         require(msg.value > 0, "Gas payment is required");
 
-        // Get the token address associated with the provided symbols (test simple transfers)
         address tokenAddress = gateway.tokenAddresses(symbol);
-
-        // idk if weth is on the gateway?
-        address wethAddress = gateway.tokenAddresses(wethAddress);
-
-        // Transfer tokens from sender to this contract
         IERC20(tokenAddress).transferFrom(msg.sender, address(this), amount);
-
-        // Approve the gateway to spend tokens on behalf of this contract
         IERC20(tokenAddress).approve(address(gateway), amount);
-
-        // Stuck: don't know what payload we need to unwrap?
-        // bytes memory payload = abi.encode(??);
-
-        // Pay for native gas using the gas service contract
+        bytes memory payload = abi.encode(destinationAddresses);
         gasService.payNativeGasForContractCallWithToken{value: msg.value}(
             address(this),
             destinationChain,
@@ -61,8 +41,6 @@ contract SendWrappedViaAxelar is AxelarExecutable {
             amount,
             msg.sender
         );
-
-        // Initiate a contract call on the gateway
         gateway.callContractWithToken(
             destinationChain,
             destinationAddress,
@@ -72,7 +50,26 @@ contract SendWrappedViaAxelar is AxelarExecutable {
         );
     }
 
-    function unwrap(uint256 _amount) public payable {
-        weth.withdraw(_amount);
-  }
+    function getRecipients() public view returns (address[] memory) {
+        return recipientArr;
+    }
+
+    function _executeWithToken(
+        string calldata,
+        string calldata,
+        bytes calldata payload,
+        string calldata tokenSymbol,
+        uint256 amount
+    ) internal override {
+        address[] memory recipients = abi.decode(payload, (address[]));
+        address tokenAddress = gateway.tokenAddresses(tokenSymbol);
+
+        amountReceived = amount;
+        recipientArr = recipients;
+
+        uint256 sentAmount = amount / recipients.length;
+        for (uint256 i = 0; i < recipients.length; i++) {
+            IERC20(tokenAddress).transfer(recipients[i], sentAmount);
+        }
+    }
 }

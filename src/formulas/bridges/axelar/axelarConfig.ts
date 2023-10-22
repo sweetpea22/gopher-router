@@ -6,6 +6,12 @@ export const domainMap: { [x: string]: string } = {
     [ChainNames.scrollSepolia]: "scroll",
     [ChainNames.mantle]: "mantle",
 }
+export const gatewayMapping: { [x: string]: string } = {
+    [ChainNames.goerli]: "0xe432150cce91c13a887f7D836923d5597adD8E31",
+    [ChainNames.opGoerli]: "0xe432150cce91c13a887f7D836923d5597adD8E31",
+    [ChainNames.scrollSepolia]: "0xe432150cce91c13a887f7D836923d5597adD8E31",
+    [ChainNames.base]: "0xe432150cce91c13a887f7D836923d5597adD8E31",
+}
 
 export const axlWethMapping: {[x: string]: string} = {
     [ChainNames.goerli]: "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6",

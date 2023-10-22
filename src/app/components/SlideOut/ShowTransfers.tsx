@@ -23,10 +23,6 @@ const ShowTransfers = ({transfers, loadingTransfers}: Props) => {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  // can use diff to signal tx has settled 
-  const { data: accountBalance } = useBalance({ address: address })
-  console.log(accountBalance)
-
   const handleExecute = async () => {
     for (let i=0; i < transfers.length; i ++) {
       const transfer = transfers[i];

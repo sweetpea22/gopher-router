@@ -25,8 +25,6 @@ const bridgeViaConnext = async () => {
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
 
-  
-  sendViaConnext(Chains[0], Chains[2], '0x7d78A8bF127410DBEeaCEF3E3991E802dB46bd03', signer);
   // replace hardcoded version with this 
   // sendViaConnext(originChain, destinationChain, to, amount, signer);
   
