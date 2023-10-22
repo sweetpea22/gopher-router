@@ -37,7 +37,6 @@ export const calculateAmountToSend = (transferAmount: BigNumber, transfers: Tran
             return {...transfer, amountToTransfer};
         } else {
             // Use full balance
-            transferAmount = transferAmount.sub(transfer.balance);
             return {...transfer, amountToTransfer: transfer.balance.sub(transfer.feeData.cost)}
         }
     })
