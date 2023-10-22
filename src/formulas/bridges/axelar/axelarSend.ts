@@ -50,16 +50,15 @@ export const axelarSend = async (
     originDomain, 
     destinationDomain, 
     to, 
-    'uausdc'
+    'eth-wei'
   );
 
   // connect to the token contracts on source and destination
   const srcTokenAddress = await wethMapping[originChain.name];
   const srcErc20 = IERC20.connect(srcTokenAddress, originConnectedWallet);
 
-  const destinationTokenAddress = await destGatewayContract.tokenAddresses(
-    "aUSDC"
-  );
+  // --- uses weth token --- 
+  const destinationTokenAddress = await wethMapping[destinationChain.name];
   
   const destERC20 = IERC20.connect(
     destinationTokenAddress,
@@ -68,11 +67,11 @@ export const axelarSend = async (
 
   const destBalance = await destERC20.balanceOf(to);
 
-  // getTransferFee
   const transferFee: number = await getTransferFee(
     originDomain,
     destinationDomain,
-    "aUSDC",
+    // not sure about this 
+    "axlWETH",
     amount = '1'
   );
 
