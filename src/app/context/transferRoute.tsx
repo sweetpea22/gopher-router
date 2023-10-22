@@ -10,7 +10,9 @@ interface IRouteContext {
     etherAmount: BigNumber,
     setEtherAmount: (amount: BigNumber) => void,
     destinationChain: ChainInfo,
-    setDestinationChain: (chain: ChainInfo) => void
+    setDestinationChain: (chain: ChainInfo) => void,
+    isToken: boolean,
+    setIsToken: (x: boolean) => void,
 }
 const defaultRouteContext: IRouteContext = {
     destinationAddress: "",
@@ -19,6 +21,8 @@ const defaultRouteContext: IRouteContext = {
     setEtherAmount: (amount: BigNumber) => {},
     destinationChain: {} as ChainInfo,
     setDestinationChain: (chain: ChainInfo) => {},
+    isToken: false,
+    setIsToken: (x: boolean) => {},
 }
 export const RouteData = createContext<IRouteContext>(defaultRouteContext);
   
@@ -27,6 +31,7 @@ export function RouteContext({children}) {
     const [destinationAddress, setDestinationAddress] = useState("");
     const [etherAmount, setEtherAmount] = useState(BigNumber.from(0));
     const [destinationChain, setDestinationChain] = useState({} as ChainInfo);
+    const [isToken, setIsToken] = useState(false);
 
     return (
         <RouteData.Provider value={{ 
@@ -35,7 +40,9 @@ export function RouteContext({children}) {
             etherAmount, 
             setEtherAmount, 
             destinationChain, 
-            setDestinationChain
+            setDestinationChain,
+            isToken,
+            setIsToken,
         }}>
             {children}
         </RouteData.Provider>

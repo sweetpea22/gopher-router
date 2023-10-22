@@ -1,6 +1,7 @@
 import {ethers, BigNumber} from "ethers";
 import {ChainInfo, AccountDetails, Transfer} from "../app/interfaces";
 import { calculateBaseGasCost, calculateBridgeCost } from "./gasCosts";
+import { TokenNames, getToken } from "@/app/constants";
 
 export const sortByTransfersByCost = (t: Transfer[]): Transfer[] => {
     return t.sort((a ,b) => {
@@ -30,7 +31,10 @@ interface IGetAllTransfers {
   amount: BigNumber;
   accountDetails: AccountDetails[];
   destinationChain?: ChainInfo;
-  to: string
+  to: string;
+  from: string;
+  isToken: boolean,
+  tokenName: TokenNames
 }
 /**
  * Returns all the possibile transfers with assosiated costs, on one single chain.
@@ -39,19 +43,26 @@ interface IGetAllTransfers {
  * @param costFn 
  * @returns 
  */
-export const getAllTransfers = async ({amount, accountDetails, destinationChain, to}: IGetAllTransfers): Promise<Transfer[]> => {
-  const tranfers = await Promise.all(accountDetails.map(async (account) => {
-    const feeData = destinationChain ? await calculateBridgeCost(account.chain, destinationChain, to) : await calculateBaseGasCost(account.chain);
-    if (!feeData || Object.keys(feeData).length === 0) return {} as Transfer;
-    const hasFullBalance = account.balance.gte(amount.add(feeData.cost));
-    return {
-        chain: account.chain,
-        balance: account.balance,
-        hasFullBalance,
-        feeData,
-    } as Transfer;
-  }));
-  return tranfers.filter(x => Object.keys(x).length > 0);  // const tranfers = await Promise.all(accountDetails.map(async (account) => {
+export const getAllTransfers = async ({amount, accountDetails, destinationChain, to, from, isToken, tokenName}: IGetAllTransfers): Promise<Transfer[]> => {
+  const transfers = [];
+  for (const x in accountDetails) {
+    const account = accountDetails[x];
+  // const tranfers = await Promise.all(accountDetails.map(async (account) => {
+    const feeData = destinationChain ? await calculateBridgeCost(account.chain, destinationChain, to, from, isToken, tokenName) : await calculateBaseGasCost(account.chain, from);
+    // if (!feeData || Object.keys(feeData).length === 0) return {} as Transfer;
+    if (feeData && Object.keys(feeData).length > 0) {
+      const hasFullBalance = account.balance.gte(amount.add(feeData.cost));
+      // return {
+      transfers.push({
+          chain: account.chain,
+          balance: account.balance,
+          hasFullBalance,
+          feeData,
+      } as Transfer)
+    }
+  // }));
+  }
+  return transfers.filter(x => Object.keys(x).length > 0);  // const tranfers = await Promise.all(accountDetails.map(async (account) => {
 };
 
 /**
@@ -59,13 +70,35 @@ export const getAllTransfers = async ({amount, accountDetails, destinationChain,
  * @param chains 
  * @returns 
  */
-export const getAllBalances = async (address: string, chains: ChainInfo[]): Promise<AccountDetails[]> => {
-    return await Promise.all(chains.map(async (chain) => {
-        const provider = new ethers.providers.JsonRpcProvider(chain.rpcUrl);
+export const getAllBalances = async (address: string, chains: ChainInfo[], isToken: boolean, tokenName: TokenNames): Promise<AccountDetails[]> => {
+    const accountDetails = [];
+    for (const x in chains) {
+      const chain = chains[x];
+    // return await Promise.all(chains.map(async (chain) => {
+        const provider = chain.provider;
+        if (isToken) {
+          const token = getToken(tokenName);
+          const tokenAddress = token.chainMap[chain.name];
+          const abi = ["function balanceOf(address owner) view returns (uint256)"];
+          const erc20 = new ethers.Contract(tokenAddress, abi, provider);
+          try {
+            const balance = await erc20.balanceOf(address);
+            // return {
+            accountDetails.push({
+              chain,
+              balance
+            })
+          } catch (e) {
+            console.log(chain.name, e)
+          }
+        }
         const balance = await provider.getBalance(address);
-        return {
+        // return {
+        accountDetails.push({
             chain,
             balance
-        };
-    }));
+        });
+    // }));
+    };
+    return accountDetails;
 };

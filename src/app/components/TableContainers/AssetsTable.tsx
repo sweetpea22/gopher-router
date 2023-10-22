@@ -4,16 +4,20 @@ import { TokenOverview } from "../TableContents/tokens/tokenOverview";
 import { TokenBalance } from "@/app/interfaces";
 import { useContext, useState } from "react";
 import { BalancesData } from "@/app/context/balances";
+import { RouteData } from "@/app/context/transferRoute";
 
 
 export default function AssetsTable() {
   const {selected, setSelected} = useContext(BalancesData);
+  const {setIsToken} = useContext(RouteData);
 
   const handleSelect = (name: string | constants.TokenNames) => {
     if (name === "eth") {
       setSelected("eth");
+      setIsToken(false);
     } else {
       setSelected(name);
+      setIsToken(true);
     }
   }
 

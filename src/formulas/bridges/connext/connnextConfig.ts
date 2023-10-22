@@ -9,13 +9,13 @@ export const sdkConfig: SdkConfig = {
     // This information can be found at https://docs.connext.network/resources/supported-chains
     chains: {
         // 6648936: {
-        //     providers: [getChain(ChainNames.ethereum).rpcUrl],
+        //     providers: [getChain(ChainNames.ethereum).provider],
         // },
         1735353714: { // Goerli domain ID
-            providers: [getChain(ChainNames.goerli).rpcUrl],
+            providers: [getChain(ChainNames.goerli).provider.connection.url],
         },
         1735356532: { // Optimism-Goerli domain ID
-            providers: [getChain(ChainNames.opGoerli).rpcUrl],
+            providers: [getChain(ChainNames.opGoerli).provider.connection.url],
         },
     },
 };

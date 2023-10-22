@@ -2,6 +2,7 @@ import { ethers, BigNumber } from "ethers";
 import {ChainInfo, AccountDetails, Transfer, BundledTransfers} from "../app/interfaces";
 import {getAllBalances, getAllTransfers, sortByTransfersByBalance, sortByTransfersByCost} from "./utils";
 import { findCheapestCombination } from "./lowestCost";
+import { TokenNames } from "@/app/constants";
 
 const chains: ChainInfo[] = []; // import from somewhere
 
@@ -30,19 +31,25 @@ export const calculateBundledTransactions = (transferAmount: BigNumber, transfer
 export const calculateAmountToSend = (transferAmount: BigNumber, transfers: Transfer[]): Transfer[] => {
     const sorted = sortByTransfersByBalance(transfers).reverse();
     return sorted.map(transfer => {
-        if (transfer.balance.gt(transferAmount)) {
+        if (transfer.balance.add(transfer.feeData.cost).gt(transferAmount)) {
             // Use remainder
             const amountToTransfer = transferAmount;
-            transferAmount = BigNumber.from(0);
             return {...transfer, amountToTransfer};
         } else {
             // Use full balance
-            transferAmount = transferAmount.sub(transfer.balance);
-            return {...transfer, amountToTransfer: transfer.balance}
+            return {...transfer, amountToTransfer: transfer.balance.sub(transfer.feeData.cost)}
         }
     })
 }
 
+interface ICalculateNativeTransferOpts {
+    from: string;
+    chains: ChainInfo[];
+    amount: BigNumber;
+    destinationChain?: ChainInfo;
+    isToken: boolean;
+    tokenName: TokenNames;
+}
 /**
  * Returns best path to perfomring a native transfer
  * @param chains 
@@ -50,9 +57,9 @@ export const calculateAmountToSend = (transferAmount: BigNumber, transfers: Tran
  * @param destinationChain 
  * @returns 
  */
-export const calculateNativeTransfer = async (from: string, chains: ChainInfo[], amount: BigNumber, destinationChain?: ChainInfo): Promise<Transfer[]> => {
+export const calculateNativeTransfer = async ({from, chains, amount, destinationChain, isToken, tokenName}: ICalculateNativeTransferOpts): Promise<Transfer[]> => {
     // Step 1 - Get balances across all chains
-    const accountDetails = await getAllBalances(from, chains);
+    const accountDetails = await getAllBalances(from, chains, isToken, tokenName);
 
     // Step 2.1 - If `destinationChain == null`
     // In this case we can simply find the best set of chains to combine that will make the transfer occur at the cheapest rate
@@ -64,7 +71,10 @@ export const calculateNativeTransfer = async (from: string, chains: ChainInfo[],
             amount, 
             accountDetails,
             // @TODO change
-            to: from
+            to: from,
+            from,
+            isToken,
+            tokenName
         });
         
         // Sort the transfers based on cheapest -> most expensive
@@ -95,25 +105,34 @@ export const calculateNativeTransfer = async (from: string, chains: ChainInfo[],
         const currentChainTransfer = await getAllTransfers({
             amount, 
             accountDetails: [destinationAccountDetails!], 
-            destinationChain,
+            // destinationChain,
             // @TODO change
-            to: from
+            to: from,
+            from,
+            isToken,
+            tokenName
         }); // always length=1
         let bridgedTransfers: Transfer[] = (await getAllTransfers({
             amount, 
             accountDetails: bridgeChainsBalances, 
             destinationChain,
             // @TODO change
-            to: from
+            to: from,
+            from,
+            isToken,
+            tokenName
         })).map(x => { return {...x, isBridged: true }});
         
         // Sort the birdgedTransfer based on cheapest -> most expensive
         bridgedTransfers = sortByTransfersByCost(bridgedTransfers);
-
         if (currentChainTransfer[0] && currentChainTransfer[0].hasFullBalance) {
+            const updatedCurrentTransfers = calculateAmountToSend(amount, currentChainTransfer);
             // We want to prioritize the destinationChain if it has balance
+            if (bridgedTransfers.length === 0) {
+                return updatedCurrentTransfers;
+            }
             const { transfers, bundleCost } = calculateBundledTransactions(amount, bridgedTransfers);
-            return currentChainTransfer[0].feeData.cost!.lte(bundleCost) ? currentChainTransfer : transfers;
+            return currentChainTransfer[0].feeData.cost!.lte(bundleCost) ? updatedCurrentTransfers : transfers;
         } else {
             const bundledTransfers = [...currentChainTransfer, ...bridgedTransfers];
             const { transfers } = calculateBundledTransactions(amount, bundledTransfers);

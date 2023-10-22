@@ -1,4 +1,5 @@
 import { ChainInfo } from "@/app/interfaces";
+import { ethers } from "ethers";
 
 interface TxOverviewProps {
   destinationAddress: string;
@@ -14,7 +15,7 @@ export default function TxOverview({ destinationAddress, destinationChain, ether
         <div className='px-3 flex flex-col items-start justify-between'>
           <h3 className='font-medium font-lg'>Total Amount</h3>
           <div className='rounded-xl bg-slate-50 py-2 px-3'>
-            <p className='font-medium'>{(Number(etherAmount)/10e17).toFixed(2)}</p>
+            <p className='font-medium'>{ethers.utils.formatEther(etherAmount)}</p>
           </div>
         </div>
         <div className='px-3 py-2 flex flex-col items-start justify-between'>

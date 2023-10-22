@@ -3,8 +3,9 @@ import { useAccount } from 'wagmi';
 import { getAllBalances } from '@/formulas/utils';
 import { formatEther } from 'ethers/lib/utils';
 import { useContext, useEffect, useState } from 'react';
-import { Chains } from '@/app/constants';
+import { Chains, TokenNames } from '@/app/constants';
 import { BalancesData } from '@/app/context/balances';
+import { RouteData } from '@/app/context/transferRoute';
 
 interface IOpts {
   onClick: (name: string) => void;
@@ -13,27 +14,31 @@ interface IOpts {
 
 export function EthOverview(opts: IOpts) {
   const { address } = useAccount();
-  const {ethBalance, setEthBalance} = useContext(BalancesData);
+  const {ethBalance, setEthBalance, selected} = useContext(BalancesData);
+  const {isToken} = useContext(RouteData);
   const [totalEth, setTotalEth] = useState<Number | any>(0);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const getBalanceByChain = async () => {
-      const data = await getAllBalances(address as string, Chains);
+      const data = await getAllBalances(address as string, Chains, isToken, selected as TokenNames);
       setEthBalance(data);
     }
-    getBalanceByChain();
 
     const getTotalEth = () => {
       if (ethBalance.length > 1) {
-      let sum = (a: any[]) => a.reduce((x: any, y: any) => x + y);
-    
-      let totalAmount = sum(ethBalance.map((x) => Number(formatEther(x.balance))));
+        let sum = (a: any[]) => a.reduce((x: any, y: any) => x + y);
+      
+        let totalAmount = sum(ethBalance.map((x) => Number(formatEther(x.balance))));
         setTotalEth(totalAmount)
       }
     }
-    getTotalEth()
-  }, [address, ethBalance, setEthBalance, totalEth])
+    if (ethBalance.length === 0) {
+      getBalanceByChain();
+    } else {
+      getTotalEth()
+    }
+  }, [address, ethBalance, totalEth])
   
 
   return (

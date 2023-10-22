@@ -23,10 +23,10 @@ export const axelarSend = async (
   const originDomain = Axelar.domainMap[originChain.name];
   const destinationDomain = Axelar.domainMap[destinationChain.name];
 
-  const originProvider = getDefaultProvider(originChain.rpcUrl);
+  const originProvider = getDefaultProvider(originChain.provider);
   const originConnectedWallet = Axelar.getWallet().connect(originProvider);
   
-  const destProvider = getDefaultProvider(destinationChain.rpcUrl);
+  const destProvider = getDefaultProvider(destinationChain.provider);
   const destConnectedWallet = Axelar.getWallet().connect(destProvider);
 
   // generate temporary address 

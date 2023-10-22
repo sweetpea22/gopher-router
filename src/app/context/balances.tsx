@@ -18,7 +18,7 @@ const deafultBalancesContext: IBalancesContext = {
     setSelected: (name: string | TokenNames) => {},
     tokenBalances: {} as TokenBalances,
     setTokenBalances: (state: TokenBalances) => {},
-    ethBalance: {} as AccountDetails[],
+    ethBalance: [] as AccountDetails[],
     setEthBalance: (state: AccountDetails[]) => {}
 }
 export const BalancesData = createContext<IBalancesContext>(deafultBalancesContext);
@@ -26,7 +26,7 @@ export const BalancesData = createContext<IBalancesContext>(deafultBalancesConte
 // @ts-ignore
 export function BalancesContext({children}) {
     const [tokenBalances, setTokenBalances] = useState({} as TokenBalances);
-    const [ethBalance, setEthBalance] = useState({} as AccountDetails[]);
+    const [ethBalance, setEthBalance] = useState([] as AccountDetails[]);
     const [selected, setSelected] = useState("eth");
 
     return (

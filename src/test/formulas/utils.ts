@@ -11,7 +11,7 @@ export const generateManyFakes = (n: number, fn: Function, fnArgs: any[]) => {
 export const generateChain = (name: string, isBridged = false): ChainInfo => {
     const chain: ChainInfo = {
         name,
-        rpcUrl: ""
+        provider: ""
     };
     return chain;
 }

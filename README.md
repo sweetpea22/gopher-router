@@ -14,21 +14,24 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+# Eth Global Information
+## Safe App
+- Run the app, and open it at [http://localhost:3000](http://localhost:3000)
+- Go to [Safe Website](https://app.safe.global)
+- Navigate to `apps` > `My Custom Apps` > `Add Custom Safe App`
+- In the URL enter `http//localhost:3000` follow the prompts and play around!
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## From the demo
+### First set of transactions
+Connext: OPGoerli -> Goerli
+- [Tx on OpGoerli](https://goerli-optimism.etherscan.io/tx/0x00e48d3bb91933e72f20bcee36b5a59696bf3de8b5e7d52728d178469d9211e2)
+- [Explorer TX](https://testnet.connextscan.io/tx/0x00e48d3bb91933e72f20bcee36b5a59696bf3de8b5e7d52728d178469d9211e2)
+- [Tx on Goerli](https://goerli.etherscan.io/tx/0x47338fca712cfb45408f715075673d54a86affe7033de5d72ede758e74a1e859)
 
-## Learn More
+Goerli -> Goerli
+- [Tx on Goerli](https://goerli.etherscan.io/tx/0xf51edb97ad1f8dd081ab6523c8578bc9d5c5f46da492abc2b9859e3386b48de2)
 
-To learn more about Next.js, take a look at the following resources:
+### Second Transaction
+From BaseGoerli -> BaseGoerli
+- [Safe Tx on BaseGoerli](https://goerli.basescan.org/tx/0x7ab557acd06fc6f6d816962a6d0db2c4c59250b8701a3b568bd7faac12d5139f) 
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
