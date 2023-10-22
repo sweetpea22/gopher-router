@@ -95,7 +95,6 @@ const ShowTransfers = ({transfers, loadingTransfers}: Props) => {
                         : null
                       }
                     </div>
-                    {/* <Button className='w-full mt-4' onClick={() => {console.log('something')}}>Execute</Button> */}
                   </div>
                 ) 
               })
