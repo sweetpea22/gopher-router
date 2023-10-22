@@ -6,7 +6,6 @@ import {
   EvmChain,
   GasToken,
 } from "@axelar-network/axelarjs-sdk";
-import AirdropContract from "@/contracts/Airdrop.json";
 import { ethers } from 'ethers';
 import {  useContractWrite,
   useContractRead,
@@ -15,7 +14,7 @@ import {  useContractWrite,
   erc20ABI,
   useAccount,
 } from "wagmi";
-
+import AxelarABI from '@/contracts/axelar/ABI.json';
 
 const SPLITS_CONTRACT_ADDRESS="0x2c852e740B62308c46DD29B982FBb650D063Bd07"
 
@@ -39,7 +38,7 @@ export default function SplitFunds() {
 
    const { data: useContractWriteData, write } = useContractWrite({
     address: SPLITS_CONTRACT_ADDRESS,
-    abi: AirdropContract.abi,
+    abi: AxelarABI.abi,
     functionName: "sendToMany",
     args: [
       "Avalanche",
