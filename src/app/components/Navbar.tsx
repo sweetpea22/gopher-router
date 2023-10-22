@@ -23,7 +23,7 @@ const Navbar = (props: Props) => {
 
             {/* Right section on desktop */}
             <div className='hidden lg:ml-4 lg:flex lg:items-center lg:pr-0.5'>
-              {/* Safe App dropdown */}
+            {/* Safe App dropdown */}
             </div>
           </div>
         </div>

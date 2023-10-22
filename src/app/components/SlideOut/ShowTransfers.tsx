@@ -1,11 +1,12 @@
+"use client"
+
 import { Transfer } from '@/app/interfaces';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import Button from '../Button';
 import { BridgeType } from '@/formulas/gasCosts';
 import { connextSend } from '@/formulas/bridges/connext/connextSend';
-import { getChain } from '@/app/constants';
-import { useAccount, useSendTransaction, useSwitchNetwork } from 'wagmi';
+import { useAccount, useBalance, useSwitchNetwork } from 'wagmi';
 import { RouteData } from '@/app/context/transferRoute';
 import { useEthersSigner } from '@/app/wagmi/ethers';
 
@@ -18,7 +19,13 @@ const ShowTransfers = ({transfers, loadingTransfers}: Props) => {
   const { address } = useAccount();
   const {destinationAddress, destinationChain} = useContext(RouteData);
   const signer = useEthersSigner();
-  const {switchNetworkAsync} = useSwitchNetwork()
+  const { switchNetworkAsync } = useSwitchNetwork()
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  // can use diff to signal tx has settled 
+  const { data: accountBalance } = useBalance({ address: address })
+  console.log(accountBalance)
 
   const handleExecute = async () => {
     for (let i=0; i < transfers.length; i ++) {
@@ -48,7 +55,8 @@ const ShowTransfers = ({transfers, loadingTransfers}: Props) => {
           await switchNetworkAsync?.(transfer.chain.chainId);
         }
         const res = await signer?.sendTransaction(txData);
-        console.log(res)
+        console.log(res);
+        setIsLoading(false);
       }
     }
   }
@@ -125,5 +133,4 @@ const ShowTransfers = ({transfers, loadingTransfers}: Props) => {
     </>
   )
 };
-
 export default ShowTransfers;

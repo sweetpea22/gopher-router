@@ -1,7 +1,7 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, ReactNode } from 'react';
 
 type Props = {
-  children: string | ReactElement;
+  children: any;
   to?: string;
   onClick: () => void;
   className?: string;
