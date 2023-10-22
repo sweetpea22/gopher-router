@@ -30,7 +30,8 @@ interface IGetAllTransfers {
   amount: BigNumber;
   accountDetails: AccountDetails[];
   destinationChain?: ChainInfo;
-  to: string
+  to: string,
+  from: string
 }
 /**
  * Returns all the possibile transfers with assosiated costs, on one single chain.
@@ -39,9 +40,9 @@ interface IGetAllTransfers {
  * @param costFn 
  * @returns 
  */
-export const getAllTransfers = async ({amount, accountDetails, destinationChain, to}: IGetAllTransfers): Promise<Transfer[]> => {
+export const getAllTransfers = async ({amount, accountDetails, destinationChain, to, from}: IGetAllTransfers): Promise<Transfer[]> => {
   const tranfers = await Promise.all(accountDetails.map(async (account) => {
-    const feeData = destinationChain ? await calculateBridgeCost(account.chain, destinationChain, to) : await calculateBaseGasCost(account.chain);
+    const feeData = destinationChain ? await calculateBridgeCost(account.chain, destinationChain, to) : await calculateBaseGasCost(account.chain, from);
     if (!feeData || Object.keys(feeData).length === 0) return {} as Transfer;
     const hasFullBalance = account.balance.gte(amount.add(feeData.cost));
     return {

@@ -30,7 +30,7 @@ export const calculateBundledTransactions = (transferAmount: BigNumber, transfer
 export const calculateAmountToSend = (transferAmount: BigNumber, transfers: Transfer[]): Transfer[] => {
     const sorted = sortByTransfersByBalance(transfers).reverse();
     return sorted.map(transfer => {
-        if (transfer.balance.gt(transferAmount)) {
+        if (transfer.balance.add(transfer.feeData.cost).gt(transferAmount)) {
             // Use remainder
             const amountToTransfer = transferAmount;
             transferAmount = BigNumber.from(0);
@@ -38,7 +38,7 @@ export const calculateAmountToSend = (transferAmount: BigNumber, transfers: Tran
         } else {
             // Use full balance
             transferAmount = transferAmount.sub(transfer.balance);
-            return {...transfer, amountToTransfer: transfer.balance}
+            return {...transfer, amountToTransfer: transfer.balance.sub(transfer.feeData.cost)}
         }
     })
 }
@@ -64,7 +64,8 @@ export const calculateNativeTransfer = async (from: string, chains: ChainInfo[],
             amount, 
             accountDetails,
             // @TODO change
-            to: from
+            to: from,
+            from
         });
         
         // Sort the transfers based on cheapest -> most expensive
@@ -73,7 +74,7 @@ export const calculateNativeTransfer = async (from: string, chains: ChainInfo[],
         // Find the cheapest single chain transfer, since its sorted it will always be the first one found
         const bestSingleChainTransfer = possibleTransfers.find(transfer => {
             if (transfer.hasFullBalance) {
-                transfer.amountToTransfer = amount;
+                transfer.amountToTransfer = amount.sub(transfer.feeData.cost);
                 return true;
             }
         });
@@ -97,14 +98,16 @@ export const calculateNativeTransfer = async (from: string, chains: ChainInfo[],
             accountDetails: [destinationAccountDetails!], 
             destinationChain,
             // @TODO change
-            to: from
+            to: from,
+            from
         }); // always length=1
         let bridgedTransfers: Transfer[] = (await getAllTransfers({
             amount, 
             accountDetails: bridgeChainsBalances, 
             destinationChain,
             // @TODO change
-            to: from
+            to: from,
+            from
         })).map(x => { return {...x, isBridged: true }});
         
         // Sort the birdgedTransfer based on cheapest -> most expensive

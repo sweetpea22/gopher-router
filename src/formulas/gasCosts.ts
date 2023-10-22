@@ -29,27 +29,36 @@ export interface FeeData {
     bridgeType: BridgeType;
 }
 
-export const calculateBaseGasCost = async (chain: ChainInfo): Promise<FeeData> => {
+export const calculateBaseGasCost = async (chain: ChainInfo, from: string): Promise<FeeData> => {
     if (standardEVM.includes(chain.name)) {
-        // Usage of 21000 gas
         const provider = new ethers.providers.JsonRpcProvider(chain.rpcUrl);
-        const {maxFeePerGas, gasPrice, maxPriorityFeePerGas} = await provider.getFeeData();
-        let cost: BigNumber;
-        if (!maxPriorityFeePerGas) {
-            // @ts-ignore let the app blow up if gasPrice isn't available yolo
-            cost = BigNumber.from(21000).mul(gasPrice);
-        } else {
-            // @ts-ignore let the app blow up if gasPrice isn't available yolo
-            cost = BigNumber.from(21000).mul((maxFeePerGas.add(maxPriorityFeePerGas)));
-        }
+        try {
+            const {maxFeePerGas, gasPrice, maxPriorityFeePerGas} = await provider.getFeeData();
+            const gasUsed = await provider.estimateGas({
+                to: from,
+                from,
+                value: 0
+            })
+            let cost: BigNumber;
+            if (!maxPriorityFeePerGas) {
+                // @ts-ignore let the app blow up if gasPrice isn't available yolo
+                cost = gasUsed.mul(gasPrice);
+            } else {
+                // @ts-ignore let the app blow up if gasPrice isn't available yolo
+                cost = gasUsed.mul((maxFeePerGas.add(maxPriorityFeePerGas)));
+            }
 
-        return {
-            // @ts-ignore
-            maxFeePerGas,
-            // @ts-ignore
-            maxPriorityFeePerGas,
-            cost
-        };
+            return {
+                // @ts-ignore
+                maxFeePerGas,
+                // @ts-ignore
+                maxPriorityFeePerGas,
+                cost
+            };
+        } catch (e) {
+            console.log("Error: ", e)
+            return {} as FeeData;
+        }
     } else {
         return {} as FeeData;
     }
