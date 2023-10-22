@@ -35,10 +35,10 @@ export function EthOverview(opts: IOpts) {
         setTotalEth(totalAmount)
       }
     }
-    // console.log("length", ethBalance.length)
-    // if (ethBalance.length === 0) {
-    //   getBalanceByChain();
-    // }
+    console.log("length", ethBalance.length)
+    if (ethBalance.length === 0) {
+      getBalanceByChain();
+    }
     // getTotalEth()
   }, [address, ethBalance, totalEth])
   

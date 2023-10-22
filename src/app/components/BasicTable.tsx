@@ -50,7 +50,7 @@ export default function BasicTable({children}: any) {
         <div className='flex flex-row items-center'>
           <Navbar />
         </div>
-        <SlideOut />
+        {isOpen ? <SlideOut /> : null}
         <div className='flex flex-col justify-start'>
           <AssetsTable />
           <div className='grid sm:grid-cols-2 gap-4 px-8'>
