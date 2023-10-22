@@ -32,7 +32,7 @@ export const connextSend = async (
         to,
         asset: wethMapping[originChain.name], // If Native Asset (eth) use wrapper for weth
         amount: amount.toString(), // override later, we can't know this yet until amountToSend is determined later
-        slippage: "30", // maybe lower
+        // slippage: "500", // maybe lower
         callData: "0x",
         delegate: from,
         relayerFee: relayerFee.toString(),

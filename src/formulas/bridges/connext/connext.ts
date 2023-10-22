@@ -9,6 +9,7 @@ import { TokenNames, wethMapping } from "@/app/constants";
 
 export const connextGasCosts = async (originChain: ChainInfo, destinationChain: ChainInfo, to: string, isToken: boolean, tokenName?: TokenNames): Promise<FeeData> => {
     const originProvider = originChain.provider;
+    // const {sdkBase} = await create(Connext.sdkConfig);
     const {sdkBase} = await create(Connext.sdkConfig, new Logger({name: "SDK", level:"silent"})); 
     const originDomain = Connext.domainMap[originChain.name];
     const destinationDomain = Connext.domainMap[destinationChain.name];
@@ -20,7 +21,7 @@ export const connextGasCosts = async (originChain: ChainInfo, destinationChain: 
         to,
         asset: wethMapping[originChain.name], // If Native Asset (eth) use wrapper for weth
         amount: "1", // override later, we can't know this yet until amountToSend is determined later
-        slippage: "30", // maybe lower
+        // slippage: "30", // maybe lower
         callData: "0x",
         delegate: Connext.sdkConfig.signerAddress,
         relayerFee: relayerFee.toString(),

@@ -34,7 +34,6 @@ export const calculateAmountToSend = (transferAmount: BigNumber, transfers: Tran
         if (transfer.balance.add(transfer.feeData.cost).gt(transferAmount)) {
             // Use remainder
             const amountToTransfer = transferAmount;
-            transferAmount = BigNumber.from(0);
             return {...transfer, amountToTransfer};
         } else {
             // Use full balance
@@ -106,7 +105,7 @@ export const calculateNativeTransfer = async ({from, chains, amount, destination
         const currentChainTransfer = await getAllTransfers({
             amount, 
             accountDetails: [destinationAccountDetails!], 
-            destinationChain,
+            // destinationChain,
             // @TODO change
             to: from,
             from,
@@ -126,11 +125,14 @@ export const calculateNativeTransfer = async ({from, chains, amount, destination
         
         // Sort the birdgedTransfer based on cheapest -> most expensive
         bridgedTransfers = sortByTransfersByCost(bridgedTransfers);
-
         if (currentChainTransfer[0] && currentChainTransfer[0].hasFullBalance) {
+            const updatedCurrentTransfers = calculateAmountToSend(amount, currentChainTransfer);
             // We want to prioritize the destinationChain if it has balance
+            if (bridgedTransfers.length === 0) {
+                return updatedCurrentTransfers;
+            }
             const { transfers, bundleCost } = calculateBundledTransactions(amount, bridgedTransfers);
-            return currentChainTransfer[0].feeData.cost!.lte(bundleCost) ? currentChainTransfer : transfers;
+            return currentChainTransfer[0].feeData.cost!.lte(bundleCost) ? updatedCurrentTransfers : transfers;
         } else {
             const bundledTransfers = [...currentChainTransfer, ...bridgedTransfers];
             const { transfers } = calculateBundledTransactions(amount, bundledTransfers);

@@ -103,7 +103,8 @@ const ShowTransfers = ({transfers, loadingTransfers}: Props) => {
           {/* Route Logic here */}
             {
               transfers.map((transfer, i) => {
-                return (
+      console.log(transfer.amountToTransfer)
+      return (
                   <div key={i}>
                     <div className='grid grid-cols-2 place-items-stretch mt-3'>
                       <table>
@@ -118,7 +119,8 @@ const ShowTransfers = ({transfers, loadingTransfers}: Props) => {
                       <p className='text-gray-900 justify-self-end'>{destinationChain.name}</p>
                     </div>
                     <div className='flex flex-col'>
-                      <p>Cost to transfer: {ethers.utils.formatEther(transfer.feeData.cost)} ETH</p>
+                      <p>Amount: {ethers.utils.formatEther(transfer.amountToTransfer)}</p>
+                      <p>Cost: {ethers.utils.formatEther(transfer.feeData.cost)} ETH</p>
                       {renderRelayerFee(transfer)}
                       {transfer.isBridged ? 
                         <p>Bridge: {transfer.feeData.bridgeType}</p>

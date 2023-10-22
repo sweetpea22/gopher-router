@@ -12,10 +12,10 @@ export const sdkConfig: SdkConfig = {
         //     providers: [getChain(ChainNames.ethereum).provider],
         // },
         1735353714: { // Goerli domain ID
-            providers: [getChain(ChainNames.goerli).provider],
+            providers: [getChain(ChainNames.goerli).provider.connection.url],
         },
         1735356532: { // Optimism-Goerli domain ID
-            providers: [getChain(ChainNames.opGoerli).provider],
+            providers: [getChain(ChainNames.opGoerli).provider.connection.url],
         },
     },
 };

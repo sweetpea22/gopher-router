@@ -21,8 +21,6 @@ export function EthOverview(opts: IOpts) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const getBalanceByChain = async () => {
-      console.log("ethOverview -- im tripping")
-
       const data = await getAllBalances(address as string, Chains, isToken, selected as TokenNames);
       setEthBalance(data);
     }
@@ -35,11 +33,11 @@ export function EthOverview(opts: IOpts) {
         setTotalEth(totalAmount)
       }
     }
-    console.log("length", ethBalance.length)
     if (ethBalance.length === 0) {
       getBalanceByChain();
+    } else {
+      getTotalEth()
     }
-    // getTotalEth()
   }, [address, ethBalance, totalEth])
   
 
