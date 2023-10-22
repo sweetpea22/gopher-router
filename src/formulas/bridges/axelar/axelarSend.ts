@@ -32,18 +32,6 @@ export const axelarSend = async (
   const destConnectedWallet = Axelar.getWallet().connect(destProvider);
 
 
-
-  const srcGatewayContract = IAxelarGateway.connect(
-    Axelar.gatewayMapping[originChain.name], // gateway contract
-    originConnectedWallet
-    );
-    
-    const destGatewayContract = IAxelarGateway.connect(
-    Axelar.gatewayMapping[destinationChain.name], // gateway contract
-    destConnectedWallet
-  );
-
-
   // generate temporary address 
   depositAddress = await api.getDepositAddress(
     //@ts-ignore
