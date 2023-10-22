@@ -11,7 +11,6 @@ export const connextGasCosts = async (originChain: ChainInfo, destinationChain: 
     const originProvider = new ethers.providers.JsonRpcProvider(originChain.rpcUrl);
     const {sdkBase} = await create(Connext.sdkConfig, new Logger({name: "SDK", level:"silent"})); 
     const originDomain = Connext.domainMap[originChain.name];
-    console.log('origin domain', originDomain)
     const destinationDomain = Connext.domainMap[destinationChain.name];
     const params = { originDomain, destinationDomain };
     // const relayerFee = await sdkBase.estimateRelayerFee(params);
