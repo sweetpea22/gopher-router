@@ -64,7 +64,7 @@ export const calculateBaseGasCost = async (chain: ChainInfo, from: string): Prom
     }
 };
 
-export const calculateBridgeCost = async (originChain: ChainInfo, destinationChain: ChainInfo, to: string): Promise<FeeData> => {
+export const calculateBridgeCost = async (originChain: ChainInfo, destinationChain: ChainInfo, to: string, from: string): Promise<FeeData> => {
     const bridgeOptions: FeeData[] = [];
     if (typeof Connext.domainMap[originChain.name] !== 'undefined' && typeof Connext.domainMap[destinationChain.name] !== 'undefined') {
         const option = await connextGasCosts(originChain, destinationChain, to);
@@ -75,17 +75,22 @@ export const calculateBridgeCost = async (originChain: ChainInfo, destinationCha
     }
 
     if (typeof Axelar.domainMap[originChain.name] !== 'undefined' && typeof Axelar.domainMap[destinationChain.name] !== 'undefined') {
-        const option = await getAxelarCost(originChain, destinationChain, to); 
+        const option = await getAxelarCost(originChain, destinationChain, to, from); 
         if (Object.keys(option).length > 0) {
             option.bridgeType = BridgeType.axelar;
             bridgeOptions.push(option)
         }
     }
-    console.log('All options: ', bridgeOptions);
+    
+    if (bridgeOptions.length > 0) { 
+        console.log('All options: ', bridgeOptions);
+    }
 
     // Sort and return cheapest
     if (bridgeOptions.length > 0) {
         const sorted = bridgeOptions.sort((a,b) => {
+            console.log("Cost: ", a.bridgeType, ethers.utils.formatEther(a.cost))
+            console.log("Cost: ", b.bridgeType, ethers.utils.formatEther(b.cost.toString()))
             if(a?.cost.gt(b.cost)) {
                 return 1;
             } else if (a.cost.lt(b.cost)){

@@ -23,7 +23,7 @@ export const connextGasCosts = async (originChain: ChainInfo, destinationChain: 
         slippage: "30", // maybe lower
         callData: "0x",
         delegate: Connext.sdkConfig.signerAddress,
-        relayerFee: '1',
+        relayerFee: relayerFee.toString(),
         wrapNativeOnOrigin: true,
         unwrapNativeOnDestination: true,
         };

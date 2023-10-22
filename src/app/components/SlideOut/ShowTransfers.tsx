@@ -9,6 +9,7 @@ import { connextSend } from '@/formulas/bridges/connext/connextSend';
 import { useAccount, useBalance, useSwitchNetwork } from 'wagmi';
 import { RouteData } from '@/app/context/transferRoute';
 import { useEthersSigner } from '@/app/wagmi/ethers';
+import { truncate } from '../TableContainers/NetworkBreakdown';
 
 type Props = {
   transfers: Transfer[];
@@ -24,6 +25,7 @@ const ShowTransfers = ({transfers, loadingTransfers}: Props) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleExecute = async () => {
+    console.log("execute")
     for (let i=0; i < transfers.length; i ++) {
       const transfer = transfers[i];
       if (!transfer.isBridged) {
@@ -51,8 +53,9 @@ const ShowTransfers = ({transfers, loadingTransfers}: Props) => {
           await switchNetworkAsync?.(transfer.chain.chainId);
         }
         const res = await signer?.sendTransaction(txData);
-        console.log(res);
         setIsLoading(false);
+      } else if (transfer.isBridged && transfer.feeData.bridgeType == BridgeType.axelar) {
+        
       }
     }
   }
@@ -89,7 +92,7 @@ const ShowTransfers = ({transfers, loadingTransfers}: Props) => {
                       <p className='text-gray-900 justify-self-end'>{destinationChain.name}</p>
                     </div>
                     <div className='flex flex-col'>
-                      <p>Cost to transfer: {(transfer.feeData.cost.toNumber() / 10e18).toFixed(8) } ETH</p>
+                      <p>Cost to transfer: {truncate(transfer.feeData.cost.toString(), 2)} ETH</p>
                       {transfer.isBridged ? 
                         <p>Bridge: {transfer.feeData.bridgeType}</p>
                         : null

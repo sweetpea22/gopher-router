@@ -10,7 +10,7 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-function truncate(numberString: string, trunk = 2) {
+export function truncate(numberString: string, trunk = 2) {
   var onpoint = numberString.split('.',2);
   var numberStringTruncated = numberString;
   if (onpoint.length > 1) {
