@@ -1,18 +1,14 @@
 "use client"
-
-import "dotenv/config"
-import "@typechain/hardhat"
-import "@nomiclabs/hardhat-ethers"
-import "hardhat-gas-reporter"
-import "solidity-coverage"
-import "@nomicfoundation/hardhat-verify"
-import "hardhat-deploy"
-import { HardhatUserConfig } from 'hardhat/config';
+import { config as dotEnvConfig } from "dotenv";
+dotEnvConfig();
+import type { HardhatUserConfig } from 'hardhat/config';
 
 const GOERLI_RPC_URL =
-  process.env.GOERLI_RPC_URL as string;
+  process.env.NEXT_PUBLIC_GOERLI_RPC_URL as string;
+const OPGOERLI_RPC_URL =
+  process.env.NEXT_PUBLIC_OPGOERLI_RPC_URL as string;
 
-const PRIVATE_KEY = process.env.PRIVATE_KEY as string;
+const PRIVATE_KEY = process.env.NEXT_PUBLIC_PRIVATE_KEY as string;
 const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY as string;
 
 const config: HardhatUserConfig = {
@@ -38,6 +34,12 @@ const config: HardhatUserConfig = {
       accounts: [PRIVATE_KEY],
       chainId: 534351,
     },
+    OpGoerli: {
+      url: OPGOERLI_RPC_URL,
+      accounts: [PRIVATE_KEY],
+      gasPrice: 225000000000,
+      chainId: 420,
+    }
   },
   solidity: {
     version: '0.8.19',

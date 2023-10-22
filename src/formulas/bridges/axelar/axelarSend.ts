@@ -2,7 +2,6 @@
 import { getTransferFee } from "./getTransferFee";
 import {
   IERC20__factory as IERC20,
-  IAxelarGateway__factory as IAxelarGateway,
 } from "./types/factories/@axelar-network/axelar-gmp-sdk-solidity/contracts/interfaces";
 import { wethMapping } from "@/app/constants";
 import { Environment, AxelarAssetTransfer } from "@axelar-network/axelarjs-sdk";
@@ -75,9 +74,7 @@ export const axelarSend = async (
       await sleep(2000);
     }
     return txHash;
-
-
-
+    
     } catch (e: any) {
         console.log("connext error", e);
         return {} as providers.TransactionRequest;
