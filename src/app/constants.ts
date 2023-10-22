@@ -1,4 +1,4 @@
-import { ChainInfo, Token } from "./interfaces";
+import { ChainInfo, Token } from "@/app/interfaces";
 import "dotenv/config"
 
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY as string;
@@ -32,7 +32,7 @@ export const Chains: ChainInfo[] = [
     { 
         // have to find a new provider for scroll 
         name: ChainNames.scrollSepolia, 
-        rpcUrl: `https://rpc.ankr.com/scroll_sepolia_testnet`,
+        rpcUrl: `https://sepolia-rpc.scroll.io`,
         chainId: 534351
     },
     { 

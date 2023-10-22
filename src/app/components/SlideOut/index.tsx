@@ -29,7 +29,7 @@ export function SlideOut() {
                     <div className="px-4 sm:px-6">
                       <div className="flex items-start justify-between">
                         <Dialog.Title className="text-base font-semibold leading-6 text-indigo-700">
-                          Send from multiple accounts
+                          Send to
                         </Dialog.Title>
                         <div className="ml-3 flex h-7 items-center">
                           <button
