@@ -8,6 +8,7 @@ export const ChainNames: {[x: string]: string} = {
     goerli: "GOERLI",
     sepolia: "SEPOLIA",
     opGoerli: "OP-GOERLI",
+    baseGoerli: "BASE-GOERLI",
     scrollSepolia: "SCROLL-SEPOLIA",
     mantle: "MANTLE",
 }
@@ -38,6 +39,11 @@ export const Chains: ChainInfo[] = [
         name: ChainNames.ethereum, 
         rpcUrl: `https://mainnet.infura.io/v3/${INFURA_API_KEY}`,
         chainId: 1
+    },
+    { 
+        name: ChainNames.baseGoerli , 
+        rpcUrl: `https://goerli.base.org`,
+        chainId: 84531
     }
 ]
 
@@ -51,6 +57,7 @@ export const wethMapping: {[x: string]: string} = {
     [ChainNames.opGoerli]: "0x74c6FD7D2Bc6a8F0Ebd7D78321A95471b8C2B806",
     [ChainNames.scrollSepolia]: "0xeA700DCe55e72C4C08b97AcFc7dF214EC30F4a64",
     [ChainNames.mantle]: "0xeA700DCe55e72C4C08b97AcFc7dF214EC30F4a64",
+    [ChainNames.baseGoerli]: "0x4200000000000000000000000000000000000006",
 }
 
 export enum TokenNames {
