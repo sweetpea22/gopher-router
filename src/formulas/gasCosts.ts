@@ -7,7 +7,15 @@ import * as Axelar from "./bridges/axelar/axelarConfig";
 import { getAxelarCost } from "./bridges/axelar/axelar";
 
 // Populate list of common gas costs where available
-const standardEVM = [ChainNames.ethereum, ChainNames.goerli, ChainNames.sepolia, ChainNames.opGoerli, ChainNames.scrollSepolia, ChainNames.mantle]; // assume 21000 gas
+const standardEVM = [
+    ChainNames.ethereum, 
+    ChainNames.goerli, 
+    ChainNames.sepolia, 
+    ChainNames.opGoerli, 
+    ChainNames.scrollSepolia, 
+    ChainNames.mantle, 
+    ChainNames.baseGoerli,
+]; // assume 21000 gas
 
 export enum BridgeType {
     connext = "Connext",
