@@ -13,7 +13,7 @@ export const connextGasCosts = async (originChain: ChainInfo, destinationChain: 
     const originDomain = Connext.domainMap[originChain.name];
     const destinationDomain = Connext.domainMap[destinationChain.name];
     const params = { originDomain, destinationDomain };
-    // const relayerFee = await sdkBase.estimateRelayerFee(params);
+    const relayerFee = await sdkBase.estimateRelayerFee(params);
     const xcallParams = {
         origin: originDomain,
         destination: destinationDomain,
